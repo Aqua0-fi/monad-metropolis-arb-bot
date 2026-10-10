@@ -1,0 +1,15 @@
+
+> @aqua0/market-rebalancer-service@0.1.0 test:integration
+> node --import tsx --test test/execution.integration.ts
+
+(node:58612) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ offchain worker simulates, signs, sends, accounts for receipt and prevents duplicate sends (476.06075ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 967.759625

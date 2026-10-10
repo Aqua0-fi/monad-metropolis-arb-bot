@@ -1,0 +1,30 @@
+{
+  "chainId": 42161,
+  "venue": "uniswap-v3",
+  "block": 510678586,
+  "blockHash": "0x96825be9648306833b496f888247d553c2ca7ef5579f0954af96bc8c8bbaf4c2",
+  "blockTimestamp": 1790862701,
+  "exitCode": 0,
+  "elapsedSeconds": 23.36,
+  "fixture": "Real chain state and external venues; local Aqua0 vaults, signed JIT hook, seeded mispricing and test capital",
+  "harnessSha256": "8515edd5b49c7f61c0719f14a6c0b94f98f1faa0628d37c4e78fb2107c703548",
+  "pairFixture": {
+    "chainId": 42161,
+    "pool": {
+      "currency0": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "currency1": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+      "fee": 100,
+      "tickSpacing": 1
+    },
+    "externalFee": 100,
+    "inputAmount": 5000000,
+    "jitLiquidity": 10000000000000000,
+    "purpose": "Local-fork regression only. Uses real token and external venue state but locally deployed Aqua0 vaults/hook, synthetic capital, test signatures and seeded mispricing. Not a live worker configuration or profitability proof."
+  },
+  "pairFixtureSha256": "1a4cb8a1f97d8e26c5598b09a102c462abd75a5bc2ed5d146da31f360e20abd1",
+  "tests": [
+    "[PASS] testFork_AquaThenExternalProfits() (gas: 2324630)",
+    "[PASS] testFork_ExternalThenAquaProfits() (gas: 1814454)",
+    "[PASS] testFork_ImpossibleProfitRevertsBothLegsAndNonce() (gas: 2308234)"
+  ]
+}

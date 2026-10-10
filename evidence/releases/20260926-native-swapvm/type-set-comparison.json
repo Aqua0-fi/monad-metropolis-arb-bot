@@ -1,0 +1,7 @@
+{
+  "newErrors": [],
+  "resolvedErrors": [],
+  "baselineErrorSetSize": 18,
+  "candidateErrorSetSize": 18,
+  "normalization": "Remove line/column and the reference checkout dependency prefix only"
+}

@@ -1,0 +1,18 @@
+{
+  "status": "blocked-missing-v4-class",
+  "chainId": 42161,
+  "poolId": "0x1f7d6bb891093beb90fb3802388282e1d2fea68118c3220d902c7a8e207b5f15",
+  "poolFee": 100,
+  "tickSpacing": 1,
+  "classId": null,
+  "approved": false,
+  "lpSmartWallet": "0xa58c8abde99e90c2ed07c7a9f79f5c0180a2903f",
+  "lpSigner": "0xDe2cCfDE6E453E11Cb000BcaFf46FeB01a4b7138",
+  "withdrawnClassId": "10",
+  "reason": "Class 10 is already bound to an Aqua/SwapVM constant-product 0.3% strategy. Class 12 has no active venue binding. The app requires one venue per class. Do not apply the previous class-10 policy or request a class-10 V4 approval. This is a readiness record, not an executable market-policy body.",
+  "proposedLimits": {
+    "baseToken": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+    "maxInput": "5000000",
+    "minNetProfit": "10000"
+  }
+}

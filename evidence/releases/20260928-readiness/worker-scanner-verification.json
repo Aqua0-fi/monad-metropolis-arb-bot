@@ -1,0 +1,8 @@
+{
+  "actualStagedScan": "passed",
+  "sameGitDiffTransportUsedForCanary": true,
+  "onlyExactPublicAddressesInFixtureExcluded": true,
+  "canaryCredentialStillDetected": true,
+  "sameAddressOutsideFixtureStillDetected": true,
+  "findings": 2
+}

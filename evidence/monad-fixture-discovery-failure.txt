@@ -1,0 +1,16 @@
+No files changed, compilation skipped
+2026-09-17T15:39:11.552851Z  WARN evm::traces::external: etherscan config not found
+
+Ran 1 test for contracts/test/MarketRebalancer.fork.t.sol:MarketRebalancerForkTest
+[FAIL: No liquid external V3 pool for this pair at pinned block] setUp() (gas: 0)
+Suite result: FAILED. 0 passed; 1 failed; 0 skipped; finished in 486.50ms (0.00ns CPU time)
+
+Ran 1 test suite in 488.97ms (486.50ms CPU time): 0 tests passed, 1 failed, 0 skipped (1 total tests)
+
+Failing tests:
+Encountered 1 failing test in contracts/test/MarketRebalancer.fork.t.sol:MarketRebalancerForkTest
+[FAIL: No liquid external V3 pool for this pair at pinned block] setUp() (gas: 0)
+
+Encountered a total of 1 failing tests, 0 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 1 failed test

@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "chainId": 42161,
+  "contract": "MarketRebalancer",
+  "compiler": "0.8.37+commit.f401782d",
+  "creationCodeHash": "0xbe13c3ae2599bd59834d2ffd84ef2be60d8c2ca482338a78ade8df18c9f0570c",
+  "sourceScope": "Reviewed guarded executor; starts paused; no native value, market approvals or funding in creation."
+}

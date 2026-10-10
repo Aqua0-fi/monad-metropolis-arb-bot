@@ -1,0 +1,33 @@
+{
+  "repository": "https://github.com/Aqua0-fi/contracts",
+  "commit": "42546e5c5eee94d4c0b25448911efaba33c08d86",
+  "purpose": "Unmodified Aqua0 production contracts used only in fork tests",
+  "sha256": {
+    "src/aqua/AquaAdapter.sol": "aca2b752daed1273a3841f55391c8548ebd3ff99ce79570741d79aa7d94cb5f5",
+    "src/filler/FillerRegistry.sol": "5e97b6d0ad4ad7c33e60c3347077266b98ef7eebbd68df05e1f2b1a5e1646191",
+    "src/interface/IAqua.sol": "041e1d0a2f53366ce7e15ee7f2f303259e2f823a214bd5c8698490a78bcaf007",
+    "src/interface/IAssetVault.sol": "3879f8bda744d393d0b89a1a75b35bac9f4c45e26835969c1d0031125de6d487",
+    "src/interface/ICreateX.sol": "d75b045cf12a7afe53f84de49816de12b7af7e53fea147a5e810ecb89c7a5f26",
+    "src/interface/IFillerRegistry.sol": "5b3b56700dd190068686fe60025bcd645ba7a06fd836ae0c902e5c7e451ca30d",
+    "src/interface/IMakerHooks.sol": "7e03cef9dca437e77f7bcb22cca69ae72955033a52143320cce76164fc736016",
+    "src/interface/ISwapVMRouter.sol": "d32232bb900c4928db44213cc5e2aa6f72de7329c05ad28cb313ae8d3cbf88bd",
+    "src/interface/IVaultRegistry.sol": "d55f2b165310ebe11455dc5211ae3f6d10d2694cc40739653aceeb0af066e099",
+    "src/interface/IVenueAdapter.sol": "898b50b6704c06478efa86dc7ea441d2548076d1fc12dac00b42f4803badd018",
+    "src/lib/Errors.sol": "4bc7ecf1caf735da5e4b4d18aae0dc4e0ff2f56f58ff83aa0ccbb4e7fd4a28fc",
+    "src/lib/Events.sol": "657f394d83e5d6277bedd4b8fe9e703d6a4e49556c8961170f64666b66c68956",
+    "src/lib/Roles.sol": "5b0926777fa14fbdd66abb3c487300eada679b5d5ca89b3377fde5d4e6478de7",
+    "src/lib/Types.sol": "c5c6a84b8c3fff9058dc91c876066a9591b5917c025a4b5f86d3c061e6c2f242",
+    "src/v4/V4Adapter.sol": "71631c7b94cd7081388d465291ada6cf7e1ce48eae4eaeb9b409f43c767d640b",
+    "src/vault/AssetVault.sol": "9bc915916a3e6ceb4a4c1a6346d2fb132f22e209b3748d90ffd9eeaaeb824119",
+    "src/vault/Composer.sol": "3e797116a15a28727cb4a5df6b9beeabacee3bb25db64ea9e0ecadaff83d2138",
+    "src/vault/VaultFactory.sol": "567c779b84035c27c790560d4bd8557cbbf62f35e4bb167eeac8296589cc48d1",
+    "src/vault/VaultRegistry.sol": "2c9910846ed0d76304b3c109d4b1047ec56213ff22771fd02cc6fc0468b52d0b",
+    "src/vault/lib/AsyncRedeemLib.sol": "77e6e075a5d498509f2ab3d1735b2050b118080fdcace837b361a8fc5333b80d",
+    "src/vault/lib/BoundedSetLib.sol": "e25f48b19cf38a67bd811e740d7a8792dd085015d5f36a305167a0561413ff93",
+    "src/vault/lib/FrontLockLib.sol": "4b5df31af361462bd35e2378fc63d09ba728b15f4c9a7d602825d1db70ba96d2",
+    "src/vault/lib/FrontObligationLib.sol": "c63068e0783c61069f05290393bf8e0e3542450992fa2dcfcfcada39fd17a2d3",
+    "src/vault/lib/HybridPnLLib.sol": "276c69c4589a7e53f281bb69abe6045752bc4e29b1169d6b46b9000daf21307e",
+    "src/vault/lib/PoolLib.sol": "861a814bc5ee50cba4457f6b9bed531f168408070e05b855371c960142fbc221",
+    "src/vault/lib/VaultMath.sol": "7db6171d57e00f2565c0b6e767afe4a8d35182297618ca89833dcdfd8262d030"
+  }
+}

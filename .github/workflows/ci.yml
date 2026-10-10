@@ -1,0 +1,30 @@
+name: market-rebalancer-service
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      # Use only the exact compiler binaries provisioned below, not a cached release list.
+      FOUNDRY_OFFLINE: "true"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.5.1
+      - name: Install checksum-verified Solidity compilers
+        run: python3 scripts/install-ci-solc.py
+      - run: npm ci --ignore-scripts
+      - run: python3 scripts/verify-vendor.py
+      - run: npm run format:check
+      - run: npm run check
+      - run: npm run test:integration
+      - run: npm run build
+      - run: docker build --tag market-rebalancer-service:ci .

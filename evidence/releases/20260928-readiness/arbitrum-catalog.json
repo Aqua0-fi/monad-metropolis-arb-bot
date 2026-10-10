@@ -1,0 +1,338 @@
+{
+  "checkedAt": "2026-09-28T01:37:19.878Z",
+  "network": "mainnet",
+  "source": "existing observer discovery catalogs; not a new quote or execution proof",
+  "v4Chains": [
+    {
+      "chainId": 42161,
+      "name": "Arbitrum",
+      "checkedAt": "2026-09-28T01:37:17.587Z",
+      "ok": true,
+      "error": null
+    }
+  ],
+  "v4": [
+    {
+      "poolId": "0x1f7d6bb891093beb90fb3802388282e1d2fea68118c3220d902c7a8e207b5f15",
+      "tokens": [
+        {
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "symbol": "USDC",
+          "decimals": 6
+        },
+        {
+          "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+          "symbol": "DAI",
+          "decimals": 18
+        }
+      ],
+      "classIds": [
+        "10",
+        "12"
+      ],
+      "present": true,
+      "armed": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "lastSeen": "2026-09-28T01:37:17.587Z"
+    },
+    {
+      "poolId": "0x979e3972e0f912d188bcb61a7ef76bf3fb4c17f32fa12b996b67b63601b89dbf",
+      "tokens": [
+        {
+          "address": "0x3eD03E95DD894235090B3d4A49E0C3239EDcE59e",
+          "symbol": "MYRC",
+          "decimals": 18
+        },
+        {
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "symbol": "USDC",
+          "decimals": 6
+        }
+      ],
+      "classIds": [
+        "3",
+        "101"
+      ],
+      "present": true,
+      "armed": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "lastSeen": "2026-09-28T01:37:17.587Z"
+    },
+    {
+      "poolId": "0xb7a4fee4a7d215adda80308352ee12b01a6dab72f439f15a6336784dec704781",
+      "tokens": [
+        {
+          "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+          "symbol": "WETH",
+          "decimals": 18
+        },
+        {
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "symbol": "USDC",
+          "decimals": 6
+        }
+      ],
+      "classIds": [
+        "1",
+        "2",
+        "13",
+        "102"
+      ],
+      "present": true,
+      "armed": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "lastSeen": "2026-09-28T01:37:17.587Z"
+    }
+  ],
+  "swapVM": [
+    {
+      "strategyId": "0x0f3e407a472199fc89f74c3abb53fbf3a8d6335b011a75d14f5db6be810a4808",
+      "classId": "3",
+      "tokens": [
+        {
+          "address": "0x3eD03E95DD894235090B3d4A49E0C3239EDcE59e",
+          "symbol": "myrc",
+          "decimals": 18
+        },
+        {
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "symbol": "usdc",
+          "decimals": 6
+        }
+      ],
+      "present": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "blockNumber": "509560706",
+      "lastSeen": "2026-09-28T01:37:18.204Z"
+    },
+    {
+      "strategyId": "0x1699cd647f33b3362d9adac8b771e3744023e6cc97250d3290c417f812175f83",
+      "classId": "10",
+      "tokens": [
+        {
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "symbol": "usdc",
+          "decimals": 6
+        },
+        {
+          "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+          "symbol": "dai",
+          "decimals": 18
+        }
+      ],
+      "present": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "blockNumber": "509560707",
+      "lastSeen": "2026-09-28T01:37:18.204Z"
+    },
+    {
+      "strategyId": "0x4aedcc8f17c21dae0eb7809f5ae5b5ccc945317b3a12a15be8b907c9a811622d",
+      "classId": "6",
+      "tokens": [
+        {
+          "address": "0x3eD03E95DD894235090B3d4A49E0C3239EDcE59e",
+          "symbol": "myrc",
+          "decimals": 18
+        },
+        {
+          "address": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+          "symbol": "usdt",
+          "decimals": 6
+        }
+      ],
+      "present": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "blockNumber": "509560707",
+      "lastSeen": "2026-09-28T01:37:18.204Z"
+    },
+    {
+      "strategyId": "0x6876f614501d759d74834eed340cfdaebf8d908d3d6270d01eea4e4c42cc0bea",
+      "classId": "2",
+      "tokens": [
+        {
+          "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+          "symbol": "weth",
+          "decimals": 18
+        },
+        {
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "symbol": "usdc",
+          "decimals": 6
+        }
+      ],
+      "present": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "blockNumber": "509560706",
+      "lastSeen": "2026-09-28T01:37:18.204Z"
+    },
+    {
+      "strategyId": "0xa24eb0f8c916623fd559adcac6ef3605e123977036e28fa56ff055d7cce0f04d",
+      "classId": "1",
+      "tokens": [
+        {
+          "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+          "symbol": "weth",
+          "decimals": 18
+        },
+        {
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "symbol": "usdc",
+          "decimals": 6
+        }
+      ],
+      "present": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "blockNumber": "509560706",
+      "lastSeen": "2026-09-28T01:37:18.204Z"
+    },
+    {
+      "strategyId": "0xcd97521243a78dee28545800e347223602720c8626ac4039bdfbb2bcf33a7782",
+      "classId": "7",
+      "tokens": [
+        {
+          "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+          "symbol": "dai",
+          "decimals": 18
+        },
+        {
+          "address": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+          "symbol": "usdt",
+          "decimals": 6
+        }
+      ],
+      "present": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "blockNumber": "509560707",
+      "lastSeen": "2026-09-28T01:37:18.204Z"
+    },
+    {
+      "strategyId": "0xcea23fe82a826b5668ce333ce43f1cd5b6d6bf93a6980e3694e698b2db76116c",
+      "classId": "11",
+      "tokens": [
+        {
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "symbol": "usdc",
+          "decimals": 6
+        },
+        {
+          "address": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+          "symbol": "usdt",
+          "decimals": 6
+        }
+      ],
+      "present": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "blockNumber": "509560707",
+      "lastSeen": "2026-09-28T01:37:18.204Z"
+    },
+    {
+      "strategyId": "0xe37e4e6317d6988e6106bb54efca9982816ea213f52d76035f135858eaec7b78",
+      "classId": "5",
+      "tokens": [
+        {
+          "address": "0x3eD03E95DD894235090B3d4A49E0C3239EDcE59e",
+          "symbol": "myrc",
+          "decimals": 18
+        },
+        {
+          "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+          "symbol": "weth",
+          "decimals": 18
+        }
+      ],
+      "present": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "blockNumber": "509560707",
+      "lastSeen": "2026-09-28T01:37:18.204Z"
+    },
+    {
+      "strategyId": "0xea6df2c5d37589dee4bb75c5e09865156a9c11da173e2d96f21db27319d1e7c0",
+      "classId": "8",
+      "tokens": [
+        {
+          "address": "0x3eD03E95DD894235090B3d4A49E0C3239EDcE59e",
+          "symbol": "myrc",
+          "decimals": 18
+        },
+        {
+          "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+          "symbol": "dai",
+          "decimals": 18
+        }
+      ],
+      "present": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "blockNumber": "509560707",
+      "lastSeen": "2026-09-28T01:37:18.204Z"
+    },
+    {
+      "strategyId": "0xf6d3c54a5d09d79575ac497c364b0274c7e486bcfdba956285a160d44fbd0f05",
+      "classId": "4",
+      "tokens": [
+        {
+          "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+          "symbol": "weth",
+          "decimals": 18
+        },
+        {
+          "address": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+          "symbol": "usdt",
+          "decimals": 6
+        }
+      ],
+      "present": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "blockNumber": "509560707",
+      "lastSeen": "2026-09-28T01:37:18.204Z"
+    },
+    {
+      "strategyId": "0xfebaa269414199175dde4926863f8fd0e19452b5a804b185caa7d813342a498a",
+      "classId": "9",
+      "tokens": [
+        {
+          "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+          "symbol": "weth",
+          "decimals": 18
+        },
+        {
+          "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+          "symbol": "dai",
+          "decimals": 18
+        }
+      ],
+      "present": true,
+      "approved": false,
+      "readyToQuote": false,
+      "blockers": [],
+      "blockNumber": "509560707",
+      "lastSeen": "2026-09-28T01:37:18.204Z"
+    }
+  ],
+  "writeRequests": 0
+}

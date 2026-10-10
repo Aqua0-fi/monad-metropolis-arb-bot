@@ -1,0 +1,53 @@
+{
+  "backendCommit": "55e9fd41f4cf9cae2ae889e458ca0fed70a01ecf",
+  "frontendCommit": "063c5b47565f22038a3112cf1c421b7780b22aa9",
+  "workerSourceCommit": "8f2903cd7067b1d3db22f6c7a4e6d2e7e27348be",
+  "workerUnitTests": {
+    "passed": 47,
+    "failed": 0
+  },
+  "solidityUnitTests": {
+    "passed": 25,
+    "failed": 0
+  },
+  "workerTransactionIntegration": {
+    "passed": 2,
+    "failed": 0
+  },
+  "swapVMRealRouterFork": {
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0,
+    "controlledTestMaker": true,
+    "productionVaultAdapterTested": false
+  },
+  "frontendSuite": {
+    "passed": 6186,
+    "skipped": 50
+  },
+  "backendTypeComparison": "exactly equal after line/column and checkout-prefix normalization",
+  "backendFullSuite": "five pre-existing durability/mock failures reproduced on untouched staging; the new duplicate import failure was fixed",
+  "frontendProductionBuild": "passed",
+  "changedFrontendSourceLint": "passed",
+  "stagedSourceSecretScans": "passed for all three repos",
+  "rollout": "Backend deployed to staging; worker and frontend update remain pending because AWS source upload was blocked",
+  "liveWorkerChanged": false,
+  "marketApprovalsChanged": false,
+  "liveTradingEnabled": false,
+  "logSha256": {
+    "worker-final-integration.log": "02b1cc2b666dcc09e2281f1707b89eeb91950573bdd8bdc818fe2deac5df99b7",
+    "swapvm-fork-events.log": "4de8466cccc37f8bb96d75d1c8905c0d6bd11a63d3213d1c30cb6fcd87424248",
+    "web-all.log": "c6007ff667ee07f62b7a5175943bf0a288528e568897c2a12316ce61e9e2a630",
+    "web-build.log": "707659c69fcf3b0a2cb3dd598a7db0b01b2649c5a455efd0e17ff31ac627ad7b",
+    "web-changed-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "backendDeployment": {
+    "pullRequest": 593,
+    "stagingCommit": "35fc07ba424cc9611177919c04e72019fb93735e",
+    "railwayDeploymentId": "5232d63d-82fa-4862-b2f6-cfcad2f1fba9",
+    "status": "SUCCESS",
+    "publicHealthHttp": 200,
+    "unauthenticatedSwapVMDiscoveryHttp": 401,
+    "authenticatedDataProbe": "blocked by tool platform; not verified"
+  }
+}

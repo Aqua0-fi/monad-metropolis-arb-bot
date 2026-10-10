@@ -1,0 +1,7 @@
+
+> @aqua0/market-rebalancer-service@0.1.0 doctor
+> node --import tsx src/cli.ts doctor --chain 8453
+
+(node:46048) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"time":"2026-09-17T15:39:59.205Z","event":"chain_unavailable","chainId":8453,"error":"RPC Request failed."}

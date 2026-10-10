@@ -1,0 +1,50 @@
+{
+  "checkedAt": "2026-09-28T01:53:30.322Z",
+  "origin": "https://staging-admin.aqua0.xyz",
+  "views": [
+    {
+      "section": "rebalancer-lps",
+      "width": 1440,
+      "status": 200,
+      "horizontalOverflow": false,
+      "hasArbitrum": true,
+      "hasObserveLabel": false,
+      "reportsNoExecutions": true
+    },
+    {
+      "section": "market-rebalancer",
+      "width": 1440,
+      "status": 200,
+      "horizontalOverflow": false,
+      "hasArbitrum": true,
+      "hasObserveLabel": true,
+      "reportsNoExecutions": true
+    },
+    {
+      "section": "rebalancer-lps",
+      "width": 390,
+      "status": 200,
+      "horizontalOverflow": false,
+      "hasArbitrum": true,
+      "hasObserveLabel": false,
+      "reportsNoExecutions": true
+    },
+    {
+      "section": "market-rebalancer",
+      "width": 390,
+      "status": 200,
+      "horizontalOverflow": false,
+      "hasArbitrum": true,
+      "hasObserveLabel": true,
+      "reportsNoExecutions": true
+    }
+  ],
+  "liveOperatingControlsClicked": 0,
+  "blockedMutationRequests": 0,
+  "allowedReadActions": 2,
+  "blockedExternalRequests": 12,
+  "pageErrors": [],
+  "httpErrors": [],
+  "unauthenticatedStatus": 401,
+  "passed": true
+}

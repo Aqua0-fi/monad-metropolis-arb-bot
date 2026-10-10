@@ -1,0 +1,34 @@
+{
+  "pr": 605,
+  "state": "MERGED",
+  "base": "staging",
+  "head": "e95f0db5da1dc39fb2e753ce66735ab3203d401e",
+  "mergeCommit": "8af70b95c2bfa0c252cb8ad579dc313c47a22266",
+  "checks": [
+    {
+      "name": "Typecheck + Lint + Test + Build",
+      "status": "COMPLETED",
+      "conclusion": "FAILURE"
+    },
+    {
+      "name": "Semgrep SAST",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "Mobile e2e (playwright)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "CodeQL",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "gitleaks (secret scan)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    }
+  ]
+}

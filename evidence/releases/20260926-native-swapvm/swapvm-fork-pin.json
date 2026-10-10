@@ -1,0 +1,7 @@
+{
+  "chainId": 8453,
+  "blockNumber": 51798735,
+  "blockHash": "0xc1327f7843323d77079e7d3e739d4488f31ab182a6fde8a6de19eab46cd9c6bd",
+  "purpose": "real-router replay after final event-schema changes",
+  "testFundsOnly": true
+}

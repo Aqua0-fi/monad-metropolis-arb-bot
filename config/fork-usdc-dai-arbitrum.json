@@ -1,0 +1,13 @@
+{
+  "chainId": 42161,
+  "pool": {
+    "currency0": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+    "currency1": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+    "fee": 100,
+    "tickSpacing": 1
+  },
+  "externalFee": 100,
+  "inputAmount": 5000000,
+  "jitLiquidity": 10000000000000000,
+  "purpose": "Local-fork regression only. Uses real token and external venue state but locally deployed Aqua0 vaults/hook, synthetic capital, test signatures and seeded mispricing. Not a live worker configuration or profitability proof."
+}

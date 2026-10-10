@@ -1,0 +1,5 @@
+# Byte-hashed registry inputs/outputs. Regenerate and verify with sync-registry.ts,
+# rather than changing their provenance by reformatting them.
+config/chains.json
+config/execution-policies.json
+config/registry-provenance.json

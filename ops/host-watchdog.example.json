@@ -1,0 +1,28 @@
+{
+  "region": "us-east-1",
+  "workerPort": 9191,
+  "stateDirectory": "/var/lib/aqua0-host-watchdog",
+  "reportGroupId": 1000,
+  "containers": [
+    "ethglobal-dashboard",
+    "ethglobal-mcp",
+    "ethglobal-arc-rpc-proxy",
+    "ethglobal-graph-node",
+    "ethglobal-graph-ipfs",
+    "ethglobal-graph-postgres",
+    "docker-jitsi-meet-jicofo-1",
+    "docker-jitsi-meet-web-1",
+    "docker-jitsi-meet-prosody-1",
+    "docker-jitsi-meet-jvb-1",
+    "testnet-bridge-testnet-bridge-1",
+    "aqua0_postgres",
+    "aqua0_redis",
+    "aqua0-market-rebalancer"
+  ],
+  "services": [
+    "aqua0-api.service",
+    "aqua0-ponder.service",
+    "aqua0-uniswapx-filler.service",
+    "caddy.service"
+  ]
+}

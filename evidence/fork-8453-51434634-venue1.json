@@ -1,0 +1,15 @@
+{
+  "chainId": 8453,
+  "venue": "sushi-v3",
+  "block": 51434634,
+  "blockHash": "0x140819486bbf7e33578b8d936ca1ed5092bf956f16487c6647a94ba55a55973e",
+  "blockTimestamp": 1789658615,
+  "exitCode": 0,
+  "elapsedSeconds": 11.38,
+  "fixture": "Real chain state and external venues; local Aqua0 vaults, signed JIT hook, seeded mispricing and test capital",
+  "tests": [
+    "[PASS] testFork_AquaThenExternalProfits() (gas: 2312744)",
+    "[PASS] testFork_ExternalThenAquaProfits() (gas: 1895411)",
+    "[PASS] testFork_ImpossibleProfitRevertsBothLegsAndNonce() (gas: 2296356)"
+  ]
+}

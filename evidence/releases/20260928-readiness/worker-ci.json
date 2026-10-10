@@ -1,0 +1,20 @@
+{
+  "pullRequest": 3,
+  "head": "2a0db3043f2ee26f025e2c23105565f84735003a",
+  "state": "OPEN",
+  "checks": [
+    {
+      "name": "verify",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/aqua0-market-rebalancer-service/actions/runs/36362348972/job/108741882040"
+    },
+    {
+      "name": "verify",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/aqua0-market-rebalancer-service/actions/runs/36362345883/job/108741873328"
+    }
+  ],
+  "scope": "Deployed worker source; a subsequent documentation commit does not change the running image."
+}

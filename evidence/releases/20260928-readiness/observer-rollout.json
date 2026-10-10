@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-09-28T00:33:17Z",
+  "oldImage": "sha256:fd3905313444dadae8228523e9b45db2a3e8f47b6b40d3c7b1e48cee48f53d26",
+  "image": "sha256:53e88c7854085c251e47102947ad3c3b37ba8dd618dce89be51f7994bf7f8172",
+  "sourceCommit": "2a0db3043f2ee26f025e2c23105565f84735003a",
+  "mode": "observe",
+  "runtimeChains": [
+    42161
+  ],
+  "scheduler": "block-driven",
+  "settingsUnchanged": true,
+  "credentialsUnchanged": true,
+  "pairPermissionsUnchanged": true,
+  "operatorPausesUnchanged": true,
+  "transactionJournalUnchanged": true,
+  "storedExecutions": 0,
+  "economicReviewAvailable": true,
+  "economics": {
+    "blocked": false,
+    "totalGroups": 0
+  },
+  "fundsTransferred": false,
+  "tradingEnabled": false,
+  "backupPath": "/var/lib/aqua0-market-rebalancer-backups/arbitrum-readiness-2a0db30-1790555595"
+}

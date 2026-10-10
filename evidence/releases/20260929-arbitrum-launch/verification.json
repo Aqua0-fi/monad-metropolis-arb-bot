@@ -1,0 +1,127 @@
+{
+  "recordedAt": "2026-09-28T23:17:27.259194+00:00",
+  "scope": "Arbitrum readiness and optional owner-reviewed initial hackathon return batch",
+  "backendCommit": "76c669ee4e532fc13dfab89a62122a14d0bd08f7",
+  "frontendCommit": "96189b2ec16cdf29a0bc0058378227909815c98a",
+  "backendPR": 602,
+  "frontendPR": 612,
+  "stagingDeployment": "Backend PR602 and frontend PR612 are open. At the last check their self-hosted Linux checks were queued without an assigned runner. No staging merge or launch-branch deployment occurred.",
+  "workerUnitPassed": 89,
+  "contractUnitPassed": 47,
+  "localTransactionIntegrationsPassed": 2,
+  "localBlockFeedTestsPassed": 3,
+  "freshArbitrumV4Forks": {
+    "0": {
+      "block": 509851642,
+      "blockHash": "0xa65351de0ce5112cc2784a85d8f7403dc824c23803ea6918a996bb34daffdfe5",
+      "passed": 3,
+      "failed": 0,
+      "fixture": "Real chain state and external venues; local Aqua0 vaults, signed JIT hook, seeded mispricing and test capital"
+    },
+    "1": {
+      "block": 509851782,
+      "blockHash": "0xa90f08526aaefaa8ff9706c1b5468fe9dc82db82d59d22754d2d04bba5b3d6e9",
+      "passed": 3,
+      "failed": 0,
+      "fixture": "Real chain state and external venues; local Aqua0 vaults, signed JIT hook, seeded mispricing and test capital"
+    }
+  },
+  "baseProductionMakerFork": {
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "realProductionMakerAndVaults": true,
+    "externalPriceDisplacedLocally": true,
+    "localLpReturnVerified": true,
+    "recipientCount": 1,
+    "localGasPrice": 0,
+    "notLiveProfitability": true
+  },
+  "frontend": {
+    "fullTestsPassed": 6277,
+    "skipped": 50,
+    "fullLintErrors": 0,
+    "inheritedLintWarnings": 34,
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "desktopMobileBrowser": "passed",
+    "lastCopyChange": "Final manual-button implementation passed the complete frontend suite and production build.",
+    "manualReview": {
+      "explicitButton": true,
+      "fetchOnMount": false,
+      "automaticPayout": false,
+      "focusedAuthAndUiTestsPassed": 17,
+      "signingOrSubmissionInUi": false,
+      "browserQualification": "Desktop/mobile browser proof covers actual preview layout and unsigned export. Manual action/authentication behavior is verified by component/action tests, not a live payout."
+    }
+  },
+  "backend": {
+    "testsPassed": 5553,
+    "skipped": 4,
+    "inheritedBatchFailures": 5,
+    "comparison": {
+      "arbitrum-launch-type-comparison.json": {
+        "baseline": "d9432708180896715e4b54d07a06b62e5f932863",
+        "baselineErrors": 10,
+        "candidateErrors": 10,
+        "added": [],
+        "removed": []
+      },
+      "arbitrum-launch-backend-test-comparison.json": {
+        "baselineFailures": [
+          "(fail) a shipped-bytes write that is not durable says so > accumulates non-durable writes in a health ledger an operator can read",
+          "(fail) a shipped-bytes write that is not durable says so > reports no-database rather than resolving as though the row landed",
+          "(fail) registered pool store > is idempotent on the same pool, because re-registering IS the repair path",
+          "(fail) registered pool store > keeps a registered pool readable so a hidden one can still be explained",
+          "(fail) registered pool store > reports a write that reached no durable store rather than claiming success"
+        ],
+        "candidateFailures": [
+          "(fail) a shipped-bytes write that is not durable says so > accumulates non-durable writes in a health ledger an operator can read",
+          "(fail) a shipped-bytes write that is not durable says so > reports no-database rather than resolving as though the row landed",
+          "(fail) registered pool store > is idempotent on the same pool, because re-registering IS the repair path",
+          "(fail) registered pool store > keeps a registered pool readable so a hidden one can still be explained",
+          "(fail) registered pool store > reports a write that reached no durable store rather than claiming success"
+        ],
+        "addedFailures": [],
+        "removedFailures": []
+      }
+    }
+  },
+  "unsignedDeploymentFeeEstimate": {
+    "available": true,
+    "gasUnits": "4962038",
+    "observedGasPriceWei": "20036000",
+    "estimatedNativeFeeWei": "99419393368000",
+    "estimatedEth": "0.000099419393368",
+    "basis": "RPC estimate for deployment only; excludes setup, inventory and later trades"
+  },
+  "limits": [
+    "Fresh authenticated Arbitrum production-maker capture was tool-blocked and was not rerouted.",
+    "The return preview is an initial complete batch of at most 20 executions, not a recurring rewards service.",
+    "The owner reviews receipt/fee/LP evidence; the distributor does not prove historical receipts or offchain gas valuations.",
+    "Receipt-based trading net excludes deployment, hosting and payout-transaction costs.",
+    "The preview does not check externally submitted payouts; the distributor rejects reused execution hashes.",
+    "The local frontend build lacked optional MaxMind credentials and retained the existing fallback warning."
+  ],
+  "publicTransactions": 0,
+  "liveTradingEnabled": false,
+  "liveSettingsChanged": false,
+  "fundsMoved": false,
+  "productionPromoted": false,
+  "logSha256": {
+    "arbitrum-launch-worker-check.log": "553fcca5a1870b70e4f63c5c7d5f76ee794a7a760b03912947ce75a1098866f4",
+    "arbitrum-launch-worker-integration.log": "a220935c77c560c17d636fe1b9a97a56d34a7ddc35899f40ea13043351b7f276",
+    "arbitrum-launch-worker-heads.log": "80e7d0f14a152a01d7b11bd34611326b67971a58fdf3ff933ea782aea82a7f92",
+    "production-maker-profit-return-e2e-20260929.log": "dec1051065d35a360668dfad31e8eac8a3dc9719eee80734cb846819cc449d63",
+    "arbitrum-launch-web-tests.log": "1f8f8fbff6126acc30d54e6eb2dfaf57a35ad087c5531e22bbb3d2fae89844e4",
+    "arbitrum-launch-web-build-release.log": "08224c70c27ae4cb23f26584bc613798a53c11a2964e88810eebf473df966feb",
+    "arbitrum-launch-browser-final.log": "ba2cb9c0cf1cebd41034d4b682a32bc2b1a4e7b4d9c57cb809f220ec9fa6acb4",
+    "arbitrum-launch-backend-tests.log": "74c1f7af6d539534d18f70a03d1628246a684002f7ca3f6002e3e773a78c80f7",
+    "arbitrum-launch-backend-baseline-tests.log": "3b6a5e8998e59e5893bdc4e29146d05b6e8627ebcaa8756163e5653cd8050b21",
+    "manual-return-final-tests.log": "4b29250f2f08891f8c309d96e9ec38b19a4c1189d7932578d8a4cfa69b4fd0b4",
+    "manual-return-web-full-tests.log": "4bf8b031a83f106b159baa71e35dc1b9260bafa2a4d33a99c5f29d3b51a2b8d1",
+    "manual-return-web-build.log": "c4922aad7c5a19763dadc75452f5c65cd3d4f50915c90cdee183f90623798895"
+  },
+  "workerImplementationCommit": "247badd7d1bf07b254767b0a0162aeaae62a4677",
+  "workerPR": 4
+}

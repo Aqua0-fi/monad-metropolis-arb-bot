@@ -1,0 +1,21 @@
+{
+  "chainId": 42161,
+  "block": 509541062,
+  "blockHash": "0x12009f87863d474eca795b1195c62857a25bfe100707d39262aa5feead92dc5b",
+  "executorCompiler": "0.8.37+commit.f401782d",
+  "results": [
+    {
+      "venue": "uniswap-v3",
+      "exitCode": 0,
+      "seconds": 25.342,
+      "logSha256": "f10fa61f1cc8c82c28806094f16313b797e75c3645a1a54e2b1faef8e7e01181"
+    },
+    {
+      "venue": "sushi-v3",
+      "exitCode": 0,
+      "seconds": 4.283,
+      "logSha256": "e3dd0b3448dc5cab618e27be8938c5757f2a6dff42fe59f5ef1de33440aa8a31"
+    }
+  ],
+  "scope": "Real deployed PoolManager, routers, tokens and external V3 pools; controlled local Aqua0 vaults, JIT authorization, liquidity and price gaps. No live funds or broadcasting."
+}

@@ -1,0 +1,29 @@
+No files changed, compilation skipped
+2026-09-18T03:07:12.351821Z  WARN evm::traces::external: etherscan config not found
+
+Ran 3 tests for contracts/test/MarketRebalancer.fork.t.sol:MarketRebalancerForkTest
+[PASS] testFork_AquaThenExternalProfits() (gas: 2312744)
+Logs:
+  chain: 8453
+  forkBlock: 51434634
+  externalPool: 0x57713F7716e0b0F65ec116912F834E49805480d2
+  executionGas: 1042128
+  profitRaw: 2056521716465972
+
+[PASS] testFork_ExternalThenAquaProfits() (gas: 1895411)
+Logs:
+  chain: 8453
+  forkBlock: 51434634
+  externalPool: 0x57713F7716e0b0F65ec116912F834E49805480d2
+  executionGas: 1080697
+  profitRaw: 2301516614565421
+
+[PASS] testFork_ImpossibleProfitRevertsBothLegsAndNonce() (gas: 2296356)
+Logs:
+  chain: 8453
+  forkBlock: 51434634
+  externalPool: 0x57713F7716e0b0F65ec116912F834E49805480d2
+
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 10.66s (17.38s CPU time)
+
+Ran 1 test suite in 10.67s (10.66s CPU time): 3 tests passed, 0 failed, 0 skipped (3 total tests)

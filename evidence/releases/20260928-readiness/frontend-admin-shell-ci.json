@@ -1,0 +1,38 @@
+{
+  "pullRequest": 608,
+  "head": "552b52f4b52ea9f2b2fcb43c2c2b7cb0fb0ba006",
+  "checks": [
+    {
+      "name": "Typecheck + Lint + Test + Build",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/web-app/actions/runs/36366495823/job/108755506999"
+    },
+    {
+      "name": "Semgrep SAST",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/web-app/actions/runs/36366495941/job/108753842320"
+    },
+    {
+      "name": "Mobile e2e (playwright)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/web-app/actions/runs/36366495823/job/108755507724"
+    },
+    {
+      "name": "CodeQL",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/web-app/actions/runs/36366495941/job/108753842567"
+    },
+    {
+      "name": "gitleaks (secret scan)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/web-app/actions/runs/36366495941/job/108753842621"
+    }
+  ],
+  "testBuildAttempt": 2,
+  "firstFailure": "Unchanged Solana explorer assertion exceeded five seconds; preserved, independently replayed, and retried once without source or timeout changes."
+}

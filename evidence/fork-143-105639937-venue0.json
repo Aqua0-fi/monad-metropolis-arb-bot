@@ -1,0 +1,15 @@
+{
+  "chainId": 143,
+  "venue": "uniswap-v3",
+  "block": 105639937,
+  "blockHash": "0xcda6fb9a9a1497ec3968ba20172b597b8bf3956f6eb3893f2e855db2cf60fd02",
+  "blockTimestamp": 1789658543,
+  "exitCode": 0,
+  "elapsedSeconds": 10.21,
+  "fixture": "Real chain state and external venues; local Aqua0 vaults, signed JIT hook, seeded mispricing and test capital",
+  "tests": [
+    "[PASS] testFork_AquaThenExternalProfits() (gas: 2349741)",
+    "[PASS] testFork_ExternalThenAquaProfits() (gas: 1848688)",
+    "[PASS] testFork_ImpossibleProfitRevertsBothLegsAndNonce() (gas: 2332174)"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "chainId": 143,
+  "venue": "uniswap-v3",
+  "block": 105639937,
+  "blockHash": "0xcda6fb9a9a1497ec3968ba20172b597b8bf3956f6eb3893f2e855db2cf60fd02",
+  "blockTimestamp": 1789658543,
+  "exitCode": 1,
+  "elapsedSeconds": 0.75,
+  "fixture": "Real chain state and external venues; local Aqua0 vaults, signed JIT hook, seeded mispricing and test capital",
+  "tests": [
+    "[FAIL: No liquid external V3 pool for this pair at pinned block] setUp() (gas: 0)",
+    "[FAIL: No liquid external V3 pool for this pair at pinned block] setUp() (gas: 0)"
+  ]
+}

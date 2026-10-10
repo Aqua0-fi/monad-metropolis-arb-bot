@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "sourceCommit": "3e0beaddcdba0a42d6b894242c49bebff987bd99",
+  "previousImage": "sha256:abade56afd74dc92abd3f95003dbb446719dc4f4a5aa731f7674b347627cb36e",
+  "image": "sha256:4ffa8e6394f59a80a1fd2caf84246878db89e974609ae4e6362cc547f3592312",
+  "helperSha256": "8f18e96882b22bc32e1581bb6cbd1587450957d402fd86e612e9c27eaaf9c74f",
+  "probeSha256": "bd2aa4a11c2a256f76a03b2ab5501f95fecdcbfdc35deaf0107c7304a5a4c39d",
+  "hostProbeVerified": false,
+  "hostProbeRequirement": "Must pass read-only exact-call freshness and the existing 8-second task budget before the owner-run image switch",
+  "unitTests": 123,
+  "contractTests": 47,
+  "localTransactionIntegrations": 3,
+  "ownerImageUpdateTests": 6,
+  "existingOwnerHostTests": 5,
+  "liveWorkerChanged": false,
+  "ciRuns": [36522180353, 36522184404]
+}

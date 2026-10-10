@@ -1,0 +1,66 @@
+{
+  "recordedAt": "2026-09-26T03:33:58.556900+00:00",
+  "scope": "staging applications and existing AWS observe-only worker",
+  "backend": {
+    "pullRequest": 597,
+    "sourceCommit": "82358411ad70ee1552f8dc6cc60d947dd73a0c15",
+    "stagingCommit": "cd825654ffd1b97703c456d39584fbe28a13de5d",
+    "deployment": "af331971-7814-47dd-86bb-f07d48eeb7d4",
+    "deploymentStatus": "SUCCESS",
+    "ciAllPassed": true
+  },
+  "frontend": {
+    "corePullRequest": 605,
+    "coreCommit": "e95f0db5da1dc39fb2e753ce66735ab3203d401e",
+    "paginationPullRequest": 606,
+    "sourceCommit": "b91c85be7221f8215c51e1e79c8ba7f496dcc9ae",
+    "stagingCommit": "aaf1e2be680883efb9f8b93c2e3167a910406865",
+    "deployment": "97e64555-bde5-4d36-ae48-0ed139d7a47f",
+    "deploymentStatus": "SUCCESS",
+    "authenticatedBrowserVerified": true,
+    "desktopAndMobileVerified": true,
+    "localTestsPassed": 6195,
+    "localTestsSkipped": 50,
+    "ciNote": "Do not conflate local and Railway build passes with full frontend CI. The core PR CI failed on five unchanged inherited lint errors; current check statuses are recorded beside this file."
+  },
+  "worker": {
+    "sourceCommit": "9e7970a641596d6b3dba0a4b0f711194e4af3c80",
+    "image": "sha256:fd3905313444dadae8228523e9b45db2a3e8f47b6b40d3c7b1e48cee48f53d26",
+    "mode": "observe",
+    "scheduler": "block-driven",
+    "registeredChains": 8,
+    "configuredMarketsAtVerification": 0,
+    "executionEnabledChainsAtVerification": 0,
+    "settingsUnchangedDuringCutover": true,
+    "credentialsUnchangedDuringCutover": true,
+    "pairPermissionsUnchangedDuringCutover": true,
+    "backupPath": "/var/lib/aqua0-market-rebalancer-backups/reactive-9e7970a-1790392347"
+  },
+  "validation": {
+    "workerUnitPassed": 62,
+    "solidityUnitPassed": 25,
+    "actualTransactionIntegrationPassed": 2,
+    "actualWebsocketHttpFeedTestsPassed": 3,
+    "backendLocalTestsPassed": 5652,
+    "backendLocalSkipped": 6,
+    "backendInheritedLocalFailures": 5,
+    "backendLocalTypeSignatures": 18,
+    "backendAddedTypeSignatures": 0,
+    "frontendFullSuiteLogSha256": "91c57f7f78cdb237ca40c3c904000d9ba39a914e4e83a7defe37d2e971696ad3"
+  },
+  "liveControlsClickedByVerifier": 0,
+  "fundsTransferred": false,
+  "newPairApprovals": false,
+  "liveTradingEnabled": false,
+  "remainingActivationRequirements": [
+    "Choose allowed pairs and explicit spending/profit limits.",
+    "Configure quote fee budgets and the intended SwapVM caller.",
+    "Deploy, review and fund the executor only with separate explicit authorization.",
+    "Enable execution explicitly only after deployment permissions and full-transaction checks."
+  ],
+  "limits": [
+    "Public RPC cache timings are not production inclusion or profitability benchmarks.",
+    "The live worker has no allowed markets, so it is not conducting funded arbitrage.",
+    "The Aqua0 Obsidian project vault could not be resolved through available tools; repository documentation was updated, not an invented replacement vault."
+  ]
+}

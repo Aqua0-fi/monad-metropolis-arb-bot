@@ -1,0 +1,16 @@
+{
+  "scope": "local candidate verification, not a deployment or trading activation",
+  "workerUnitPassed": 84,
+  "contractUnitPassed": 42,
+  "localTransactionsPassed": 2,
+  "arbitrumForkCasesPassed": 6,
+  "frontendTestsPassed": 6227,
+  "frontendTestsSkipped": 50,
+  "frontendBuild": "passed",
+  "frontendChangedLint": "passed",
+  "backendAddedTypeDiagnostics": 0,
+  "backendAddedBatchFailures": 0,
+  "browser": "labelled synthetic desktop/mobile fixtures",
+  "liveFundsMoved": false,
+  "liveTradingEnabled": false
+}

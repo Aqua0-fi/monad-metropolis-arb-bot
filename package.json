@@ -1,0 +1,43 @@
+{
+  "name": "@aqua0/market-rebalancer-service",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "pretest": "npm run contracts:build",
+    "test": "node --import tsx --test test/*.test.ts",
+    "contracts:build": "forge build && python3 scripts/sync-compiler-fixture.py --check",
+    "contracts:test": "forge test --no-match-path '**/*.fork.t.sol' && python3 scripts/sync-compiler-fixture.py --check",
+    "test:fork": "forge test --match-path '**/*.fork.t.sol' -vv",
+    "scan": "node --import tsx src/cli.ts scan",
+    "run": "node --import tsx src/cli.ts run",
+    "doctor": "node --import tsx src/cli.ts doctor",
+    "check": "npm run verify:registry && npm run typecheck && npm test && npm run contracts:test && npm run test:owner-host",
+    "test:integration": "node --import tsx --test test/execution.integration.ts test/owner-deployment.integration.ts",
+    "format": "prettier --write src test scripts/*.ts config/*.json README.md AGENTS.md project-context/*.md && forge fmt contracts",
+    "format:check": "prettier --check src test scripts/*.ts config/*.json README.md AGENTS.md project-context/*.md && forge fmt --check contracts",
+    "test:heads": "node --import tsx --test test/head-feed.integration.ts",
+    "verify:registry": "python3 scripts/verify-registry-provenance.py",
+    "test:owner-host": "python3 -m unittest discover -s ops -p 'test_owner_pilot_remote.py' && python3 -m unittest discover -s ops -p 'test_owner_refresh_remote.py' && python3 -m unittest discover -s ops -p 'test_owner_reconcile_remote.py'"
+  },
+  "dependencies": {
+    "@aws-sdk/client-kms": "3.1095.0",
+    "@openzeppelin/contracts": "5.5.0",
+    "@openzeppelin/contracts-upgradeable": "5.5.0",
+    "@openzeppelin/uniswap-hooks": "1.2.0",
+    "@uniswap/v4-core": "1.0.2",
+    "viem": "2.55.8",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.0",
+    "prettier": "3.6.2",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

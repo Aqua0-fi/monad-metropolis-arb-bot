@@ -1,0 +1,113 @@
+{
+  "recordedAt": "2026-09-28T01:59:44.617031+00:00",
+  "scope": "Arbitrum observe-only worker and authorized staging backend/admin applications; not funded trading or production promotion",
+  "backend": {
+    "pullRequest": 598,
+    "sourceCommit": "fe4fb7a77e86eb88b7f63d14fe7fce2f154f2a75",
+    "stagingCommit": "a9d1e4ea93bda37638b8bba11f32efc9652bc2fa",
+    "deployment": "6d352914-f339-4cd3-b757-d8ae2c9ef3de",
+    "deploymentStatus": "SUCCESS",
+    "allChecksPassed": true
+  },
+  "frontend": {
+    "pullRequests": [
+      607,
+      608
+    ],
+    "coreSourceCommit": "2fdc322fae612cc4c19a699cf940502c2e920b54",
+    "adminShellSourceCommit": "552b52f4b52ea9f2b2fcb43c2c2b7cb0fb0ba006",
+    "stagingCommit": "06ecf1233dfab9e46da64119bdca92c772212ca0",
+    "deployment": "0a55f219-4b21-4c23-9b3a-5993965c12a4",
+    "deploymentStatus": "SUCCESS",
+    "allChecksPassed": true,
+    "localTestsPassed": 6228,
+    "localTestsSkipped": 50,
+    "localLint": "passed",
+    "localTypecheck": "passed",
+    "authenticatedDesktopMobileVerification": "passed"
+  },
+  "worker": {
+    "sourceCommit": "2a0db3043f2ee26f025e2c23105565f84735003a",
+    "image": "sha256:53e88c7854085c251e47102947ad3c3b37ba8dd618dce89be51f7994bf7f8172",
+    "reviewPullRequest": 3,
+    "reviewMergedToMain": false,
+    "runtimeChains": [
+      42161
+    ],
+    "mode": "observe",
+    "scheduler": "block-driven",
+    "configuredMarketsAtVerification": 0,
+    "executionEnabledAtVerification": false,
+    "observerStatePreserved": true
+  },
+  "runtimeVerifiedAt": "2026-09-28T01:56:10.379Z",
+  "browserVerifiedAt": "2026-09-28T01:53:30.322Z",
+  "discovery": {
+    "checkedAt": "2026-09-28T01:37:19.878Z",
+    "arbitrumV4Pairs": 3,
+    "arbitrumSwapVMStrategies": 11,
+    "approved": 0,
+    "note": "Old out-of-scope catalog rows remain labelled stale; they are not active runtime chains. Discovery does not establish backing, execution or profitability."
+  },
+  "continuationSafety": {
+    "publicChainTransactionsSent": 0,
+    "executorDeployed": false,
+    "fundsTransferred": false,
+    "liveTradingEnabled": false,
+    "pairApprovalsChanged": false,
+    "livePricePolicyValuesChanged": false,
+    "liveOperatingControlsClicked": 0,
+    "runtimeRefreshReadsVerified": 2
+  },
+  "priorForkEvidence": {
+    "file": "arbitrum-patched-v4-result.json",
+    "scope": "Six controlled Arbitrum V4/external-V3 execution and rollback cases recorded before this staging continuation; not newly run live-market trades."
+  },
+  "knownLimits": [
+    "No configured market, enabled execution or confirmed worker execution was present at verification; funded executor operation was not verified.",
+    "The older Base production-maker SwapVM reverse-order fork failure remains unresolved; generic router proof is not full production-maker proof.",
+    "The proposed 90 percent LP-profit distribution remains unimplemented hackathon-only follow-up work.",
+    "Local backend inherited batch failures and type diagnostics remain separately documented despite passing remote CI.",
+    "LP source attribution is not proof of LP loss, fee entitlement or a profit-sharing payout.",
+    "Receipt-token fee valuation is a replacement-cost estimate at the receipt block and excludes hosting, deployment and other operating costs.",
+    "The first admin-shell CI attempt timed out in an unchanged test; one unchanged-source retry passed. Initial failure evidence is retained."
+  ],
+  "activationRequirements": [
+    "Choose the first Arbitrum market and explicit capital, input, minimum-net-profit and gas budgets.",
+    "Confirm real available LP backing, required backend authorization and external depth using the current configuration.",
+    "Review the intended operator and executor deployment, permissions and funding under separate explicit authorization.",
+    "Complete exact-route full-transaction checks and observation before separately enabling a small live pilot."
+  ],
+  "localEvidenceRoot": "/Users/rithikkumars/CodingStuff/Aqua0/working-dir/rebalancer-readiness-20260928/evidence",
+  "localLogSha256": {
+    "frontend-dispatcher-replay.log": "41a72de35b19ae405a7eeffe634ebac3e4022c6b05de70b70000937a939b1bf0",
+    "frontend-dispatcher-static-import.log": "9b17e91ff36bee06855f31b825178767b2a85480ba292f50aba2090403c558a4",
+    "frontend-resume-lint.log": "bc3aa2fcc4f346d5b8c0c6bcb718b049ab87d45b0b2e4be2304c266aea937c9a",
+    "frontend-resume-typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "frontend-resume-full-tests.log": "5ac3cee77b360c94296083fcf45a67ce843e9f24b838137482a1f0be16a18b77",
+    "admin-onboarding-red.log": "e06e25b3bee46f26eaec48c8ac51088636723f48fbca35efcf9adafa413c3f63",
+    "admin-onboarding-green.log": "8f13acc80aae9626f0abcee6347fe692214d7634b35f007a68b85344c35acf69",
+    "admin-shell-full-lint.log": "bc3aa2fcc4f346d5b8c0c6bcb718b049ab87d45b0b2e4be2304c266aea937c9a",
+    "admin-shell-typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "admin-shell-full-tests.log": "5fb75ccfb2043f23738386cea44e6119372646042a3b986ef78865a0b9150efc",
+    "admin-shell-ci-failure.log": "6eb97f7ecc2c9e521b2d41deedac7a128fc24b35333b09acb3c6b9fa060cc4b7",
+    "admin-shell-unchanged-explorer-replay.log": "598fa24682ddd2389a8b1002b4c824869f4d43d2782e6f94c3ab7a41aad3b569"
+  },
+  "localArtifactSha256": {
+    "staging-live-browser-initial-49ec6923/verification.json": "c8f9dca71f9595f2ab254d27aec7a313ddfd8c01838e6b6982d4a32b6fc80821",
+    "staging-live-browser/rebalancer-lps-1440.png": "95d438537822c1946cd97bbe96ce02506e4527956c553e6a71be3f030399b645",
+    "staging-live-browser/rebalancer-lps-390.png": "a1c03b9ff7a90940b24a34dd8555f0f327706a10cf06ad3705cba3f0aeb93797",
+    "staging-live-browser/market-rebalancer-1440.png": "cd289fa44fb833e584562f2038683934c4a4eb73fa3444704c9d7864aafcc6bf",
+    "staging-live-browser/market-rebalancer-390.png": "74c267cf25d343d864d24b2bfdc25334bd6a82fe2deb54ab99126f870c1cd18b"
+  },
+  "releaseFilesSha256": {
+    "backend-ci.json": "5ed1c1fa75170ee92f12bd2bc77de255a419dd568c888c0947f8e324e4f637f4",
+    "frontend-core-ci.json": "2e558715b7ce954a489e471736111def469b3a86fc72428ddda483296e3e4858",
+    "frontend-admin-shell-ci.json": "1f088630a2dfa3788973ac94f0abfc9e76d3a6fcbaf821c253ba91b1a972c94e",
+    "worker-ci.json": "d550d674a6ca3d766ea96512b9b2a22937145952a19974e289c614406b680d82",
+    "browser-verification.json": "80ec5012d5cb42f454f4106f5d98dcc66b2096928c20d659b3c49e444076cf32",
+    "runtime-proof.json": "f5f7f7d37c3f48665e5f13d2fce6690daf8edfcc829df4ae8fbce9a7778a72f8",
+    "observer-rollout.json": "c14c01364e51030f4573da46859305533a2b45d151d1c43863c9759289b66829",
+    "arbitrum-catalog.json": "02912d996df97dc2e0e2651d8dc4ac550db6f42bc72afcd3567d6708257be0f6"
+  }
+}

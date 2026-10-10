@@ -1,0 +1,30 @@
+No files changed, compilation skipped
+2026-09-18T03:08:23.320252Z  WARN evm::traces::external: etherscan config not found
+2026-09-18T03:08:23.666701Z  WARN foundry_fork_db::cache: Failed to read cache file err=Os { code: 2, kind: NotFound, message: "No such file or directory" } path="/Users/rithikkumars/.foundry/cache/rpc/polygon/93997236"
+
+Ran 3 tests for contracts/test/MarketRebalancer.fork.t.sol:MarketRebalancerForkTest
+[PASS] testFork_AquaThenExternalProfits() (gas: 2332465)
+Logs:
+  chain: 137
+  forkBlock: 93997236
+  externalPool: 0xA4D8c89f0c20efbe54cBa9e7e7a7E509056228D9
+  executionGas: 1040546
+  profitRaw: 2057599
+
+[PASS] testFork_ExternalThenAquaProfits() (gas: 1828649)
+Logs:
+  chain: 137
+  forkBlock: 93997236
+  externalPool: 0xA4D8c89f0c20efbe54cBa9e7e7a7E509056228D9
+  executionGas: 1038726
+  profitRaw: 2302428
+
+[PASS] testFork_ImpossibleProfitRevertsBothLegsAndNonce() (gas: 2315766)
+Logs:
+  chain: 137
+  forkBlock: 93997236
+  externalPool: 0xA4D8c89f0c20efbe54cBa9e7e7a7E509056228D9
+
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 13.34s (14.21s CPU time)
+
+Ran 1 test suite in 13.35s (13.34s CPU time): 3 tests passed, 0 failed, 0 skipped (3 total tests)

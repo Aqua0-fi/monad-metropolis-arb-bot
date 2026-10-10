@@ -1,0 +1,11 @@
+[Unit]
+PartOf=docker.service
+Description=Isolated market-rebalancer network and EC2 metadata denial
+Requires=docker.service
+After=docker.service
+Before=aqua0-market-rebalancer.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/aqua0-market-rebalancer/ensure-observer-network.sh
+RemainAfterExit=true

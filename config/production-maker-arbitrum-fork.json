@@ -1,0 +1,44 @@
+{
+  "chainId": 42161,
+  "block": 509857082,
+  "blockHash": "0x67995cf91fea4395b1a86912c5ac99b9e922f1c6650ef3482263ce3c086a636f",
+  "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
+  "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
+  "maker": "0xEF9f7F4006fE95afede04F6916E72556A957EBbc",
+  "strategyId": "0xcea23fe82a826b5668ce333ce43f1cd5b6d6bf93a6980e3694e698b2db76116c",
+  "orderHash": "0xc8afd9469ce6a5fc4ae3643eb588eb2f9d423150d283a0622c79c3039da8453a",
+  "classId": 11,
+  "token0": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+  "token1": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+  "traits": "34375776492328245516372636174454222643939526697612042449213970252349210361856",
+  "program": "0x1504002dc6c01100140847f9a23edbbb6c9e",
+  "slices": 10,
+  "externalPool": "0xbE3aD6a5669Dc0B8b12FeBC03608860C31E2eef6",
+  "externalFactory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+  "externalFee": 100,
+  "quoter": "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
+  "universalRouter": "0xA51afAFe0263b40EdaEf0Df8781eA9aa03E381a3",
+  "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+  "hook": "0xEa0ff3277279cf94dC8A5B9923dD7bb1a30e80C8",
+  "makerCodeHash": "0xbd1fa8868f34c4c88f831ceb2ce259cccd5abcdf2fb3678a96c2d74a01147dcc",
+  "backing": [
+    {
+      "token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "vault": "0xb367A4306087d3981B38C032464cD7E3A7a03A4E",
+      "available": "25811805",
+      "freePrincipal": "25811805",
+      "cap": "25811805",
+      "committers": 1
+    },
+    {
+      "token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+      "vault": "0x6c775D7a2D8E4398E5DBabABbDEc602269A44aCd",
+      "available": "14999865",
+      "freePrincipal": "14999865",
+      "cap": "14999865",
+      "committers": 1
+    }
+  ],
+  "capturedAt": "2026-09-28T23:28:25.597Z",
+  "publicTransactions": 0
+}

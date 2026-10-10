@@ -1,0 +1,45 @@
+[extend]
+useDefault = true
+
+# The fork fixture parses these exact public ERC-20 contract addresses, not credentials.
+# Both the fixture path AND one of these exact address values must match.
+[[allowlists]]
+description = "Public ERC-20 identities in the captured production-maker fork fixture"
+condition = "AND"
+regexTarget = "secret"
+paths = ['''^config/production-maker-fork\.json$''']
+regexes = [
+  '''(?i)^0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913$''',
+  '''(?i)^0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2$''',
+]
+
+# Actual Arbitrum WETH/native-USDC contract addresses independently read at the
+# captured fork blocks; path AND exact public address must match. No keys ignored.
+[[allowlists]]
+description = "Verified public Arbitrum token identities in pilot and fork records"
+condition = "AND"
+regexTarget = "secret"
+paths = ['''^config/(arbitrum-pilot|observed-opportunity-arbitrum-fork|owner-pilot-funding-fork|production-maker-arbitrum-fork)\.json$''']
+regexes = [
+  '''(?i)^0xaf88d065e77c8cC2239327C5EDb3A432268e5831$''',
+  '''(?i)^0x82aF49447D8a07e3bd95BD0d56f35241523fBab1$''',
+]
+
+[[allowlists]]
+description = "Canonical Arbitrum WETH identity in generated chain registry"
+condition = "AND"
+regexTarget = "secret"
+paths = ['''^config/chains\.json$''']
+regexes = ['''(?i)^0x82aF49447D8a07e3bd95BD0d56f35241523fBab1$''']
+
+# Exact public token addresses in the canonical successful Arbitrum receipt fixture.
+# Both this one fixture path and one independently verified address must match.
+[[allowlists]]
+description = "Public Arbitrum token identities in the actual receipt regression"
+condition = "AND"
+regexTarget = "secret"
+paths = ['''^test/fixtures/arbitrum-first-execution\.json$''']
+regexes = [
+  '''(?i)^0x82af49447d8a07e3bd95bd0d56f35241523fbab1$''',
+  '''(?i)^0xaf88d065e77c8cc2239327c5edb3a432268e5831$''',
+]

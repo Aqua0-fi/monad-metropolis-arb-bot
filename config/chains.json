@@ -1,0 +1,401 @@
+{
+  "chains": [
+    {
+      "chainId": 137,
+      "feeModel": "gas-limit",
+      "executionReviewed": true,
+      "nativeCurrency": {
+        "symbol": "POL",
+        "decimals": 18
+      },
+      "name": "Polygon",
+      "rpcEnv": "RPC_URL_MAINNET_POLYGON",
+      "publicRpc": "https://polygon-bor-rpc.publicnode.com",
+      "poolManager": "0x67366782805870060151383F4BbFF9daB53e5cD6",
+      "universalRouter": "0x1095692A6237d83C6a72F3F5eFEdb9A670C49223",
+      "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+      "aqua0Hook": "0xEE71fFDCE0691790E814342d22E0ED2d75D8C0c8",
+      "extendedV4Encoding": false,
+      "pools": [
+        {
+          "poolId": "0xa244820c73f3e6a74430bbfa8b741d8ad330ed7aae641074a48e2a4d5cf91be6",
+          "currency0": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+          "currency1": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+          "fee": 3000,
+          "tickSpacing": 60,
+          "hooks": "0xEE71fFDCE0691790E814342d22E0ED2d75D8C0c8"
+        }
+      ],
+      "venues": [
+        {
+          "name": "uniswap-v3",
+          "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+          "quoter": "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        },
+        {
+          "name": "sushi-v3",
+          "factory": "0x917933899c6a5F8E37F31E19f92CdBFF7e8FF0e2",
+          "quoter": "0xb1E835Dc2785b52265711e17fCCb0fd018226a6e",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        }
+      ],
+      "swapVM": {
+        "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
+        "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
+        "maker": "0x03689e9311BC161F9b6DAA3eA1bdBA49C375d97B",
+        "slices": 10
+      }
+    },
+    {
+      "chainId": 143,
+      "feeModel": "gas-limit",
+      "executionReviewed": true,
+      "nativeCurrency": {
+        "symbol": "MON",
+        "decimals": 18
+      },
+      "name": "Monad",
+      "rpcEnv": "RPC_URL_MAINNET_MONAD",
+      "publicRpc": "https://rpc.monad.xyz",
+      "poolManager": "0x188d586Ddcf52439676Ca21A244753fA19F9Ea8e",
+      "universalRouter": "0x0D97Dc33264bfC1c226207428A79b26757fb9dc3",
+      "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+      "aqua0Hook": "0x027f56E669FBB2337557baeE210dbf79b87EC0C8",
+      "extendedV4Encoding": false,
+      "pools": [
+        {
+          "poolId": "0x220d42f43359b15f13c223b1c56b9ad499df3804f5a7e3bf3652bed05cc9085f",
+          "currency0": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+          "currency1": "0xEE8c0E9f1BFFb4Eb878d8f15f368A02a35481242",
+          "fee": 3000,
+          "tickSpacing": 60,
+          "hooks": "0x027f56E669FBB2337557baeE210dbf79b87EC0C8"
+        }
+      ],
+      "venues": [
+        {
+          "name": "uniswap-v3",
+          "factory": "0x204FAca1764B154221e35c0d20aBb3c525710498",
+          "quoter": "0x661E93cca42AfacB172121EF892830cA3b70F08d",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        }
+      ]
+    },
+    {
+      "chainId": 4663,
+      "feeModel": "gas-limit",
+      "executionReviewed": true,
+      "nativeCurrency": {
+        "symbol": "ETH",
+        "decimals": 18
+      },
+      "name": "Robinhood",
+      "rpcEnv": "RPC_URL_MAINNET_ROBINHOOD",
+      "publicRpc": "https://rpc.mainnet.chain.robinhood.com",
+      "poolManager": "0x8366a39CC670B4001A1121B8F6A443A643e40951",
+      "universalRouter": "0x8876789976dEcBfCbBbe364623C63652db8C0904",
+      "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+      "aqua0Hook": "0xAc343B8A43f59Ca513D0C126B6BaED5A3452c0C8",
+      "extendedV4Encoding": true,
+      "pools": [
+        {
+          "poolId": "0x20b536c2d45ede98de51cadfe02c6113e6da1ccc46e793dbcebd344ff657b377",
+          "currency0": "0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73",
+          "currency1": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+          "fee": 3000,
+          "tickSpacing": 60,
+          "hooks": "0xAc343B8A43f59Ca513D0C126B6BaED5A3452c0C8"
+        }
+      ],
+      "venues": [
+        {
+          "name": "uniswap-v3",
+          "factory": "0x1f7d7550B1b028f7571E69A784071F0205FD2EfA",
+          "quoter": "0x33e885eD0Ec9bF04EcfB19341582aADCb4c8A9E7",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        },
+        {
+          "name": "sushi-v3",
+          "factory": "0xE51960f1B45f1C9FB6D166E6a884F866fC70433B",
+          "quoter": "0x3E290e5E01818002A0b672148BdC7514D861C7B3",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        }
+      ],
+      "swapVM": {
+        "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
+        "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
+        "maker": "0xEA5F5F3803588496802C8CAe91eB17bBCFdc1E0a",
+        "slices": 10
+      }
+    },
+    {
+      "chainId": 5042,
+      "feeModel": "gas-limit",
+      "executionReviewed": false,
+      "nativeCurrency": {
+        "symbol": "USDC",
+        "decimals": 18
+      },
+      "nativeEquivalent": {
+        "token": "0x3600000000000000000000000000000000000000",
+        "decimals": 6
+      },
+      "name": "Arc",
+      "rpcEnv": "RPC_URL_MAINNET_ARC",
+      "poolManager": "0x8366a39CC670B4001A1121B8F6A443A643e40951",
+      "universalRouter": "0x4fcA4a51Ab4F23A7447b3284fBd7D73289A89Fb1",
+      "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+      "aqua0Hook": "0xAc343B8A43f59Ca513D0C126B6BaED5A3452c0C8",
+      "extendedV4Encoding": true,
+      "pools": [],
+      "venues": [],
+      "swapVM": {
+        "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
+        "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
+        "maker": "0xc0ba4b11a7c6035Ef469144D44b780D99925567C",
+        "slices": 10
+      }
+    },
+    {
+      "chainId": 8453,
+      "feeModel": "op-stack",
+      "executionReviewed": true,
+      "nativeCurrency": {
+        "symbol": "ETH",
+        "decimals": 18
+      },
+      "name": "Base",
+      "rpcEnv": "RPC_URL_MAINNET_BASE",
+      "publicRpc": "https://mainnet.base.org",
+      "poolManager": "0x498581fF718922c3f8e6A244956aF099B2652b2b",
+      "universalRouter": "0x6fF5693b99212Da76ad316178A184AB56D299b43",
+      "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+      "aqua0Hook": "0xACaF2945890AB6caea62bDa459d1922532A500C8",
+      "extendedV4Encoding": false,
+      "pools": [
+        {
+          "poolId": "0xbf948948cda5a93e50edb496cf32e565c46d8c7335c6bac7854a8d95eab25375",
+          "currency0": "0x4200000000000000000000000000000000000006",
+          "currency1": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "fee": 3000,
+          "tickSpacing": 60,
+          "hooks": "0xACaF2945890AB6caea62bDa459d1922532A500C8"
+        }
+      ],
+      "venues": [
+        {
+          "name": "uniswap-v3",
+          "factory": "0x33128a8fC17869897dcE68Ed026d694621f6FDfD",
+          "quoter": "0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        },
+        {
+          "name": "sushi-v3",
+          "factory": "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+          "quoter": "0xb1E835Dc2785b52265711e17fCCb0fd018226a6e",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        }
+      ],
+      "swapVM": {
+        "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
+        "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
+        "maker": "0x1a09f7d9B921C93F8fCD4bF04fe448982a3388Ec",
+        "slices": 10
+      }
+    },
+    {
+      "chainId": 42161,
+      "feeModel": "gas-limit",
+      "executionReviewed": true,
+      "nativeCurrency": {
+        "symbol": "ETH",
+        "decimals": 18
+      },
+      "nativeEquivalent": {
+        "token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+        "decimals": 18
+      },
+      "name": "Arbitrum",
+      "rpcEnv": "RPC_URL_MAINNET_ARBITRUM",
+      "publicRpc": "https://arb1.arbitrum.io/rpc",
+      "poolManager": "0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32",
+      "universalRouter": "0xA51afAFe0263b40EdaEf0Df8781eA9aa03E381a3",
+      "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+      "aqua0Hook": "0xEa0ff3277279cf94dC8A5B9923dD7bb1a30e80C8",
+      "extendedV4Encoding": false,
+      "pools": [
+        {
+          "poolId": "0xb7a4fee4a7d215adda80308352ee12b01a6dab72f439f15a6336784dec704781",
+          "currency0": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+          "currency1": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "fee": 3000,
+          "tickSpacing": 60,
+          "hooks": "0xEa0ff3277279cf94dC8A5B9923dD7bb1a30e80C8"
+        }
+      ],
+      "venues": [
+        {
+          "name": "uniswap-v3",
+          "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+          "quoter": "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        },
+        {
+          "name": "sushi-v3",
+          "factory": "0x1af415a1EbA07a4986a52B6f2e7dE7003D82231e",
+          "quoter": "0x0524E833cCD057e4d7A296e3aaAb9f7675964Ce1",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        }
+      ],
+      "swapVM": {
+        "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
+        "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
+        "maker": "0xEF9f7F4006fE95afede04F6916E72556A957EBbc",
+        "slices": 10
+      }
+    },
+    {
+      "chainId": 42220,
+      "feeModel": "op-stack",
+      "executionReviewed": true,
+      "nativeCurrency": {
+        "symbol": "CELO",
+        "decimals": 18
+      },
+      "name": "Celo",
+      "rpcEnv": "RPC_URL_MAINNET_CELO",
+      "publicRpc": "https://forno.celo.org",
+      "poolManager": "0x288dc841A52FCA2707c6947B3A777c5E56cd87BC",
+      "universalRouter": "0xcb695bc5D3Aa22cAD1E6DF07801b061a05A0233A",
+      "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+      "aqua0Hook": "0xCaA69ef433CAB907448F4e0C2ECfDa522F5E80C8",
+      "extendedV4Encoding": false,
+      "pools": [
+        {
+          "poolId": "0x50ad20cb5c4a3e17069b44eaca24d44f8cbb8c3d928f4350fe15d4d86f179f15",
+          "currency0": "0xcebA9300f2b948710d2653dD7B07f33A8B32118C",
+          "currency1": "0xD221812de1BD094f35587EE8E174B07B6167D9Af",
+          "fee": 3000,
+          "tickSpacing": 60,
+          "hooks": "0xCaA69ef433CAB907448F4e0C2ECfDa522F5E80C8"
+        }
+      ],
+      "venues": [
+        {
+          "name": "uniswap-v3",
+          "factory": "0xAfE208a311B21f13EF87E33A90049fC17A7acDEc",
+          "quoter": "0x82825d0554fA07f7FC52Ab63c961F330fdEFa8E8",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        }
+      ]
+    },
+    {
+      "chainId": 43114,
+      "feeModel": "gas-limit",
+      "executionReviewed": true,
+      "nativeCurrency": {
+        "symbol": "AVAX",
+        "decimals": 18
+      },
+      "name": "Avalanche",
+      "rpcEnv": "RPC_URL_MAINNET_AVALANCHE",
+      "publicRpc": "https://api.avax.network/ext/bc/C/rpc",
+      "poolManager": "0x06380C0e0912312B5150364B9DC4542BA0DbBc85",
+      "universalRouter": "0x94b75331AE8d42C1b61065089B7d48FE14aA73b7",
+      "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+      "aqua0Hook": "0x768664A369ba31520161e73E55Bcb293CA1200C8",
+      "extendedV4Encoding": false,
+      "pools": [
+        {
+          "poolId": "0x88ec703b9eb4daf160dd3da7a5d69b86c89be0bb1064565b43aed08a50e7bee4",
+          "currency0": "0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB",
+          "currency1": "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
+          "fee": 3000,
+          "tickSpacing": 60,
+          "hooks": "0x768664A369ba31520161e73E55Bcb293CA1200C8"
+        }
+      ],
+      "venues": [
+        {
+          "name": "uniswap-v3",
+          "factory": "0x740b1c1de25031C31FF4fC9A62f554A55cdC1baD",
+          "quoter": "0xbe0F5544EC67e9B3b2D979aaA43f18Fd87E6257F",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        },
+        {
+          "name": "sushi-v3",
+          "factory": "0x3e603C14aF37EBdaD31709C4f848Fc6aD5BEc715",
+          "quoter": "0xb1E835Dc2785b52265711e17fCCb0fd018226a6e",
+          "fees": [
+            100,
+            500,
+            3000,
+            10000
+          ]
+        }
+      ],
+      "swapVM": {
+        "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
+        "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
+        "maker": "0xbBA33D5e9cB676477a0653cD99d01fBe36d27d3d",
+        "slices": 10
+      }
+    }
+  ]
+}

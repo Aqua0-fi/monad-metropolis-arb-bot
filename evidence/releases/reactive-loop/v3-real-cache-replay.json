@@ -1,0 +1,92 @@
+{
+  "checkedAt": "2026-09-26T02:28:16.576Z",
+  "chainId": 8453,
+  "pool": "0xd0b53D9277642d899DF5C87A3966A349A798F224",
+  "firstBlock": "51800169",
+  "firstHash": "0xac41b56dbd9a4628a374f94ae8b6443ca4ef3799f419eeb9e297578d0247e727",
+  "comparisonBlock": "51800172",
+  "comparisonHash": "0x6ac3d132c89590add4b229f7c025a8544accb30e452ddb973240ee23c62d6f21",
+  "results": [
+    {
+      "phase": "cold",
+      "elapsedMs": 4034.3332499999997,
+      "rpcCalls": 9
+    },
+    {
+      "phase": "same-block-reuse",
+      "elapsedMs": 299.038458,
+      "rpcCalls": 1
+    },
+    {
+      "phase": "next-block-verified-refresh",
+      "elapsedMs": 1037.4683749999995,
+      "rpcCalls": 6
+    },
+    {
+      "phase": "same-next-block-forced-cold",
+      "elapsedMs": 3615.929874999999,
+      "rpcCalls": 8
+    }
+  ],
+  "cache": {
+    "entries": 1,
+    "inFlight": 0,
+    "hits": 1,
+    "reuses": 1,
+    "coldOrRefreshLoads": 2,
+    "invalidatedHistory": 0
+  },
+  "comparisons": [
+    {
+      "down": true,
+      "amount": "178680074769800908",
+      "amountOut": "481106830",
+      "complete": true
+    },
+    {
+      "down": true,
+      "amount": "17868007476980090877",
+      "amountOut": "48076797893",
+      "complete": true
+    },
+    {
+      "down": true,
+      "amount": "893400373849004543872",
+      "amountOut": "2307213914343",
+      "complete": true
+    },
+    {
+      "down": true,
+      "amount": "1786800747698009087745",
+      "amountOut": "4230645829487",
+      "complete": true
+    },
+    {
+      "down": false,
+      "amount": "312300796",
+      "amountOut": "115869248434298461",
+      "complete": true
+    },
+    {
+      "down": false,
+      "amount": "31230079684",
+      "amountOut": "11581640970034971903",
+      "complete": true
+    },
+    {
+      "down": false,
+      "amount": "1561503984217",
+      "amountOut": "563029733846604980580",
+      "complete": true
+    },
+    {
+      "down": false,
+      "amount": "3123007968435",
+      "amountOut": "1054194568439381169046",
+      "complete": true
+    }
+  ],
+  "allMatch": true,
+  "transactionsSent": 0,
+  "limitation": "Measured through a public RPC from this Mac. Does not establish production search-to-inclusion latency or profitable opportunity capture."
+}

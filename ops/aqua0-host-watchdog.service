@@ -1,0 +1,23 @@
+[Unit]
+Description=Aqua0 existing-host resource and rebalancer liveness monitor
+After=docker.service network-online.target
+
+[Service]
+Type=oneshot
+User=root
+EnvironmentFile=-/etc/aqua0-host-watchdog/monitor.env
+Environment=WATCHDOG_CONFIG=/etc/aqua0-host-watchdog/config.json
+Environment=AWS_EC2_METADATA_DISABLED=true
+Environment=AWS_CONFIG_FILE=/dev/null
+Environment=AWS_SHARED_CREDENTIALS_FILE=/dev/null
+ExecStart=/usr/bin/python3 /opt/aqua0-host-watchdog/host_watchdog.py
+TimeoutStartSec=50
+Nice=10
+CPUQuota=10%
+MemoryMax=128M
+TasksMax=32
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/aqua0-host-watchdog

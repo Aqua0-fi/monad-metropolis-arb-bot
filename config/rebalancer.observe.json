@@ -1,0 +1,14 @@
+{
+  "mode": "observe",
+  "networkMode": "mainnet",
+  "apiUrl": "https://staging-api.aqua0.xyz",
+  "pollMs": 15000,
+  "slippageBps": 10,
+  "maxQuoteAgeMs": 10000,
+  "maxBlockLag": 8,
+  "confirmations": 2,
+  "maxConsecutiveErrors": 5,
+  "markets": [],
+  "discovery": { "enabled": true, "intervalMs": 120000, "maxAgeMs": 600000 },
+  "execution": {}
+}

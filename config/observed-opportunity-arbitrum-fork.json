@@ -1,0 +1,96 @@
+{
+  "source": "../evidence/arbitrum-readonly-route-scan-20260929.json",
+  "capturedAt": "2026-09-29T00:13:27.994Z",
+  "quote": {
+    "version": 1,
+    "venue": "aqua",
+    "network": "mainnet",
+    "chainId": 42161,
+    "market": {
+      "venue": "aqua",
+      "chainId": 42161,
+      "stableStrategyId": "0xa24eb0f8c916623fd559adcac6ef3605e123977036e28fa56ff055d7cce0f04d",
+      "classId": "1",
+      "currentAquaHash": "0x42c2c10d7d2c84da82decc01b9dc5a050d3863f712e1d209e0b09ffc019bc4b0",
+      "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
+      "maker": "0xEF9f7F4006fE95afede04F6916E72556A957EBbc",
+      "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
+      "slices": 10,
+      "token0": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "token1": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "tokens": [
+        {
+          "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+          "symbol": "weth",
+          "decimals": 18
+        },
+        {
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "symbol": "usdc",
+          "decimals": 6
+        }
+      ],
+      "order": {
+        "maker": "0xEF9f7F4006fE95afede04F6916E72556A957EBbc",
+        "traits": "34375776492328245516372636174454222643939526697612042449213970252349210361856",
+        "data": "0x1504002dc6c011001408078ff48f91b88a65"
+      },
+      "blockNumber": "509863711",
+      "blockHash": "0xe98796a9c052cbf5a1d57d75a3c4213a2562a3fb727305148c3d2e3869d3437b",
+      "available": true
+    },
+    "caller": "0x0C527b9B1D603863CADC1CBBc1483036ac21D252",
+    "baseToken": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+    "externalPool": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
+    "externalFactory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+    "externalFee": 100,
+    "maxInput": "5000000",
+    "gasBudget": "269673",
+    "minNetProfit": "10000",
+    "blockNumber": "509863711",
+    "blockHash": "0xe98796a9c052cbf5a1d57d75a3c4213a2562a3fb727305148c3d2e3869d3437b",
+    "blockTimestamp": "1790639909",
+    "candidates": [
+      {
+        "aquaFirst": true,
+        "amountIn": "3976562",
+        "firstAmountOut": "1757046277329185",
+        "secondAmountIn": "1755289231051855",
+        "finalAmountOut": "4713998",
+        "grossProfit": "737436",
+        "netProfit": "467763"
+      }
+    ],
+    "searches": [
+      {
+        "aquaFirst": false,
+        "method": "opaque-vm-adaptive-multibracket",
+        "evaluatedInputs": 40,
+        "failedQuotes": 0,
+        "timedOut": false,
+        "fullyEnumerated": false,
+        "optimality": "best-actually-evaluated-size",
+        "note": "Custom programs can be non-smooth and have multiple peaks. The bounded search does not certify a global optimum."
+      },
+      {
+        "aquaFirst": true,
+        "method": "opaque-vm-adaptive-multibracket",
+        "evaluatedInputs": 40,
+        "failedQuotes": 0,
+        "timedOut": false,
+        "fullyEnumerated": false,
+        "optimality": "best-actually-evaluated-size",
+        "note": "Custom programs can be non-smooth and have multiple peaks. The bounded search does not certify a global optimum."
+      }
+    ],
+    "quoteKind": "actual-swapvm-and-native-v3",
+    "transactionSimulated": false,
+    "reservationsCreated": false,
+    "note": "Best evaluated opaque-program size, not a certified global optimum. Refresh the selected amount with the real caller and simulate the full atomic transaction before signing."
+  },
+  "expectedOwner": "0xd1fC4c8631E8C5d23a0C86D5890802DD70Cb4cf5",
+  "expectedMakerCodeHash": "0xbd1fa8868f34c4c88f831ceb2ce259cccd5abcdf2fb3678a96c2d74a01147dcc",
+  "expectedExecutorCodeHash": "0x9b0eb71fdfb39872aa809ac4cf1f07df07cd22a768ce83097157837985d5cfd7",
+  "externalQuoter": "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
+  "qualification": "Observed pool prices and actual deployed maker/vault/executor. Fork-only operating funds and permissions. No external-price displacement, public transaction or signature."
+}

@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-09-28T01:56:10.379Z",
+  "origin": "https://staging-api.aqua0.xyz",
+  "network": "mainnet",
+  "mode": "observe",
+  "scheduler": "block-driven",
+  "chains": [
+    {
+      "chainId": 42161,
+      "configuredMarkets": 0,
+      "executionEnabled": false
+    }
+  ],
+  "economicsAvailable": true,
+  "economicsBlocked": false,
+  "matchedConfirmedExecutions": 0,
+  "returnedExecutions": 0,
+  "writeRequests": 0
+}

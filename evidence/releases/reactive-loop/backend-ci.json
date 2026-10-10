@@ -1,0 +1,49 @@
+{
+  "pr": 597,
+  "state": "MERGED",
+  "base": "staging",
+  "head": "82358411ad70ee1552f8dc6cc60d947dd73a0c15",
+  "mergeCommit": "cd825654ffd1b97703c456d39584fbe28a13de5d",
+  "checks": [
+    {
+      "name": "Build + Typecheck",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "build-id",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "Semgrep (SAST)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "Unit tests",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "CodeQL (JavaScript/TypeScript)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "Postgres integration tests",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "gitleaks (secret scan)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "name": "Deploy-boot smoke (Bun runtime)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    }
+  ]
+}

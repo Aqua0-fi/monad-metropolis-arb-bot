@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-01T08:15:01.156Z",
+  "chainId": 42161,
+  "blockNumber": "510601866",
+  "blockHash": "0x61183dd6613d3961f29006caba3e74ddb6f03e0982d590f7c72f29d6a67177cb",
+  "hook": "0xEa0ff3277279cf94dC8A5B9923dD7bb1a30e80C8",
+  "poolId": "0x1f7d6bb891093beb90fb3802388282e1d2fea68118c3220d902c7a8e207b5f15",
+  "classId": "10",
+  "method": "eth_call only; callback simulation; empty signature; no submission",
+  "mutations": 0,
+  "consentRevertObserved": true,
+  "decodedError": "ClassNotApprovedForPool",
+  "decodedArgs": [
+    "0x1f7d6bb891093beb90fb3802388282e1d2fea68118c3220d902c7a8e207b5f15",
+    "10"
+  ],
+  "errorType": "ContractFunctionExecutionError"
+}

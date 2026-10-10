@@ -1,0 +1,17 @@
+No files changed, compilation skipped
+2026-09-18T03:07:12.873655Z  WARN evm::traces::external: etherscan config not found
+2026-09-18T03:07:13.751158Z ERROR sharedbackend: Failed to send/recv `basic` err=failed to get account for 0xBEfEbB60df19290CF0b39Af3855D9e4bd80a80c8: server returned an error response: error code -32000: historical state 2b72236bcfb9f416034f2561dacb35d5b20280991d07e329394807de42385233 is not available address=0xBEfEbB60df19290CF0b39Af3855D9e4bd80a80c8
+
+Ran 1 test for contracts/test/MarketRebalancer.fork.t.sol:MarketRebalancerForkTest
+[FAIL: vm.etch: failed to get account for 0xBEfEbB60df19290CF0b39Af3855D9e4bd80a80c8: server returned an error response: error code -32000: historical state 2b72236bcfb9f416034f2561dacb35d5b20280991d07e329394807de42385233 is not available] setUp() (gas: 0)
+Suite result: FAILED. 0 passed; 1 failed; 0 skipped; finished in 877.23ms (0.00ns CPU time)
+
+Ran 1 test suite in 879.33ms (877.23ms CPU time): 0 tests passed, 1 failed, 0 skipped (1 total tests)
+
+Failing tests:
+Encountered 1 failing test in contracts/test/MarketRebalancer.fork.t.sol:MarketRebalancerForkTest
+[FAIL: vm.etch: failed to get account for 0xBEfEbB60df19290CF0b39Af3855D9e4bd80a80c8: server returned an error response: error code -32000: historical state 2b72236bcfb9f416034f2561dacb35d5b20280991d07e329394807de42385233 is not available] setUp() (gas: 0)
+
+Encountered a total of 1 failing tests, 0 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 1 failed test

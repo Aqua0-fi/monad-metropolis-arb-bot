@@ -1,0 +1,14 @@
+{
+  "chainId": 4663,
+  "venue": "uniswap-v3",
+  "block": 65470614,
+  "blockHash": "0x93fd269af0bd0c4abb2d14702f5be6304b749b92c3ca31028bb0adff03cf6e3a",
+  "blockTimestamp": 1789658542,
+  "exitCode": 1,
+  "elapsedSeconds": 1.66,
+  "fixture": "Real chain state and external venues; local Aqua0 vaults, signed JIT hook, seeded mispricing and test capital",
+  "tests": [
+    "[FAIL: vm.etch: failed to get account for 0xBEfEbB60df19290CF0b39Af3855D9e4bd80a80c8: server returned an error response: error code -32000: historical state 173f59b6e0aa5ff326f419056bc90847f4b1346bd634494a2c3587e1620b94c1 is not available] setUp() (gas: 0)",
+    "[FAIL: vm.etch: failed to get account for 0xBEfEbB60df19290CF0b39Af3855D9e4bd80a80c8: server returned an error response: error code -32000: historical state 173f59b6e0aa5ff326f419056bc90847f4b1346bd634494a2c3587e1620b94c1 is not available] setUp() (gas: 0)"
+  ]
+}

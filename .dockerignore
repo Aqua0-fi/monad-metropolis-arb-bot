@@ -1,0 +1,10 @@
+.git
+node_modules
+out
+cache
+lib
+vendor
+evidence
+runtime
+.env*
+config/*.local.json

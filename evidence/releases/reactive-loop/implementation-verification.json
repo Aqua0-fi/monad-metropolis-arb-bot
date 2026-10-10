@@ -1,0 +1,53 @@
+{
+  "workerSource": "9e7970a641596d6b3dba0a4b0f711194e4af3c80",
+  "workerImage": "sha256:fd3905313444dadae8228523e9b45db2a3e8f47b6b40d3c7b1e48cee48f53d26",
+  "workerUnitTests": {
+    "passed": 62,
+    "failed": 0
+  },
+  "solidityUnitTests": {
+    "passed": 25,
+    "failed": 0
+  },
+  "transactionIntegration": {
+    "passed": 2,
+    "failed": 0
+  },
+  "actualHeadFeedIntegration": {
+    "passed": 3,
+    "failed": 0
+  },
+  "backendUnitRoutes": {
+    "passed": 5652,
+    "skipped": 6,
+    "failed": 5,
+    "failureNote": "Same five pre-existing combined-batch durability/mock failures reproduced on untouched staging."
+  },
+  "backendTypeErrors": {
+    "signatures": 18,
+    "added": 0,
+    "removed": 0
+  },
+  "frontendBeforePagination": {
+    "passed": 6193,
+    "skipped": 50,
+    "typecheck": "passed after correcting two test-only role-query options",
+    "productionBuild": "passed"
+  },
+  "ciNote": "Frontend combined check fails on five inherited lint errors in unchanged v4-adapter.tsx and v4-detail-view.tsx. Full CI is not claimed green. Backend CI status is captured separately at release.",
+  "localLogSha256": {
+    "worker-release-check.log": "bed6fa04172f5290c1b5fbbd5754e2065788347ec786bc03170a0f70b0fe94fe",
+    "worker-release-transactions.log": "70cd61e33b20c2f6bef870462f9d6df199bda32abe035accd38603b6cf22b18e",
+    "worker-release-heads.log": "7795701c13b2bd65c4ae6a23924cbc638c54f0896d81147f8f4f733e3e631c8a",
+    "worker-release-build.log": "4e680ee7270301c34be477764205e399560c6c0dd1d072b3f41f013495548812",
+    "backend-final-tests.log": "1441654d6d1739a63d308b2a189e72f95a335c4f93ad2ef7380705e50b5e9bde",
+    "backend-final-types.log": "a46a33b44e4f5ccc6ca41718b13b1652a5dec71c558fde4a47b1653cb1973c41",
+    "web-all.log": "29a2ae13afd9a1d3cd6b5ec144194c452183a8e436b0943e8607ef484b283065",
+    "web-build.log": "0dabf6097c4385a021887723ec355907f83964a6322473ae79a728c4f68dfef9",
+    "web-types-fixed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "web-ci-check.log": "4064325d3849515ab23c5237dcebf5d6821682aee43521a584df5f9456ac4e3f"
+  },
+  "fundsTransferred": false,
+  "pairPermissionsChanged": false,
+  "tradingEnabled": false
+}

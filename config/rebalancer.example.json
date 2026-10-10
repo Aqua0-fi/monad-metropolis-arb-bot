@@ -1,0 +1,36 @@
+{
+  "mode": "observe",
+  "apiUrl": "https://api.aqua0.xyz",
+  "pollMs": 15000,
+  "slippageBps": 10,
+  "maxQuoteAgeMs": 10000,
+  "maxBlockLag": 8,
+  "confirmations": 2,
+  "maxConsecutiveErrors": 5,
+  "markets": [
+    {
+      "chainId": 8453,
+      "poolId": "0xbf948948cda5a93e50edb496cf32e565c46d8c7335c6bac7854a8d95eab25375",
+      "classId": "1",
+      "baseToken": "0x4200000000000000000000000000000000000006",
+      "amounts": ["1000000000000000", "5000000000000000", "10000000000000000"],
+      "minNetProfit": "10000000000000",
+      "maxInput": "10000000000000000"
+    }
+  ],
+  "execution": {
+    "8453": {
+      "executor": "0x0000000000000000000000000000000000000000",
+      "operator": "0x0000000000000000000000000000000000000000",
+      "privateKeyEnv": "MARKET_REBALANCER_OPERATOR_KEY_BASE",
+      "allowBroadcast": false,
+      "maxGasUnits": "1800000",
+      "maxFeePerGas": "10000000",
+      "l1FeeReserveWei": "5000000000000",
+      "maxDailyGasWei": "1000000000000000",
+      "wrappedNative": "0x4200000000000000000000000000000000000006",
+      "gasConversionFee": 500,
+      "gasCostBufferBps": 13000
+    }
+  }
+}

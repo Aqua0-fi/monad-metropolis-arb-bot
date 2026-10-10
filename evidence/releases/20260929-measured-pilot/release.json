@@ -1,0 +1,74 @@
+{
+  "checkedAt": "2026-09-29T01:33:13Z",
+  "sourceCommit": "0f7fb6c04114a640734a605776207412711bf2ae",
+  "oldImage": "sha256:53e88c7854085c251e47102947ad3c3b37ba8dd618dce89be51f7994bf7f8172",
+  "image": "sha256:abade56afd74dc92abd3f95003dbb446719dc4f4a5aa731f7674b347627cb36e",
+  "mode": "observe",
+  "runtimeChains": [42161],
+  "settingsUnchanged": true,
+  "credentialsUnchanged": true,
+  "marketPermissionsUnchanged": true,
+  "operatingControlsUnchanged": true,
+  "economicControlsUnchanged": true,
+  "journalUnchanged": true,
+  "storedExecutions": 0,
+  "backupPath": "/var/lib/aqua0-market-rebalancer-backups/measured-0f7fb6c-1790645591133640652",
+  "fundsTransferred": false,
+  "tradingEnabled": false,
+  "signatures": 0,
+  "backendStagingCommit": "7caaa35c42d276fb99fc9b216abc896d30e53d45",
+  "backendPullRequest": 603,
+  "frontendStagingCommit": "ad90d85305711f192a8ed2a6d2728af4dae58453",
+  "frontendPullRequests": [612, 613],
+  "workerCI": [
+    {
+      "conclusion": "success",
+      "headSha": "0f7fb6c04114a640734a605776207412711bf2ae",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "headSha": "0f7fb6c04114a640734a605776207412711bf2ae",
+      "status": "completed"
+    }
+  ],
+  "verification": {
+    "workerUnitPassed": 110,
+    "contractPassed": 47,
+    "localTransactionIntegrationsPassed": 3,
+    "offlineOwnerHostTestsPassed": 5,
+    "observedActualVaultArbitrageForkPassed": 2,
+    "exactOwnerFundingForkPassed": 2,
+    "frontendPassed": 6279,
+    "frontendSkipped": 50,
+    "backendFocusedPassed": 51,
+    "backendLocalInheritedFailures": 5,
+    "backendAddedTypeErrorSignatures": 0,
+    "stagingBrowserPassed": true,
+    "browserWidths": [1440, 390]
+  },
+  "evidenceSha256": {
+    "owner-pilot-final-check-20260929.log": "ce4254dbec548cf7011d7db0cbed95949ba8f28dae873c9eb1a5c6ca5740505b",
+    "owner-pilot-final-integration-20260929.log": "3730e91b4a88543a5eee08864ef6f6ba7d25c4e06e2e60c11d686ec4ddb01929",
+    "owner-pilot-final-build-20260929.log": "4e680ee7270301c34be477764205e399560c6c0dd1d072b3f41f013495548812",
+    "observed-arbitrum-route-20260929.log": "5631ffb0e898a1f0a6297add23a7e7dd0b9b71e8cb9004325cd1439676ef71db",
+    "owner-pilot-funding-fork-20260929.log": "5b0f357c97a9c96a0241ac77466d73a0e866707274323069aa41de4d1954744d",
+    "owner-pilot-host-tests-20260929.log": "567d97eababdcc025b286616b0b5d28f7eed73e017cf4cfeb38c7747ab1cf40f"
+  },
+  "ownerHelperFilesSha256": {
+    "ops/owner-start-arbitrum.py": "a00134d8180f65c91c75e27426480d5e517cc8fe303019cffadbef209a99f46b",
+    "ops/owner-pilot-remote.py": "dc38be394725818e790f02f2f698e4c309e5d6c59bd4558be779493780b41d62",
+    "scripts/owner-start-arbitrum.ts": "7c8c29126fc37b8acfc9fb377dd69705fbb7389e8ae8ff7f2b99eeaeaa86f1b2",
+    "src/owner-pilot.ts": "dff142b44c7f7c65fdc016dbc6eb88e0a4cfb67808649704cc1932535a9dbcf1",
+    "config/arbitrum-pilot.json": "b53cdf8e568c2a8fa81b55f49fb18f10f610d4184ada8c4d9abbe8e31f856f26"
+  },
+  "ownerConfirmation": "START ARBITRUM 5 USDC",
+  "fundingRequiredNow": false,
+  "mainnetArbitrageTradesByAgent": 0,
+  "limitations": [
+    "Mainnet executor setup, funding conversion and trading activation remain owner-invoked.",
+    "Remote owner activation helper tested with offline fixtures, not live activation by the agent.",
+    "V4 class consent and empty LP-preference plans are not bypassed; first pilot uses the proved actual-vault SwapVM route.",
+    "Captured-state fork gains are not realized mainnet profit or a promise of future opportunities."
+  ]
+}

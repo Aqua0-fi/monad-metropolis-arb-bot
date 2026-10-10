@@ -1,0 +1,36 @@
+{
+  "pullRequest": 607,
+  "head": "2fdc322fae612cc4c19a699cf940502c2e920b54",
+  "checks": [
+    {
+      "name": "Typecheck + Lint + Test + Build",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/web-app/actions/runs/36365121228/job/108749858419"
+    },
+    {
+      "name": "Semgrep SAST",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/web-app/actions/runs/36365121157/job/108749858160"
+    },
+    {
+      "name": "Mobile e2e (playwright)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/web-app/actions/runs/36365121228/job/108749858476"
+    },
+    {
+      "name": "CodeQL",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/web-app/actions/runs/36365121157/job/108749857985"
+    },
+    {
+      "name": "gitleaks (secret scan)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/web-app/actions/runs/36365121157/job/108749858150"
+    }
+  ]
+}

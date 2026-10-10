@@ -1,0 +1,43 @@
+{
+  "candidate": {
+    "exit": 1,
+    "failures": [
+      "(fail) a shipped-bytes write that is not durable says so > accumulates non-durable writes in a health ledger an operator can read",
+      "(fail) a shipped-bytes write that is not durable says so > reports no-database rather than resolving as though the row landed",
+      "(fail) registered pool store > is idempotent on the same pool, because re-registering IS the repair path",
+      "(fail) registered pool store > keeps a registered pool readable so a hidden one can still be explained",
+      "(fail) registered pool store > reports a write that reached no durable store rather than claiming success"
+    ],
+    "tail": [
+      "(fail) registered pool store > is idempotent on the same pool, because re-registering IS the repair path [0.06ms]",
+      "(fail) registered pool store > keeps a registered pool readable so a hidden one can still be explained [0.07ms]",
+      "",
+      " 5488 pass",
+      " 4 skip",
+      " 5 fail",
+      " 16917 expect() calls",
+      "Ran 5497 tests across 468 files. [32.33s]"
+    ]
+  },
+  "upstream": {
+    "exit": 1,
+    "failures": [
+      "(fail) a shipped-bytes write that is not durable says so > accumulates non-durable writes in a health ledger an operator can read",
+      "(fail) a shipped-bytes write that is not durable says so > reports no-database rather than resolving as though the row landed",
+      "(fail) registered pool store > is idempotent on the same pool, because re-registering IS the repair path",
+      "(fail) registered pool store > keeps a registered pool readable so a hidden one can still be explained",
+      "(fail) registered pool store > reports a write that reached no durable store rather than claiming success"
+    ],
+    "tail": [
+      "(fail) registered pool store > is idempotent on the same pool, because re-registering IS the repair path",
+      "(fail) registered pool store > keeps a registered pool readable so a hidden one can still be explained",
+      "",
+      " 5469 pass",
+      " 4 skip",
+      " 5 fail",
+      " 16850 expect() calls",
+      "Ran 5478 tests across 464 files. [30.99s]"
+    ]
+  },
+  "addedFailures": []
+}

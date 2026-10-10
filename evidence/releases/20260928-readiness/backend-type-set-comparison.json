@@ -1,0 +1,9 @@
+{
+  "commit": "cd825654ffd1b97703c456d39584fbe28a13de5d",
+  "baseline": "/Users/rithikkumars/CodingStuff/Aqua0/working-dir/rebalancer-readiness-20260928/backend-upstream-check",
+  "dependencySource": "/Users/rithikkumars/CodingStuff/Aqua0/working-dir/rebalancer-readiness-20260928/backend",
+  "baselineExit": 2,
+  "exactNormalizedEquality": true,
+  "currentDiagnosticCount": 11,
+  "baselineDiagnosticCount": 11
+}

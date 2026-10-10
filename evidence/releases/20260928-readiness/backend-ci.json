@@ -1,0 +1,54 @@
+{
+  "pullRequest": 598,
+  "head": "fe4fb7a77e86eb88b7f63d14fe7fce2f154f2a75",
+  "checks": [
+    {
+      "name": "Build + Typecheck",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/backend/actions/runs/36361835029/job/108740388092"
+    },
+    {
+      "name": "build-id",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/backend/actions/runs/36361835109/job/108740388033"
+    },
+    {
+      "name": "Semgrep (SAST)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/backend/actions/runs/36361834984/job/108740387977"
+    },
+    {
+      "name": "Unit tests",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/backend/actions/runs/36361835029/job/108740387878"
+    },
+    {
+      "name": "CodeQL (JavaScript/TypeScript)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/backend/actions/runs/36361834984/job/108740387868"
+    },
+    {
+      "name": "Postgres integration tests",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/backend/actions/runs/36361835029/job/108740387952"
+    },
+    {
+      "name": "gitleaks (secret scan)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/backend/actions/runs/36361834984/job/108740387997"
+    },
+    {
+      "name": "Deploy-boot smoke (Bun runtime)",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Aqua0-fi/backend/actions/runs/36361835029/job/108740387905"
+    }
+  ]
+}

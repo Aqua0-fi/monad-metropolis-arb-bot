@@ -1,0 +1,17 @@
+{
+  "backendCommit": "0bde3d4b8cab294e858b5db2077c632609243379",
+  "canonicalRecordsSha256": "a642375a4152c3741a2f8ebf7f6becbbdd71484af240863a2cab272ace8099e1",
+  "executionPoliciesSha256": "61179e0c136f428c02bc696bd06023e11c17d6d400d1220511c2ec5e52f75483",
+  "generatedChainsSha256": "58bbb338e0de848493e305ebd74b94fcfcdf911a485fb0faad44d274022cb5ee",
+  "chainIds": [
+    137,
+    143,
+    4663,
+    5042,
+    8453,
+    42161,
+    42220,
+    43114
+  ],
+  "note": "Registry presence is not proof of deployed executor readiness, liquidity or simulator parity."
+}

@@ -1,0 +1,14 @@
+{
+  "chainId": 42161,
+  "venue": "sushi-v3",
+  "block": 506136782,
+  "blockHash": "0xdc2f5ffe496c03c3e89b145f633ff3af98030a87d3f3f1e140cc6540e17f39eb",
+  "blockTimestamp": 1789658631,
+  "exitCode": 1,
+  "elapsedSeconds": 1.46,
+  "fixture": "Real chain state and external venues; local Aqua0 vaults, signed JIT hook, seeded mispricing and test capital",
+  "tests": [
+    "[FAIL: vm.etch: failed to get account for 0xBEfEbB60df19290CF0b39Af3855D9e4bd80a80c8: server returned an error response: error code -32000: historical state aaba831ba993af6428d70767a1e194cd4f3b4f9993b9bd07df02acfb547d274e is not available] setUp() (gas: 0)",
+    "[FAIL: vm.etch: failed to get account for 0xBEfEbB60df19290CF0b39Af3855D9e4bd80a80c8: server returned an error response: error code -32000: historical state aaba831ba993af6428d70767a1e194cd4f3b4f9993b9bd07df02acfb547d274e is not available] setUp() (gas: 0)"
+  ]
+}

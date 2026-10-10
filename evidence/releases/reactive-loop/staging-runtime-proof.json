@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "network": "mainnet",
+  "mode": "observe",
+  "scheduler": "block-driven",
+  "controlsAvailable": true,
+  "configuredMarkets": 0,
+  "executionEnabledChains": 0,
+  "credentialValuesPrinted": false,
+  "writesPerformed": false
+}
