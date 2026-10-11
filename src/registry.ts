@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { encodeAbiParameters, keccak256 } from "viem";
 import {
   chainSchema,
   swapVMDeploymentSchema,
@@ -37,6 +38,11 @@ export const executionPolicySchema = z.object({
   extendedV4Encoding: z.boolean(),
   reviewed: z.boolean(),
   nativeEquivalentSymbol: z.string().optional(),
+  // A wrapped-native token that is not an Aqua0 vault asset (e.g. WMON) is reviewed here directly.
+  nativeEquivalent: chainSchema.shape.nativeEquivalent,
+  // Live Aqua0 pools the backend registry does not list yet. Each key must use the canonical hook;
+  // its pool ID is recomputed so a typo cannot alias another pool.
+  additionalPools: z.array(poolSchema).optional(),
   venues: chainSchema.shape.venues,
 });
 export type ExecutionPolicy = z.infer<typeof executionPolicySchema>;
@@ -64,8 +70,22 @@ export function buildChainRegistry(
       throw new Error(
         `Native gas token missing from canonical registry on ${c.chainId}`,
       );
+    if (policy?.nativeEquivalentSymbol && policy.nativeEquivalent)
+      throw new Error(`Configure one native gas token source on ${c.chainId}`);
+    const extra = policy?.additionalPools ?? [];
+    for (const pool of extra) {
+      if (pool.hooks.toLowerCase() !== c.aqua0Hook.toLowerCase())
+        throw new Error(`Additional pool ${pool.poolId} uses another hook`);
+      if (poolIdOf(pool) !== pool.poolId.toLowerCase())
+        throw new Error(`Additional pool ${pool.poolId} has a mismatched ID`);
+    }
+    const pools = [...c.pools];
+    for (const pool of extra)
+      if (!pools.some((p) => p.poolId.toLowerCase() === pool.poolId.toLowerCase()))
+        pools.push(pool);
     return chainSchema.parse({
       ...c,
+      pools,
       publicRpc: policy?.publicRpc,
       feeModel: policy?.feeModel ?? "unsupported",
       extendedV4Encoding: policy?.extendedV4Encoding ?? false,
@@ -73,9 +93,37 @@ export function buildChainRegistry(
       executionReviewed: policy?.reviewed ?? false,
       nativeEquivalent: equivalent
         ? { token: equivalent.address, decimals: equivalent.decimals }
-        : undefined,
+        : policy?.nativeEquivalent,
     });
   });
+}
+
+/** Uniswap V4 PoolId = keccak256(abi.encode(PoolKey)). */
+export function poolIdOf(pool: {
+  currency0: string;
+  currency1: string;
+  fee: number;
+  tickSpacing: number;
+  hooks: string;
+}): string {
+  return keccak256(
+    encodeAbiParameters(
+      [
+        { type: "address" },
+        { type: "address" },
+        { type: "uint24" },
+        { type: "int24" },
+        { type: "address" },
+      ],
+      [
+        pool.currency0 as `0x${string}`,
+        pool.currency1 as `0x${string}`,
+        pool.fee,
+        pool.tickSpacing,
+        pool.hooks as `0x${string}`,
+      ],
+    ),
+  ).toLowerCase();
 }
 
 export function registryBlockers(chain: ChainConfig): string[] {

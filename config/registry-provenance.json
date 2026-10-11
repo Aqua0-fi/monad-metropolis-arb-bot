@@ -1,8 +1,8 @@
 {
-  "backendCommit": "0bde3d4b8cab294e858b5db2077c632609243379",
-  "canonicalRecordsSha256": "a642375a4152c3741a2f8ebf7f6becbbdd71484af240863a2cab272ace8099e1",
-  "executionPoliciesSha256": "61179e0c136f428c02bc696bd06023e11c17d6d400d1220511c2ec5e52f75483",
-  "generatedChainsSha256": "58bbb338e0de848493e305ebd74b94fcfcdf911a485fb0faad44d274022cb5ee",
+  "backendCommit": "4d7c98cca264edd040a3f930d71449c4eb2526f1",
+  "canonicalRecordsSha256": "c0eac39e903cb741947ea7bab203704265f5bf53bb21d5c0b8856f2d2a68a7e6",
+  "executionPoliciesSha256": "d6c95f02fb40c85c441f6ad356a3f719be535da9c678a44a67611cd9814dee76",
+  "generatedChainsSha256": "ca4053154a575db3f0182221be43b3924b4d6143097eadfdde7d5056fdb583f3",
   "chainIds": [
     137,
     143,

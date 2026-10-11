@@ -14,18 +14,9 @@
       "poolManager": "0x67366782805870060151383F4BbFF9daB53e5cD6",
       "universalRouter": "0x1095692A6237d83C6a72F3F5eFEdb9A670C49223",
       "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
-      "aqua0Hook": "0xEE71fFDCE0691790E814342d22E0ED2d75D8C0c8",
+      "aqua0Hook": "0x099F126eEa7a2BAF13e5994a882D84eaaA8b28c0",
       "extendedV4Encoding": false,
-      "pools": [
-        {
-          "poolId": "0xa244820c73f3e6a74430bbfa8b741d8ad330ed7aae641074a48e2a4d5cf91be6",
-          "currency0": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
-          "currency1": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
-          "fee": 3000,
-          "tickSpacing": 60,
-          "hooks": "0xEE71fFDCE0691790E814342d22E0ED2d75D8C0c8"
-        }
-      ],
+      "pools": [],
       "venues": [
         {
           "name": "uniswap-v3",
@@ -53,7 +44,7 @@
       "swapVM": {
         "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
         "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
-        "maker": "0x03689e9311BC161F9b6DAA3eA1bdBA49C375d97B",
+        "maker": "0xbD1E99F1706c2520b693341FF91bA2E82555Ac59",
         "slices": 10
       }
     },
@@ -65,22 +56,34 @@
         "symbol": "MON",
         "decimals": 18
       },
+      "nativeEquivalent": {
+        "token": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
+        "decimals": 18
+      },
       "name": "Monad",
       "rpcEnv": "RPC_URL_MAINNET_MONAD",
-      "publicRpc": "https://rpc.monad.xyz",
+      "publicRpc": "https://rpc2.monad.xyz",
       "poolManager": "0x188d586Ddcf52439676Ca21A244753fA19F9Ea8e",
       "universalRouter": "0x0D97Dc33264bfC1c226207428A79b26757fb9dc3",
       "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
-      "aqua0Hook": "0x027f56E669FBB2337557baeE210dbf79b87EC0C8",
+      "aqua0Hook": "0xA2bdf696822D4D97da31d936c8520d89B9A868c0",
       "extendedV4Encoding": false,
       "pools": [
         {
-          "poolId": "0x220d42f43359b15f13c223b1c56b9ad499df3804f5a7e3bf3652bed05cc9085f",
+          "poolId": "0x26d1028fae5935b2553bcd7299884fb2150e9f5b135059fe49b9b8222aa3daad",
+          "currency0": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+          "currency1": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+          "fee": 100,
+          "tickSpacing": 1,
+          "hooks": "0xA2bdf696822D4D97da31d936c8520d89B9A868c0"
+        },
+        {
+          "poolId": "0x33d51cd1a32eb4c25366b074a85b450bed2f6c15ae420a4d7215b8c399f7d799",
           "currency0": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
           "currency1": "0xEE8c0E9f1BFFb4Eb878d8f15f368A02a35481242",
           "fee": 3000,
           "tickSpacing": 60,
-          "hooks": "0x027f56E669FBB2337557baeE210dbf79b87EC0C8"
+          "hooks": "0xA2bdf696822D4D97da31d936c8520d89B9A868c0"
         }
       ],
       "venues": [
@@ -95,7 +98,13 @@
             10000
           ]
         }
-      ]
+      ],
+      "swapVM": {
+        "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
+        "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
+        "maker": "0x2927dBC38387351956410adEad3E73ECa746c3BC",
+        "slices": 10
+      }
     },
     {
       "chainId": 4663,
@@ -111,18 +120,9 @@
       "poolManager": "0x8366a39CC670B4001A1121B8F6A443A643e40951",
       "universalRouter": "0x8876789976dEcBfCbBbe364623C63652db8C0904",
       "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
-      "aqua0Hook": "0xAc343B8A43f59Ca513D0C126B6BaED5A3452c0C8",
+      "aqua0Hook": "0xCd1Fc0805BFa7333f814aEfE2A3D92b8c305e8c0",
       "extendedV4Encoding": true,
-      "pools": [
-        {
-          "poolId": "0x20b536c2d45ede98de51cadfe02c6113e6da1ccc46e793dbcebd344ff657b377",
-          "currency0": "0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73",
-          "currency1": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
-          "fee": 3000,
-          "tickSpacing": 60,
-          "hooks": "0xAc343B8A43f59Ca513D0C126B6BaED5A3452c0C8"
-        }
-      ],
+      "pools": [],
       "venues": [
         {
           "name": "uniswap-v3",
@@ -150,7 +150,7 @@
       "swapVM": {
         "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
         "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
-        "maker": "0xEA5F5F3803588496802C8CAe91eB17bBCFdc1E0a",
+        "maker": "0xCb3301926999aD144479E9222FF98abC83d0D2c9",
         "slices": 10
       }
     },
@@ -171,14 +171,14 @@
       "poolManager": "0x8366a39CC670B4001A1121B8F6A443A643e40951",
       "universalRouter": "0x4fcA4a51Ab4F23A7447b3284fBd7D73289A89Fb1",
       "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
-      "aqua0Hook": "0xAc343B8A43f59Ca513D0C126B6BaED5A3452c0C8",
+      "aqua0Hook": "0xCd1Fc0805BFa7333f814aEfE2A3D92b8c305e8c0",
       "extendedV4Encoding": true,
       "pools": [],
       "venues": [],
       "swapVM": {
         "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
         "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
-        "maker": "0xc0ba4b11a7c6035Ef469144D44b780D99925567C",
+        "maker": "0xdAEdD9D11B44e9e704A35476Fed0B805d3cFC53f",
         "slices": 10
       }
     },
@@ -196,18 +196,9 @@
       "poolManager": "0x498581fF718922c3f8e6A244956aF099B2652b2b",
       "universalRouter": "0x6fF5693b99212Da76ad316178A184AB56D299b43",
       "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
-      "aqua0Hook": "0xACaF2945890AB6caea62bDa459d1922532A500C8",
+      "aqua0Hook": "0x5Aef2c787AFC743D20FD632D66391B2ccd5c68C0",
       "extendedV4Encoding": false,
-      "pools": [
-        {
-          "poolId": "0xbf948948cda5a93e50edb496cf32e565c46d8c7335c6bac7854a8d95eab25375",
-          "currency0": "0x4200000000000000000000000000000000000006",
-          "currency1": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-          "fee": 3000,
-          "tickSpacing": 60,
-          "hooks": "0xACaF2945890AB6caea62bDa459d1922532A500C8"
-        }
-      ],
+      "pools": [],
       "venues": [
         {
           "name": "uniswap-v3",
@@ -235,7 +226,7 @@
       "swapVM": {
         "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
         "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
-        "maker": "0x1a09f7d9B921C93F8fCD4bF04fe448982a3388Ec",
+        "maker": "0x21073ac51B2691142d19AeAa53ECd11fb7213586",
         "slices": 10
       }
     },
@@ -257,18 +248,9 @@
       "poolManager": "0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32",
       "universalRouter": "0xA51afAFe0263b40EdaEf0Df8781eA9aa03E381a3",
       "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
-      "aqua0Hook": "0xEa0ff3277279cf94dC8A5B9923dD7bb1a30e80C8",
+      "aqua0Hook": "0x42bAe9191E09b871c1d79D4707d1D653f905A8C0",
       "extendedV4Encoding": false,
-      "pools": [
-        {
-          "poolId": "0xb7a4fee4a7d215adda80308352ee12b01a6dab72f439f15a6336784dec704781",
-          "currency0": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-          "currency1": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-          "fee": 3000,
-          "tickSpacing": 60,
-          "hooks": "0xEa0ff3277279cf94dC8A5B9923dD7bb1a30e80C8"
-        }
-      ],
+      "pools": [],
       "venues": [
         {
           "name": "uniswap-v3",
@@ -296,7 +278,7 @@
       "swapVM": {
         "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
         "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
-        "maker": "0xEF9f7F4006fE95afede04F6916E72556A957EBbc",
+        "maker": "0x489d129B9ae54492433333bB649d869DbAE63abd",
         "slices": 10
       }
     },
@@ -314,18 +296,9 @@
       "poolManager": "0x288dc841A52FCA2707c6947B3A777c5E56cd87BC",
       "universalRouter": "0xcb695bc5D3Aa22cAD1E6DF07801b061a05A0233A",
       "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
-      "aqua0Hook": "0xCaA69ef433CAB907448F4e0C2ECfDa522F5E80C8",
+      "aqua0Hook": "0x495b1403B6B59680E28fd1886e97851441D328c0",
       "extendedV4Encoding": false,
-      "pools": [
-        {
-          "poolId": "0x50ad20cb5c4a3e17069b44eaca24d44f8cbb8c3d928f4350fe15d4d86f179f15",
-          "currency0": "0xcebA9300f2b948710d2653dD7B07f33A8B32118C",
-          "currency1": "0xD221812de1BD094f35587EE8E174B07B6167D9Af",
-          "fee": 3000,
-          "tickSpacing": 60,
-          "hooks": "0xCaA69ef433CAB907448F4e0C2ECfDa522F5E80C8"
-        }
-      ],
+      "pools": [],
       "venues": [
         {
           "name": "uniswap-v3",
@@ -354,18 +327,9 @@
       "poolManager": "0x06380C0e0912312B5150364B9DC4542BA0DbBc85",
       "universalRouter": "0x94b75331AE8d42C1b61065089B7d48FE14aA73b7",
       "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
-      "aqua0Hook": "0x768664A369ba31520161e73E55Bcb293CA1200C8",
+      "aqua0Hook": "0xf825f54486570dE02434737bbe94Af25172628C0",
       "extendedV4Encoding": false,
-      "pools": [
-        {
-          "poolId": "0x88ec703b9eb4daf160dd3da7a5d69b86c89be0bb1064565b43aed08a50e7bee4",
-          "currency0": "0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB",
-          "currency1": "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
-          "fee": 3000,
-          "tickSpacing": 60,
-          "hooks": "0x768664A369ba31520161e73E55Bcb293CA1200C8"
-        }
-      ],
+      "pools": [],
       "venues": [
         {
           "name": "uniswap-v3",
@@ -393,7 +357,7 @@
       "swapVM": {
         "router": "0x111111338c5091E8440b67B168bAe16a668AC0De",
         "aqua": "0x1111113CCf1426A8E30e2bfF5E005d929bF6a90a",
-        "maker": "0xbBA33D5e9cB676477a0653cD99d01fBe36d27d3d",
+        "maker": "0xEbF15E281d0bec0d4b9ce5605C49f2fba594B0cA",
         "slices": 10
       }
     }
