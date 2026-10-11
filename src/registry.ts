@@ -81,7 +81,9 @@ export function buildChainRegistry(
     }
     const pools = [...c.pools];
     for (const pool of extra)
-      if (!pools.some((p) => p.poolId.toLowerCase() === pool.poolId.toLowerCase()))
+      if (
+        !pools.some((p) => p.poolId.toLowerCase() === pool.poolId.toLowerCase())
+      )
         pools.push(pool);
     return chainSchema.parse({
       ...c,
