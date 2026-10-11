@@ -17,6 +17,7 @@ import { createReportServer } from "./reporting.js";
 import { parseArgs } from "node:util";
 import { loadChains, loadSettings } from "./config.js";
 import { AquaClient } from "./aqua.js";
+import { BackendBudget } from "./backend-budget.js";
 import { Runner, log, safeError } from "./runner.js";
 import { Journal, acquireLock } from "./state.js";
 import {
@@ -34,6 +35,8 @@ const { values, positionals } = parseArgs({
     config: { type: "string", default: "config/rebalancer.example.json" },
     chain: { type: "string" },
     registry: { type: "string", default: "config/chains.json" },
+    // The process stops itself after this many milliseconds (overrides settings.maxRuntimeMs).
+    "max-runtime-ms": { type: "string" },
   },
 });
 const registeredChains = loadChains(values.registry);
@@ -148,6 +151,36 @@ if (command === "doctor") {
   };
   process.on("SIGINT", stop);
   process.on("SIGTERM", stop);
+  const runtimeLimit = values["max-runtime-ms"]
+    ? Number(values["max-runtime-ms"])
+    : settings.maxRuntimeMs;
+  if (
+    runtimeLimit !== undefined &&
+    (!Number.isSafeInteger(runtimeLimit) ||
+      runtimeLimit < 10000 ||
+      runtimeLimit > 86400000)
+  )
+    throw new Error("--max-runtime-ms must be between 10000 and 86400000");
+  // A bounded run cannot outlive its budget: stop gracefully, then exit hard if shutdown stalls.
+  const runtimeTimer =
+    runtimeLimit === undefined
+      ? undefined
+      : setTimeout(() => {
+          log("runtime_limit_reached", { runtimeLimitMs: runtimeLimit });
+          stop();
+          setTimeout(() => {
+            log("runtime_limit_forced_exit", { runtimeLimitMs: runtimeLimit });
+            process.exit(3);
+          }, 30000).unref();
+        }, runtimeLimit);
+  const budget = new BackendBudget(
+    {
+      catalog: settings.backendBudget.catalog,
+      search: settings.backendBudget.search,
+      authorize: settings.backendBudget.authorize,
+    },
+    settings.backendBudget.file,
+  );
   try {
     const journal = new Journal("runtime/journal.json");
     assertPendingScope(journal, chains, settings);
@@ -191,7 +224,12 @@ if (command === "doctor") {
     const runner = new Runner(
       chains,
       settings,
-      new AquaClient(settings.apiUrl, headers),
+      new AquaClient(
+        settings.apiUrl,
+        headers,
+        budget,
+        process.env.AQUA0_OPERATOR_API_KEY || undefined,
+      ),
       journal,
       history,
       catalog,
@@ -241,6 +279,7 @@ if (command === "doctor") {
           const status = runner.reportingStatus();
           return {
             ...status,
+            backendBudget: runner.backendBudget(),
             observationHistory: {
               ...observations!.status(),
               writerIssue: status.observationHistory.issue,
@@ -267,6 +306,8 @@ if (command === "doctor") {
     if (command === "scan") await runner.scan();
     else await runReactive(runner, chains, settings, shutdown.signal);
   } finally {
+    if (runtimeTimer) clearTimeout(runtimeTimer);
+    log("backend_budget_summary", { backendBudget: budget.status() });
     if (server?.listening)
       await new Promise<void>((resolve) => server!.close(() => resolve()));
     await observations?.stop();

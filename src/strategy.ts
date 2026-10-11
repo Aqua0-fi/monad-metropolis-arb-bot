@@ -54,11 +54,13 @@ export async function findCandidates(params: {
   quoteAqua: (input: Address, amount: bigint) => Promise<bigint>;
   quoteExternal: (input: Address, amount: bigint) => Promise<bigint>;
   onQuoteError?: (error: unknown) => void;
+  /** Route orders to price; a screened search prices only the order it selected. */
+  directions?: boolean[];
 }): Promise<Candidate[]> {
   const p = params;
   const candidates: Candidate[] = [];
   for (const amount of p.amounts)
-    for (const aquaFirst of [true, false]) {
+    for (const aquaFirst of p.directions ?? [true, false]) {
       const quotedAt = Date.now();
       try {
         const firstQuote = aquaFirst ? p.quoteAqua : p.quoteExternal;

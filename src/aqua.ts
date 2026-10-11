@@ -16,6 +16,11 @@ import {
   type SwapVMSizingRequest,
 } from "./swapvm.js";
 import { acceptOptimizedCandidates, type SizingRequest } from "./sizing.js";
+import {
+  BackendBudget,
+  DEFAULT_BUDGET_LIMITS,
+  type BackendCallClass,
+} from "./backend-budget.js";
 export const MIN_SQRT = 4295128740n;
 export const MAX_SQRT = 1461446703485210103287273052203988822378723970341n;
 const quoteSchema = z.object({
@@ -43,6 +48,17 @@ const authSchema = z.object({
     nonce: uint,
   }),
 });
+/** Thrown when Aqua0 can back less than requested; carries the backed input so search can shrink. */
+export class AquaCapacityLimit extends Error {
+  constructor(
+    readonly requested: bigint,
+    readonly backed: bigint,
+  ) {
+    super(
+      `Aqua0 can back ${backed} of the requested ${requested}; not a full fill`,
+    );
+  }
+}
 export function validateQuote(
   raw: unknown,
   input: Address,
@@ -50,6 +66,14 @@ export function validateQuote(
   amount: bigint,
 ): bigint {
   const { quote: q } = quoteSchema.parse(raw);
+  if (
+    (q.execution.wasClamped || !q.execution.fullySupported) &&
+    q.execution.requestedAmountIn === amount &&
+    q.execution.authorizedAmountIn < amount &&
+    same(q.amountInToken, input) &&
+    same(q.amountOutToken, output)
+  )
+    throw new AquaCapacityLimit(amount, q.execution.authorizedAmountIn);
   if (
     !q.execution.fullySupported ||
     q.execution.wasClamped ||
@@ -72,16 +96,28 @@ export class AquaClient {
   constructor(
     private readonly url: string,
     private readonly headers: Record<string, string> = {},
+    // Every request passes this budget first; there is no unbudgeted path to the backend.
+    readonly budget: BackendBudget = new BackendBudget(DEFAULT_BUDGET_LIMITS),
+    // Sent only on /authorize, the one route that needs operator tier.
+    private readonly operatorKey?: string,
   ) {}
+  private spend(callClass: BackendCallClass) {
+    this.budget.take(callClass);
+  }
   private async post(
     path: string,
     body: unknown,
     timeout = 10000,
     signal?: AbortSignal,
+    extraHeaders: Record<string, string> = {},
   ): Promise<unknown> {
     const response = await fetch(new URL(path, this.url), {
       method: "POST",
-      headers: { "content-type": "application/json", ...this.headers },
+      headers: {
+        "content-type": "application/json",
+        ...this.headers,
+        ...extraHeaders,
+      },
       body: JSON.stringify(body),
       signal: signal
         ? AbortSignal.any([signal, AbortSignal.timeout(timeout)])
@@ -92,6 +128,7 @@ export class AquaClient {
     return response.json();
   }
   async listPools(chain: ChainConfig): Promise<unknown> {
+    this.spend("catalog");
     const url = new URL("/api/vaults/pools", this.url);
     url.searchParams.set("chainId", String(chain.chainId));
     url.searchParams.set("includeArming", "true");
@@ -154,6 +191,7 @@ export class AquaClient {
     };
   }
   async listSwapVM(chain: ChainConfig): Promise<unknown> {
+    this.spend("catalog");
     const endpoint = new URL("/api/swap/aqua-markets", this.url);
     endpoint.searchParams.set("chainId", String(chain.chainId));
     const response = await fetch(endpoint, {
@@ -168,6 +206,7 @@ export class AquaClient {
   async optimizeSwapVM(request: SwapVMSizingRequest) {
     return this.searchReads.run(
       async () => {
+        this.spend("search");
         const quotedAt = Date.now();
         const raw = await this.post(
           "/api/swap/optimize-aqua-round-trip",
@@ -201,6 +240,7 @@ export class AquaClient {
   async optimize(request: Omit<SizingRequest, "quotedAt">) {
     return this.searchReads.run(
       async () => {
+        this.spend("search");
         const quotedAt = Date.now();
         const { chain, pool, market, external } = request;
         const raw = await this.post(
@@ -241,6 +281,7 @@ export class AquaClient {
     amount: bigint,
   ): Promise<bigint> {
     const out = same(input, pool.currency0) ? pool.currency1 : pool.currency0;
+    this.spend("search");
     return validateQuote(
       await this.post(
         "/api/swap/quote",
@@ -258,14 +299,21 @@ export class AquaClient {
     input: Address,
     amount: bigint,
   ): Promise<{ hookData: Hex; deadline: bigint }> {
-    const raw = await this.post("/api/swap/authorize", {
-      ...this.body(chain, pool, market, input, amount),
-      amountSpecified: (-amount).toString(),
-      sqrtPriceLimitX96: (same(input, pool.currency0)
-        ? MIN_SQRT
-        : MAX_SQRT
-      ).toString(),
-    });
+    this.spend("authorize");
+    const raw = await this.post(
+      "/api/swap/authorize",
+      {
+        ...this.body(chain, pool, market, input, amount),
+        amountSpecified: (-amount).toString(),
+        sqrtPriceLimitX96: (same(input, pool.currency0)
+          ? MIN_SQRT
+          : MAX_SQRT
+        ).toString(),
+      },
+      10000,
+      undefined,
+      this.operatorKey ? { "X-Operator-Key": this.operatorKey } : {},
+    );
     const auth = authSchema.parse(raw);
     if (
       !same(auth.authorization.executor, chain.universalRouter) ||

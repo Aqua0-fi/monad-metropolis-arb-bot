@@ -1,0 +1,94 @@
+{
+  "mode": "execute",
+  "networkMode": "mainnet",
+  "apiUrl": "https://staging-api.aqua0.xyz",
+  "maxRuntimeMs": 900000,
+  "slippageBps": 1,
+  "maxQuoteAgeMs": 10000,
+  "maxBlockLag": 20,
+  "confirmations": 2,
+  "maxConsecutiveErrors": 3,
+  "scheduling": {
+    "headerPollMs": 1500,
+    "maxConcurrentChains": 1,
+    "maxScanMs": 8000,
+    "maxScanBlockLag": 20
+  },
+  "discovery": {
+    "enabled": false,
+    "intervalMs": 3600000,
+    "maxAgeMs": 3600000
+  },
+  "backendBudget": {
+    "file": "runtime/monad-pilot/backend-budget.json",
+    "catalog": {
+      "perMinute": 0,
+      "perHour": 0,
+      "perDay": 0
+    },
+    "search": {
+      "perMinute": 4,
+      "perHour": 60,
+      "perDay": 300
+    },
+    "authorize": {
+      "perMinute": 2,
+      "perHour": 10,
+      "perDay": 30
+    }
+  },
+  "v4Search": {
+    "mode": "quote-grid",
+    "feedKeys": {
+      "0x754704bc059f8c67012fed69bc8a327a5aafb603": "usd-stable",
+      "0xe7cd86e13ac4309349f30b3435a9d337750fc82d": "usd-stable",
+      "0xee8c0e9f1bffb4eb878d8f15f368a02a35481242": "coingecko:ethereum"
+    },
+    "marginBps": 2,
+    "minBackendIntervalMs": 20000,
+    "sizesPerScreen": 4,
+    "externalPools": {
+      "143": ["0xacf82ECC826A9fc2D8c8C4d370d2D268fA5B3500"]
+    }
+  },
+  "markets": [
+    {
+      "chainId": 143,
+      "poolId": "0x26d1028fae5935b2553bcd7299884fb2150e9f5b135059fe49b9b8222aa3daad",
+      "classId": "17557176959828909580598016596944908883460282011703740996960343852595219258029",
+      "baseToken": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+      "amounts": [],
+      "minNetProfit": "1000",
+      "maxInput": "15000000",
+      "screenGasCost": "4500"
+    }
+  ],
+  "quoteFees": {
+    "143": {
+      "maxGasUnits": "1300000",
+      "maxFeePerGas": "200000000000",
+      "l1FeeReserveWei": "0",
+      "wrappedNative": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
+      "gasConversionFee": 3000
+    }
+  },
+  "execution": {
+    "143": {
+      "executor": "0x0000000000000000000000000000000000000000",
+      "operator": "0xd1fC4c8631E8C5d23a0C86D5890802DD70Cb4cf5",
+      "kms": {
+        "region": "us-east-1",
+        "keyId": "arn:aws:kms:us-east-1:000000000000:key/00000000-0000-0000-0000-000000000000"
+      },
+      "allowBroadcast": false,
+      "externalPools": ["0xacf82ECC826A9fc2D8c8C4d370d2D268fA5B3500"],
+      "maxGasUnits": "1300000",
+      "maxFeePerGas": "200000000000",
+      "l1FeeReserveWei": "0",
+      "maxDailyGasWei": "10000000000000000000",
+      "wrappedNative": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
+      "gasConversionFee": 3000
+    }
+  },
+  "_template": "Owner setup writes runtime/monad-pilot/execute.json with the deployed executor, the real KMS key and allowBroadcast. Never run this template as-is."
+}

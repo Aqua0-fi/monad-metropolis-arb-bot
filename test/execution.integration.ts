@@ -157,6 +157,9 @@ for (const signerMode of ["local", "kms"] as const) {
       await write("MarketRebalancer", bot, "setV3Pool", [pool, true]);
       await write("MarketRebalancer", bot, "setGasPriceLimit", [10000000000n]);
       await write("MarketRebalancer", bot, "setPaused", [false]);
+      await write("MarketRebalancer", bot, "setActiveUntil", [
+        BigInt(Math.floor(Date.now() / 1000)) + 3600n,
+      ]);
       await write("Token", token0, "mint", [bot, 1000n * 10n ** 18n]);
       const source = loadChains()[0]!;
       const chain: ChainConfig = {

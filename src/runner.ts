@@ -13,15 +13,18 @@ import { ObsoleteScan, type ScanTask } from "./head-scheduler.js";
 import { registryBlockers } from "./registry.js";
 import { erc20Abi, type Address, type PublicClient } from "viem";
 import { executorAbi } from "./abi.js";
-import { AquaClient } from "./aqua.js";
+import { AquaClient, AquaCapacityLimit } from "./aqua.js";
 import {
   clientFor,
   discoverCached,
+  quoteV3,
   verifyChain,
   type ExternalPool,
 } from "./venues.js";
+import { V4Screen } from "./v4-screen.js";
+import { BackendBudgetExceeded } from "./backend-budget.js";
 import { findPool, same, type ChainConfig, type Settings } from "./config.js";
-import { ceilDiv, type Candidate } from "./strategy.js";
+import { ceilDiv, findCandidates, type Candidate } from "./strategy.js";
 import { submit } from "./execution.js";
 import { reconcile } from "./reconciliation.js";
 import { Journal } from "./state.js";
@@ -282,6 +285,125 @@ export class Runner {
   ) {
     if (settings.discovery.enabled && !catalog)
       throw new Error("Discovery needs a persistent market catalog");
+    this.screen = new V4Screen(settings.v4Search, settings.slippageBps);
+  }
+  private readonly screen: V4Screen;
+  backendBudget() {
+    return this.aqua.budget.status();
+  }
+  /** Execute mode trades only inside the executor's owner-opened window; outside it no backend call is made. */
+  private async executorWindow(
+    client: PublicClient,
+    executor: Address,
+  ): Promise<{ open: boolean; reason?: string }> {
+    const head = await client.getBlock();
+    const paused = await client.readContract({
+      address: executor,
+      abi: executorAbi,
+      functionName: "paused",
+      blockNumber: head.number,
+    });
+    if (paused) return { open: false, reason: "Executor is paused" };
+    let activeUntil: bigint;
+    try {
+      activeUntil = await client.readContract({
+        address: executor,
+        abi: executorAbi,
+        functionName: "activeUntil",
+        blockNumber: head.number,
+      });
+    } catch {
+      // Executors deployed before the trading window existed have no such getter.
+      return { open: true };
+    }
+    if (activeUntil < head.timestamp)
+      return { open: false, reason: "Executor trading window is closed" };
+    return { open: true };
+  }
+  /**
+   * Screened V4 search: free screen first, then one read-tier backend quote for the single size and
+   * route order the screen selected. `fixed` re-prices a selected trade before authorization.
+   */
+  private async quoteGrid(p: {
+    client: PublicClient;
+    chain: ChainConfig;
+    pool: ReturnType<typeof findPool>;
+    market: Settings["markets"][number];
+    external: ExternalPool;
+    inputCap: bigint;
+    head: { number: bigint; hash: `0x${string}`; timestamp: bigint };
+    fixed?: { amount: bigint; aquaFirst: boolean };
+  }): Promise<Candidate[]> {
+    const { client, chain, pool, market, external, head } = p;
+    let amount: bigint, aquaFirst: boolean, fingerprint: string | undefined;
+    const key = V4Screen.key(chain.chainId, pool, external);
+    if (p.fixed) {
+      ({ amount, aquaFirst } = p.fixed);
+    } else {
+      const screen = await this.screen.screen({
+        client,
+        chain,
+        pool,
+        market,
+        external,
+        inputCap: p.inputCap,
+        blockNumber: head.number,
+      });
+      this.event("v4_screen", {
+        chainId: chain.chainId,
+        poolId: pool.poolId,
+        externalPool: external.address,
+        go: screen.go,
+        reason: screen.reason,
+        expectedProfit: screen.expectedProfit ?? null,
+        required: screen.required ?? null,
+      });
+      if (!screen.go) return [];
+      ({ amount, aquaFirst, fingerprint } = screen);
+    }
+    const counterpart = (input: Address) =>
+      same(input, pool.currency0) ? pool.currency1 : pool.currency0;
+    const candidates = await findCandidates({
+      base: market.baseToken,
+      other: counterpart(market.baseToken),
+      pool,
+      router: chain.universalRouter,
+      external: external.address,
+      amounts: [amount],
+      directions: [aquaFirst],
+      slippageBps: this.settings.slippageBps,
+      minNetProfit: market.minNetProfit,
+      // Not a zero-fee assertion: the exact call cost is measured before signing.
+      gasCost: 0n,
+      blockNumber: head.number,
+      timestamp: head.timestamp,
+      quoteAqua: (input, value) =>
+        this.aqua.quote(chain, pool, market, input, value),
+      quoteExternal: (input, value) =>
+        quoteV3(
+          client,
+          external.venue.quoter,
+          external.fee,
+          input,
+          counterpart(input),
+          value,
+          head.number,
+        ),
+      onQuoteError: (error) => {
+        if (error instanceof BackendBudgetExceeded) throw error;
+        if (error instanceof AquaCapacityLimit)
+          this.screen.noteCapacity(key, aquaFirst, error.backed);
+        this.event("v4_quote_rejected", {
+          chainId: chain.chainId,
+          poolId: pool.poolId,
+          error: safeError(error),
+        });
+      },
+    });
+    if (fingerprint)
+      this.screen.noteBackend(key, fingerprint, candidates.length > 0);
+    for (const candidate of candidates) candidate.quoteBlockHash = head.hash;
+    return candidates;
   }
   private swapVMMarkets() {
     return (
@@ -606,6 +728,13 @@ export class Runner {
     };
     let quoteFailures = 0,
       completedQuotes = 0;
+    const v4Window =
+      this.settings.mode === "execute" && v4Markets.length && execution
+        ? await this.executorWindow(client, execution.executor)
+        : { open: true };
+    const allowedExternal =
+      execution?.externalPools ??
+      this.settings.v4Search.externalPools[String(chainId)];
     const collectV4 = () =>
       forEachConcurrent(
         v4Markets,
@@ -614,6 +743,14 @@ export class Runner {
           if (searchSignal.aborted) return;
           check();
           const pool = findPool(chain, market);
+          if (!v4Window.open) {
+            this.event("executor_inactive", {
+              chainId,
+              poolId: pool.poolId,
+              reason: v4Window.reason,
+            });
+            return;
+          }
           const head = await client.getBlock();
           let inputCap =
             market.maxInput < (1n << 128n) - 1n
@@ -646,7 +783,13 @@ export class Runner {
             });
             return;
           }
-          const venues = await discoverCached(client, chain, pool, head.number);
+          const venues = (
+            await discoverCached(client, chain, pool, head.number)
+          ).filter(
+            (venue) =>
+              !allowedExternal ||
+              allowedExternal.some((allowed) => same(allowed, venue.address)),
+          );
           await forEachConcurrent(
             venues,
             2,
@@ -655,6 +798,34 @@ export class Runner {
               check();
               try {
                 this.assertMarketApproval(market);
+                if (this.settings.v4Search.mode === "quote-grid") {
+                  const found = await this.quoteGrid({
+                    client,
+                    chain,
+                    pool,
+                    market,
+                    external,
+                    inputCap,
+                    head,
+                  });
+                  completedQuotes += found.length;
+                  for (const candidate of found) {
+                    await verifyV4Quote(client, candidate, this.settings, {
+                      signal: searchSignal,
+                      check,
+                    });
+                    this.assertMarketApproval(market);
+                    offer({
+                      kind: "v4",
+                      startToken: market.baseToken,
+                      candidate,
+                      market,
+                      pool,
+                      external,
+                    });
+                  }
+                  return;
+                }
                 const optimized = await this.aqua.optimize({
                   chain,
                   pool,
@@ -702,6 +873,14 @@ export class Runner {
                 }
               } catch (error) {
                 if (searchSignal.aborted) return;
+                if (error instanceof BackendBudgetExceeded) {
+                  this.event("backend_budget_exhausted", {
+                    chainId,
+                    poolId: pool.poolId,
+                    reason: error.message,
+                  });
+                  return;
+                }
                 this.event("sizing_rejected", {
                   chainId,
                   poolId: pool.poolId,
@@ -951,19 +1130,39 @@ export class Runner {
     // Shared backing or either pool may have changed. Re-optimize the route, not only the old size.
     this.assertMarketApproval(market);
     check();
-    const optimized = await this.aqua.optimize({
-      chain,
-      pool,
-      market,
-      external,
-      network: this.settings.networkMode,
-      maxInput: inputCap,
-      gasBudget: 0n,
-      slippageBps: this.settings.slippageBps,
-      signal: task?.signal,
-      executionPriority: true,
-    });
-    const selected = optimized.candidates[0];
+    let selected: Candidate | undefined;
+    if (this.settings.v4Search.mode === "quote-grid") {
+      const chosen = choice.candidate.trade.first.amountIn;
+      selected = (
+        await this.quoteGrid({
+          client,
+          chain,
+          pool,
+          market,
+          external,
+          inputCap,
+          head: fresh,
+          fixed: {
+            amount: chosen < inputCap ? chosen : inputCap,
+            aquaFirst: choice.candidate.aquaFirst,
+          },
+        })
+      )[0];
+    } else {
+      const optimized = await this.aqua.optimize({
+        chain,
+        pool,
+        market,
+        external,
+        network: this.settings.networkMode,
+        maxInput: inputCap,
+        gasBudget: 0n,
+        slippageBps: this.settings.slippageBps,
+        signal: task?.signal,
+        executionPriority: true,
+      });
+      selected = optimized.candidates[0];
+    }
     if (!selected) {
       this.event("opportunity_disappeared", { chainId });
       return false;

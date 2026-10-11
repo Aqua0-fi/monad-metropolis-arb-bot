@@ -13,6 +13,7 @@ export const executorAbi = parseAbi([
   "function maxGasPrice() view returns (uint256)",
   "function executionBlockNumber() view returns (uint256)",
   "function paused() view returns (bool)",
+  "function activeUntil() view returns (uint64)",
   "function operators(address) view returns (bool)",
   "function universalRouter() view returns (address)",
   "function aqua0Hook() view returns (address)",
@@ -30,6 +31,7 @@ export const v3Abi = parseAbi([
   "function token1() view returns (address)",
   "function fee() view returns (uint24)",
   "function liquidity() view returns (uint128)",
+  "function slot0() view returns (uint160 sqrtPriceX96,int24 tick,uint16 observationIndex,uint16 observationCardinality,uint16 observationCardinalityNext,uint8 feeProtocol,bool unlocked)",
 ]);
 export const quoterAbi = parseAbi([
   "function quoteExactInputSingle((address tokenIn,address tokenOut,uint256 amountIn,uint24 fee,uint160 sqrtPriceLimitX96) params) returns (uint256 amountOut,uint160 sqrtPriceX96After,uint32 initializedTicksCrossed,uint256 gasEstimate)",

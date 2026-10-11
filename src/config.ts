@@ -72,6 +72,8 @@ const marketSchema = z.object({
   amounts: z.array(positive).max(8).default([]),
   minNetProfit: positive,
   maxInput: positive,
+  // Screening-only gas allowance in base-token units. Real fees are measured before signing.
+  screenGasCost: uint.optional(),
 });
 export type Market = z.infer<typeof marketSchema>;
 const quoteFeeSchema = z
@@ -87,7 +89,67 @@ const quoteFeeSchema = z
     caller: address.optional(),
   })
   .strict();
+const budgetLimitSchema = z
+  .object({
+    perMinute: z.number().int().min(0).max(600),
+    perHour: z.number().int().min(0).max(20000),
+    perDay: z.number().int().min(0).max(200000),
+  })
+  .strict();
 export const settingsSchema = z.object({
+  // Hard caps on Aqua0 backend requests (each spends the backend's paid RPC). Persisted across restarts.
+  backendBudget: z
+    .object({
+      file: z.string().min(1).default("runtime/backend-budget.json"),
+      catalog: budgetLimitSchema.default({
+        perMinute: 2,
+        perHour: 30,
+        perDay: 200,
+      }),
+      search: budgetLimitSchema.default({
+        perMinute: 6,
+        perHour: 120,
+        perDay: 600,
+      }),
+      authorize: budgetLimitSchema.default({
+        perMinute: 2,
+        perHour: 20,
+        perDay: 60,
+      }),
+    })
+    .strict()
+    .prefault({}),
+  // "optimize" asks the backend to search every head (operator tier, expensive). "quote-grid" screens
+  // with free data (the backend's own price feed + the external pool on the worker's RPC) and asks the
+  // backend for one read-tier quote only when the screen shows a profitable gap.
+  v4Search: z
+    .object({
+      mode: z.enum(["optimize", "quote-grid"]).default("optimize"),
+      feedUrl: z.url().default("https://coins.llama.fi/prices/current"),
+      // Lowercase token address -> "usd-stable" (the backend's fixed $1 model) or a DefiLlama key.
+      feedKeys: z.record(z.string(), z.string().min(1)).default({}),
+      feedMaxAgeMs: z.number().int().min(10000).max(600000).default(300000),
+      feedRefreshMs: z.number().int().min(15000).max(600000).default(60000),
+      // Extra screening margin over pool fees, slippage and the gas allowance.
+      marginBps: z.number().int().min(0).max(1000).default(5),
+      // Do not re-ask the backend about an unchanged market sooner than this.
+      minBackendIntervalMs: z
+        .number()
+        .int()
+        .min(1000)
+        .max(3600000)
+        .default(15000),
+      sizesPerScreen: z.number().int().min(1).max(8).default(4),
+      // Chain ID -> external pools the V4 search may price (observe mode; execute mode uses
+      // execution.externalPools). Unset means every discovered pool, as before.
+      externalPools: z
+        .record(z.string(), z.array(address).min(1).max(16))
+        .default({}),
+    })
+    .strict()
+    .prefault({}),
+  // The process stops itself after this long. Pilot runs must set it.
+  maxRuntimeMs: z.number().int().min(10000).max(86400000).optional(),
   observations: z
     .object({
       enabled: z.boolean().default(true),

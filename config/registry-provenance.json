@@ -1,8 +1,8 @@
 {
-  "backendCommit": "4d7c98cca264edd040a3f930d71449c4eb2526f1",
+  "backendCommit": "0bde3d4b8cab294e858b5db2077c632609243379",
   "canonicalRecordsSha256": "c0eac39e903cb741947ea7bab203704265f5bf53bb21d5c0b8856f2d2a68a7e6",
   "executionPoliciesSha256": "d6c95f02fb40c85c441f6ad356a3f719be535da9c678a44a67611cd9814dee76",
-  "generatedChainsSha256": "ca4053154a575db3f0182221be43b3924b4d6143097eadfdde7d5056fdb583f3",
+  "generatedChainsSha256": "935f28fece93aea49f3a94cfb92eff187936ff925759b11cd27fd5b20b348fc1",
   "chainIds": [
     137,
     143,
@@ -13,5 +13,12 @@
     42220,
     43114
   ],
-  "note": "Registry presence is not proof of deployed executor readiness, liquidity or simulator parity."
+  "note": "Registry presence is not proof of deployed executor readiness, liquidity or simulator parity.",
+  "partialUpdate": {
+    "chainIds": [
+      143
+    ],
+    "backendCommit": "4d7c98cca264edd040a3f930d71449c4eb2526f1",
+    "note": "Only Monad was regenerated (hook redeployed Oct 7, live pools added). Other chains keep the 0bde3d4b reviewed records until their own redeployed hooks are reviewed."
+  }
 }
