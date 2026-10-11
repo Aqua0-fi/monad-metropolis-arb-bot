@@ -105,6 +105,10 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
     bool public immutable extendedV4Encoding;
     bool public paused = true;
     uint256 public maxGasPrice;
+    /// @notice Dead-man switch: execute reverts after this timestamp. Zero (the default) means inactive,
+    /// so a fresh deployment cannot trade until the owner opens a bounded window.
+    uint64 public activeUntil;
+    uint256 public constant MAX_ACTIVE_WINDOW = 1 days;
     mapping(address => bool) public operators;
     mapping(address => Limit) public limits;
     mapping(bytes32 => bool) public aquaPools;
@@ -125,6 +129,7 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
     error InsufficientOutput();
     error Unprofitable();
     error BadCallback();
+    error Inactive();
     event Executed(bytes32 indexed id, address indexed token, uint256 input, uint256 profit);
     event OperatorSet(address indexed operator, bool allowed);
     event LimitsSet(address indexed token, uint256 maxInput, uint256 minProfit);
@@ -133,6 +138,7 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
     event AquaPoolSet(bytes32 indexed poolId, bool allowed);
     event V3PoolSet(address indexed pool, bool allowed);
     event Withdrawn(address indexed token, address indexed recipient, uint256 amount);
+    event ActiveUntilSet(uint64 activeUntil);
 
     constructor(address owner_, address router_, address permit2_, address hook_, bool extended_) Ownable(owner_) {
         if (router_.code.length == 0 || permit2_.code.length == 0 || hook_.code.length == 0) revert InvalidRoute();
@@ -171,6 +177,14 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
         emit PauseSet(value);
     }
 
+    /// @notice Open (or close, with any past value such as zero) the trading window. Bounded so a
+    /// forgotten window always expires on its own.
+    function setActiveUntil(uint64 value) external onlyOwner {
+        if (value > block.timestamp + MAX_ACTIVE_WINDOW) revert LimitExceeded();
+        activeUntil = value;
+        emit ActiveUntilSet(value);
+    }
+
     function setAquaPool(PoolKey calldata key, bool allowed) external onlyOwner {
         if (key.hooks != aqua0Hook || key.currency0 == address(0) || key.currency0 >= key.currency1) {
             revert InvalidRoute();
@@ -201,6 +215,7 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
     function execute(Trade calldata trade) external nonReentrant returns (uint256 profit) {
         if (!operators[msg.sender]) revert Unauthorized();
         if (paused) revert Paused();
+        if (block.timestamp > activeUntil) revert Inactive();
         if (tx.gasprice > maxGasPrice) revert GasPriceExceeded();
         if (
             block.timestamp > trade.deadline || block.number > trade.validUntilBlock

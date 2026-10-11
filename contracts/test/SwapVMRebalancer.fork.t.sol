@@ -119,6 +119,7 @@ contract SwapVMRebalancerForkTest is Test {
         bot.setV3Pool(V3_POOL, true);
         bot.setSwapVMRouter(VM_ROUTER, AQUA, 10, true);
         bot.setPaused(false);
+        bot.setActiveUntil(uint64(block.timestamp + 1 days));
         deal(USDC, address(bot), 10_000e6);
     }
 

@@ -110,6 +110,7 @@ contract MarketRebalancerTest is Test {
         rebalancer.setV3Pool(address(v3), true);
         rebalancer.setGasPriceLimit(100 gwei);
         rebalancer.setPaused(false);
+        rebalancer.setActiveUntil(uint64(block.timestamp + 1 days));
         a.mint(address(rebalancer), 1_000_000 ether);
     }
 

@@ -193,6 +193,7 @@ contract SecurityReviewTest is Test {
         bot.setV3Pool(address(v3), true);
         bot.setGasPriceLimit(100 gwei);
         bot.setPaused(false);
+        bot.setActiveUntil(uint64(block.timestamp + 1 days));
         vm.stopPrank();
         a.mint(address(bot), CAPITAL);
     }
@@ -451,6 +452,37 @@ contract SecurityReviewTest is Test {
         vm.prank(outsider);
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, outsider));
         fresh.setOperator(outsider, true);
+    }
+
+    function testFreshDeploymentCannotTradeUntilOwnerOpensBoundedWindow() public {
+        MarketRebalancer fresh = new MarketRebalancer(owner, address(router), address(permit), address(a), false);
+        assertEq(fresh.activeUntil(), 0);
+        vm.prank(outsider);
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, outsider));
+        fresh.setActiveUntil(uint64(block.timestamp + 1 hours));
+        vm.startPrank(owner);
+        vm.expectRevert(MarketRebalancer.LimitExceeded.selector);
+        fresh.setActiveUntil(uint64(block.timestamp + 1 days + 1));
+        fresh.setActiveUntil(uint64(block.timestamp + 1 days));
+        assertEq(fresh.activeUntil(), uint64(block.timestamp + 1 days));
+        vm.stopPrank();
+    }
+
+    function testExpiredOrClosedWindowRevertsBeforeAnySwap() public {
+        MarketRebalancer.Trade memory t = trade(100 ether);
+        uint256 window = bot.activeUntil();
+        vm.warp(window + 1);
+        t.deadline = block.timestamp + 60;
+        vm.expectRevert(MarketRebalancer.Inactive.selector);
+        run(t);
+        unchanged(t, 0);
+        vm.warp(window - 1 hours);
+        vm.prank(owner);
+        bot.setActiveUntil(0);
+        t.deadline = block.timestamp + 60;
+        vm.expectRevert(MarketRebalancer.Inactive.selector);
+        run(t);
+        unchanged(t, 0);
     }
 
     function testNativeGasFundingMustNotBeSentDirectlyToExecutor() public {

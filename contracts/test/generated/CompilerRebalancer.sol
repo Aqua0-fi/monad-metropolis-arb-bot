@@ -55,6 +55,7 @@ interface ICompilerRebalancer {
     error BadCallback();
     error Expired();
     error GasPriceExceeded();
+    error Inactive();
     error InsufficientOutput();
     error InvalidRoute();
     error LimitExceeded();
@@ -70,6 +71,7 @@ interface ICompilerRebalancer {
     error Unauthorized();
     error Unprofitable();
 
+    event ActiveUntilSet(uint64 activeUntil);
     event AquaPoolSet(bytes32 indexed poolId, bool allowed);
     event Executed(bytes32 indexed id, address indexed token, uint256 input, uint256 profit);
     event GasPriceLimitSet(uint256 maxGasPrice);
@@ -94,7 +96,9 @@ interface ICompilerRebalancer {
     event V3PoolSet(address indexed pool, bool allowed);
     event Withdrawn(address indexed token, address indexed recipient, uint256 amount);
 
+    function MAX_ACTIVE_WINDOW() external view returns (uint256);
     function acceptOwnership() external;
+    function activeUntil() external view returns (uint64);
     function aqua0Hook() external view returns (address);
     function aquaPools(bytes32) external view returns (bool);
     function execute(MarketRebalancer.Trade memory trade) external returns (uint256 profit);
@@ -108,6 +112,7 @@ interface ICompilerRebalancer {
     function pendingOwner() external view returns (address);
     function permit2() external view returns (address);
     function renounceOwnership() external;
+    function setActiveUntil(uint64 value) external;
     function setAquaPool(PoolKey memory key, bool allowed) external;
     function setGasPriceLimit(uint256 value) external;
     function setLimits(address token, uint256 maxInput, uint256 minProfit) external;

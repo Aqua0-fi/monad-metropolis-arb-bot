@@ -122,6 +122,7 @@ contract ProductionAquaAdapterForkTest is Test {
         bot.setSwapVMRouter(router, aqua, 10, true);
         bot.setSwapVMStrategy(router, maker, strategyId, true);
         bot.setPaused(false);
+        bot.setActiveUntil(uint64(block.timestamp + 1 days));
         deal(token0, address(bot), 5e6);
         deal(token1, address(bot), 5e6);
     }

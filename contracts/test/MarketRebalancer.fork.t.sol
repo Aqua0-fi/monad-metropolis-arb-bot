@@ -144,6 +144,7 @@ contract MarketRebalancerForkTest is Test {
         rebalancer.setV3Pool(v3, true);
         rebalancer.setGasPriceLimit(100 gwei);
         rebalancer.setPaused(false);
+        rebalancer.setActiveUntil(uint64(block.timestamp + 1 days));
         deal(token0, address(rebalancer), amount * 10);
         emit log_named_uint("chain", block.chainid);
         emit log_named_uint("forkBlock", block.number);
