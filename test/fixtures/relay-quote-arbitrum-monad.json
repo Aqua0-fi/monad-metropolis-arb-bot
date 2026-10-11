@@ -1,0 +1,351 @@
+{
+  "requestId": "0x179175926051f11d75655fca2c264806bd34444b55864d0b12a4ff53faff571f",
+  "steps": [
+    {
+      "id": "deposit",
+      "action": "Confirm transaction in your wallet",
+      "description": "Depositing funds to the relayer to execute the swap for MON",
+      "kind": "transaction",
+      "items": [
+        {
+          "status": "incomplete",
+          "data": {
+            "from": "0xd1fC4c8631E8C5d23a0C86D5890802DD70Cb4cf5",
+            "to": "0x4cd00e387622c35bddb9b4c962c136462338bc31",
+            "data": "0x49290c1c000000000000000000000000d1fc4c8631e8c5d23a0c86d5890802dd70cb4cf50f87df5be4c2b0ea6444038665c7bdbe8a3a7732dd4b19d5d767770137764a74",
+            "value": "1000000000000000",
+            "chainId": 42161,
+            "gas": "33208",
+            "maxFeePerGas": "22004400",
+            "maxPriorityFeePerGas": "0"
+          },
+          "check": {
+            "endpoint": "/intents/status?requestId=0x179175926051f11d75655fca2c264806bd34444b55864d0b12a4ff53faff571f",
+            "method": "GET"
+          }
+        }
+      ],
+      "requestId": "0x179175926051f11d75655fca2c264806bd34444b55864d0b12a4ff53faff571f",
+      "depositAddress": ""
+    }
+  ],
+  "fees": {
+    "gas": {
+      "currency": {
+        "chainId": 42161,
+        "address": "0x0000000000000000000000000000000000000000",
+        "symbol": "ETH",
+        "name": "Ether",
+        "decimals": 18,
+        "metadata": {
+          "logoURI": "https://assets.relay.link/icons/1/light.png",
+          "verified": true
+        }
+      },
+      "amount": "730722115200",
+      "amountFormatted": "0.0000007307221152",
+      "amountUsd": "0.001849",
+      "minimumAmount": "730722115200"
+    },
+    "relayer": {
+      "currency": {
+        "chainId": 42161,
+        "address": "0x0000000000000000000000000000000000000000",
+        "symbol": "ETH",
+        "name": "Ether",
+        "decimals": 18,
+        "metadata": {
+          "logoURI": "https://assets.relay.link/icons/1/light.png",
+          "verified": true
+        }
+      },
+      "amount": "9929496738565",
+      "amountFormatted": "0.000009929496738565",
+      "amountUsd": "0.025123",
+      "minimumAmount": "9929496738565"
+    },
+    "relayerGas": {
+      "currency": {
+        "chainId": 42161,
+        "address": "0x0000000000000000000000000000000000000000",
+        "symbol": "ETH",
+        "name": "Ether",
+        "decimals": 18,
+        "metadata": {
+          "logoURI": "https://assets.relay.link/icons/1/light.png",
+          "verified": true
+        }
+      },
+      "amount": "31213880492",
+      "amountFormatted": "0.000000031213880492",
+      "amountUsd": "0.000079",
+      "minimumAmount": "31213880492"
+    },
+    "relayerService": {
+      "currency": {
+        "chainId": 42161,
+        "address": "0x0000000000000000000000000000000000000000",
+        "symbol": "ETH",
+        "name": "Ether",
+        "decimals": 18,
+        "metadata": {
+          "logoURI": "https://assets.relay.link/icons/1/light.png",
+          "verified": true
+        }
+      },
+      "amount": "9898282858073",
+      "amountFormatted": "0.000009898282858073",
+      "amountUsd": "0.025044",
+      "minimumAmount": "9898282858073"
+    },
+    "app": {
+      "currency": {
+        "chainId": 42161,
+        "address": "0x0000000000000000000000000000000000000000",
+        "symbol": "ETH",
+        "name": "Ether",
+        "decimals": 18,
+        "metadata": {
+          "logoURI": "https://assets.relay.link/icons/1/light.png",
+          "verified": true
+        }
+      },
+      "amount": "0",
+      "amountFormatted": "0.0",
+      "amountUsd": "0",
+      "minimumAmount": "0"
+    },
+    "subsidized": {
+      "currency": {
+        "chainId": 42161,
+        "address": "0x0000000000000000000000000000000000000000",
+        "symbol": "ETH",
+        "name": "Ether",
+        "decimals": 18,
+        "metadata": {
+          "logoURI": "https://assets.relay.link/icons/1/light.png",
+          "verified": true
+        }
+      },
+      "amount": "0",
+      "amountFormatted": "0.0",
+      "amountUsd": "0",
+      "minimumAmount": "0"
+    }
+  },
+  "details": {
+    "operation": "swap",
+    "sender": "0xd1fC4c8631E8C5d23a0C86D5890802DD70Cb4cf5",
+    "recipient": "0xd1fC4c8631E8C5d23a0C86D5890802DD70Cb4cf5",
+    "currencyIn": {
+      "currency": {
+        "chainId": 42161,
+        "address": "0x0000000000000000000000000000000000000000",
+        "symbol": "ETH",
+        "name": "Ether",
+        "decimals": 18,
+        "metadata": {
+          "logoURI": "https://assets.relay.link/icons/1/light.png",
+          "verified": true
+        }
+      },
+      "amount": "1000000000000000",
+      "amountFormatted": "0.001",
+      "amountUsd": "2.530178",
+      "minimumAmount": "1000000000000000"
+    },
+    "currencyOut": {
+      "currency": {
+        "chainId": 143,
+        "address": "0x0000000000000000000000000000000000000000",
+        "symbol": "MON",
+        "name": "Monad",
+        "decimals": 18,
+        "metadata": {
+          "logoURI": "https://assets.coingecko.com/coins/images/38927/large/monad.jpg",
+          "verified": true
+        }
+      },
+      "amount": "89192996273012027275",
+      "amountFormatted": "89.192996273012027275",
+      "amountUsd": "2.475284",
+      "minimumAmount": "86508287085194365254"
+    },
+    "refundCurrency": {
+      "currency": {
+        "chainId": 42161,
+        "address": "0x0000000000000000000000000000000000000000",
+        "symbol": "ETH",
+        "name": "Ether",
+        "decimals": 18,
+        "metadata": {
+          "logoURI": "https://assets.relay.link/icons/1/light.png",
+          "verified": true
+        }
+      },
+      "amount": "1000000000000000",
+      "amountFormatted": "0.001",
+      "amountUsd": "2.530178",
+      "minimumAmount": "1000000000000000"
+    },
+    "totalImpact": { "usd": "-0.054894", "percent": "-2.17" },
+    "swapImpact": { "usd": "-0.029771", "percent": "-1.18" },
+    "expandedPriceImpact": {
+      "swap": { "usd": "-0.031020" },
+      "execution": { "usd": "-0.020079" },
+      "relay": { "usd": "-0.003795" },
+      "app": { "usd": "0" },
+      "sponsored": { "usd": "0" }
+    },
+    "rate": "89192.99627301203",
+    "slippageTolerance": {
+      "total": "301",
+      "origin": { "usd": "0.000000", "value": "0", "percent": "0.00" },
+      "destination": {
+        "usd": "0.074506",
+        "value": "2684709187817662021",
+        "percent": "3.01"
+      }
+    },
+    "timeEstimate": 1,
+    "userBalance": "0",
+    "isFixedRate": false,
+    "route": {
+      "origin": {
+        "inputCurrency": {
+          "currency": {
+            "chainId": 42161,
+            "address": "0x0000000000000000000000000000000000000000",
+            "symbol": "ETH",
+            "name": "Ether",
+            "decimals": 18,
+            "metadata": {
+              "logoURI": "https://assets.relay.link/icons/1/light.png",
+              "verified": true
+            }
+          },
+          "amount": "1000000000000000",
+          "amountFormatted": "0.001",
+          "amountUsd": "2.530178",
+          "minimumAmount": "1000000000000000"
+        },
+        "outputCurrency": {
+          "currency": {
+            "chainId": 42161,
+            "address": "0x0000000000000000000000000000000000000000",
+            "symbol": "ETH",
+            "name": "Ether",
+            "decimals": 18,
+            "metadata": {
+              "logoURI": "https://assets.relay.link/icons/1/light.png",
+              "verified": true
+            }
+          },
+          "amount": "1000000000000000",
+          "amountFormatted": "0.001",
+          "amountUsd": "2.530178",
+          "minimumAmount": "1000000000000000"
+        },
+        "router": "relay"
+      },
+      "destination": {
+        "inputCurrency": {
+          "currency": {
+            "chainId": 143,
+            "address": "0x0000000000000000000000000000000000000000",
+            "symbol": "MON",
+            "name": "Monad",
+            "decimals": 18,
+            "metadata": {
+              "logoURI": "https://assets.coingecko.com/coins/images/38927/large/monad.jpg",
+              "verified": true
+            }
+          },
+          "amount": "89192996273012027275",
+          "amountFormatted": "89.192996273012027275",
+          "amountUsd": "2.475284",
+          "minimumAmount": "86508287085194365254"
+        },
+        "outputCurrency": {
+          "currency": {
+            "chainId": 143,
+            "address": "0x0000000000000000000000000000000000000000",
+            "symbol": "MON",
+            "name": "Monad",
+            "decimals": 18,
+            "metadata": {
+              "logoURI": "https://assets.coingecko.com/coins/images/38927/large/monad.jpg",
+              "verified": true
+            }
+          },
+          "amount": "89192996273012027275",
+          "amountFormatted": "89.192996273012027275",
+          "amountUsd": "2.475284",
+          "minimumAmount": "86508287085194365254"
+        },
+        "router": "relay"
+      }
+    }
+  },
+  "protocol": {
+    "v2": {
+      "orderId": "0x0f87df5be4c2b0ea6444038665c7bdbe8a3a7732dd4b19d5d767770137764a74",
+      "hubType": "onchain",
+      "orderData": {
+        "version": "v1",
+        "solverChainId": "base",
+        "solver": "0xf70da97812cb96acdf810712aa562db8dfa3dbef",
+        "salt": "0xdb08692a0e505968e4f34010fa07af3933cca932a30541dba50dd32f9719903d",
+        "inputs": [
+          {
+            "payment": {
+              "chainId": "arbitrum",
+              "currency": "0x0000000000000000000000000000000000000000",
+              "amount": "1000000000000000",
+              "weight": "1"
+            },
+            "refunds": [
+              {
+                "chainId": "arbitrum",
+                "recipient": "0xd1fC4c8631E8C5d23a0C86D5890802DD70Cb4cf5",
+                "currency": "0x0000000000000000000000000000000000000000",
+                "minimumAmount": "0",
+                "deadline": 1792364061,
+                "extraData": "0x000000000000000000000000b92fe925dc43a0ecde6c8b1a2709c170ec4fff4f"
+              },
+              {
+                "chainId": "monad",
+                "recipient": "0xd1fC4c8631E8C5d23a0C86D5890802DD70Cb4cf5",
+                "currency": "0x0000000000000000000000000000000000000000",
+                "minimumAmount": "0",
+                "deadline": 1792364061,
+                "extraData": "0x000000000000000000000000b92fe925dc43a0ecde6c8b1a2709c170ec4fff4f"
+              }
+            ]
+          }
+        ],
+        "output": {
+          "chainId": "monad",
+          "payments": [
+            {
+              "recipient": "0xd1fC4c8631E8C5d23a0C86D5890802DD70Cb4cf5",
+              "currency": "0x0000000000000000000000000000000000000000",
+              "minimumAmount": "86508287085194365254",
+              "expectedAmount": "89192996273012027275"
+            }
+          ],
+          "calls": [],
+          "deadline": 1792364061,
+          "extraData": "0x000000000000000000000000b92fe925dc43a0ecde6c8b1a2709c170ec4fff4f"
+        },
+        "fees": []
+      },
+      "paymentDetails": {
+        "chainId": "arbitrum",
+        "depository": "0x4cd00e387622c35bddb9b4c962c136462338bc31",
+        "currency": "0x0000000000000000000000000000000000000000",
+        "amount": "1000000000000000"
+      }
+    }
+  }
+}
