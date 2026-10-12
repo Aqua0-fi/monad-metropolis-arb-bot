@@ -52,7 +52,7 @@ class TimedRunTests(unittest.TestCase):
         write_secret(self.secrets, 'market-rebalancer-observer.json', json.dumps({'AQUA0_READ_API_KEY': 'read-test'}))
         write_secret(self.secrets, 'market-rebalancer-operator.json', json.dumps({'AQUA0_OPERATOR_API_KEY': 'op-test'}))
         write_secret(self.secrets, 'market-rebalancer.aws.env', '\n'.join([
-            'AWS_REGION=us-east-1', 'AWS_ACCESS_KEY_ID=AKIATESTTESTTESTTEST', 'AWS_SECRET_ACCESS_KEY=' + 'x' * 40,
+            'AWS_REGION=us-east-1', 'AWS_ACCESS_KEY_ID=test-access-key-id', 'AWS_SECRET_ACCESS_KEY=' + 'x' * 40,
             'MARKET_REBALANCER_KMS_KEY_ID=arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012',
             'MARKET_REBALANCER_OPERATOR_ADDRESS=0xd1fC4c8631E8C5d23a0C86D5890802DD70Cb4cf5']))
         self.handlers = {s: signal.getsignal(s) for s in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP)}
