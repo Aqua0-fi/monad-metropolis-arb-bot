@@ -64,8 +64,8 @@
   "markets": [
     {
       "chainId": 143,
-      "poolId": "POOL_ID_AFTER_DEPLOY",
-      "classId": "POOL_ID_DECIMAL_AFTER_DEPLOY",
+      "poolId": "0x578d30680d809f6f197d16bcb72a792f57d3cb2475a01c2892bf84a29b040952",
+      "classId": "39600677351958999447736613570343852438939523129701017792115048576485742086482",
       "baseToken": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
       "amounts": [],
       "minNetProfit": "1000",

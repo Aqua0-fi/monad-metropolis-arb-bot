@@ -149,20 +149,12 @@
     },
     "additionalPools": [
       {
-        "poolId": "0x26d1028fae5935b2553bcd7299884fb2150e9f5b135059fe49b9b8222aa3daad",
-        "currency0": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
-        "currency1": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
-        "fee": 100,
-        "tickSpacing": 1,
-        "hooks": "0xA2bdf696822D4D97da31d936c8520d89B9A868c0"
-      },
-      {
-        "poolId": "0x33d51cd1a32eb4c25366b074a85b450bed2f6c15ae420a4d7215b8c399f7d799",
-        "currency0": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
-        "currency1": "0xEE8c0E9f1BFFb4Eb878d8f15f368A02a35481242",
-        "fee": 3000,
-        "tickSpacing": 60,
-        "hooks": "0xA2bdf696822D4D97da31d936c8520d89B9A868c0"
+        "poolId": "0x578d30680d809f6f197d16bcb72a792f57d3cb2475a01c2892bf84a29b040952",
+        "currency0": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
+        "currency1": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+        "fee": 500,
+        "tickSpacing": 10,
+        "hooks": "0x458A6eEb541478E714A0C2D17cB02B2E4ff7a8C0"
       }
     ],
     "venues": [
