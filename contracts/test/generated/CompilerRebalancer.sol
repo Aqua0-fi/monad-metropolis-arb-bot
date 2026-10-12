@@ -94,6 +94,7 @@ interface ICompilerRebalancer {
     function maxGasPrice() external view returns (uint256);
     function operators(address) external view returns (bool);
     function owner() external view returns (address);
+    function pancakeV3SwapCallback(int256 amount0, int256 amount1, bytes memory) external;
     function paused() external view returns (bool);
     function pendingOwner() external view returns (address);
     function permit2() external view returns (address);
