@@ -1,0 +1,155 @@
+{
+  "chainId": 143,
+  "block": 112591595,
+  "blockHash": "0xf1652ad0e40c48c46fcd277147ace69e28dd0e69653cb5bb1515929b0836f833",
+  "method": "Read-only eth_estimateGas against https://rpc2.monad.xyz at the pinned block, versus the same call on a local anvil fork of that block (Ethereum gas schedule). Accessed accounts/slots from eth_createAccessList on the anvil fork. No transaction was signed or sent.",
+  "model": "monadGas = ethereumGas + 7500*coldAccounts + 8000*coldPages - 2000*coldSlots (+3000 per ecRecover call); from docs.monad.xyz/developer-essentials/opcode-pricing: cold account 10100 vs 2600, cold storage 8100 per 128-slot page (100 for other slots of a touched page) vs 2100 per slot.",
+  "tokens": {
+    "USDC": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+    "WETH": "0xEE8c0E9f1BFFb4Eb878d8f15f368A02a35481242",
+    "USDT0": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+    "poolManager": "0x188d586Ddcf52439676Ca21A244753fA19F9Ea8e",
+    "fromAndTarget": "0x25EF1a210fF55BcEe9F8fee979aAFf6bD1bE5Bf1 (USDC/WETH V3), USDT0 transfer from 0xacf82ECC826A9fc2D8c8C4d370d2D268fA5B3500"
+  },
+  "gasPriceAtObservation": {
+    "eth_gasPrice_wei": 102000000000,
+    "pinnedBlockBaseFeeWei": 100000000000
+  },
+  "calls": [
+    {
+      "call": "USDC.balanceOf(V3 pool)",
+      "monadEstimateGas": 57469,
+      "ethereumScheduleEstimateGas": 31182,
+      "coldAccounts": 1,
+      "coldSlots": 3,
+      "coldPages": 3,
+      "modelPrediction": 56682,
+      "residual": 787
+    },
+    {
+      "call": "WETH.balanceOf(V3 pool)",
+      "monadEstimateGas": 48778,
+      "ethereumScheduleEstimateGas": 28912,
+      "coldAccounts": 1,
+      "coldSlots": 2,
+      "coldPages": 2,
+      "modelPrediction": 48412,
+      "residual": 366
+    },
+    {
+      "call": "USDT0.balanceOf(V3 pool)",
+      "monadEstimateGas": 57459,
+      "ethereumScheduleEstimateGas": 31172,
+      "coldAccounts": 1,
+      "coldSlots": 3,
+      "coldPages": 3,
+      "modelPrediction": 56672,
+      "residual": 787
+    },
+    {
+      "call": "USDC.transfer(fresh, 1) from V3 pool",
+      "monadEstimateGas": 100299,
+      "ethereumScheduleEstimateGas": 62431,
+      "coldAccounts": 1,
+      "coldSlots": 5,
+      "coldPages": 5,
+      "modelPrediction": 99931,
+      "residual": 368
+    },
+    {
+      "call": "WETH.transfer(fresh, 1) from V3 pool",
+      "monadEstimateGas": 82369,
+      "ethereumScheduleEstimateGas": 56516,
+      "coldAccounts": 1,
+      "coldSlots": 3,
+      "coldPages": 3,
+      "modelPrediction": 82016,
+      "residual": 353
+    },
+    {
+      "call": "USDT0.transfer(fresh, 1) from V3 pool",
+      "monadEstimateGas": 99047,
+      "ethereumScheduleEstimateGas": 61165,
+      "coldAccounts": 1,
+      "coldSlots": 5,
+      "coldPages": 5,
+      "modelPrediction": 98665,
+      "residual": 382
+    },
+    {
+      "call": "USDC.transfer(existing holder, 1) from V3 pool",
+      "monadEstimateGas": 83412,
+      "ethereumScheduleEstimateGas": 45240,
+      "coldAccounts": 1,
+      "coldSlots": 5,
+      "coldPages": 5,
+      "modelPrediction": 82740,
+      "residual": 672
+    },
+    {
+      "call": "PoolManager.extsload(slot 0, 1)",
+      "monadEstimateGas": 30261,
+      "ethereumScheduleEstimateGas": 23931,
+      "coldAccounts": 0,
+      "coldSlots": 1,
+      "coldPages": 1,
+      "modelPrediction": 29931,
+      "residual": 330
+    },
+    {
+      "call": "PoolManager.extsload(slot 0, 2)",
+      "monadEstimateGas": 30433,
+      "ethereumScheduleEstimateGas": 26106,
+      "coldAccounts": 0,
+      "coldSlots": 2,
+      "coldPages": 1,
+      "modelPrediction": 30106,
+      "residual": 327
+    },
+    {
+      "call": "PoolManager.extsload(slot 0, 8)",
+      "monadEstimateGas": 31470,
+      "ethereumScheduleEstimateGas": 39156,
+      "coldAccounts": 0,
+      "coldSlots": 8,
+      "coldPages": 1,
+      "modelPrediction": 31156,
+      "residual": 314
+    },
+    {
+      "call": "PoolManager.extsload(slot 0, 64)",
+      "monadEstimateGas": 41150,
+      "ethereumScheduleEstimateGas": 160965,
+      "coldAccounts": 0,
+      "coldSlots": 64,
+      "coldPages": 1,
+      "modelPrediction": 40965,
+      "residual": 185
+    },
+    {
+      "call": "PoolManager.extsload(slot 0x1000, 1)",
+      "monadEstimateGas": 30273,
+      "ethereumScheduleEstimateGas": 23943,
+      "coldAccounts": 0,
+      "coldSlots": 1,
+      "coldPages": 1,
+      "modelPrediction": 29943,
+      "residual": 330
+    },
+    {
+      "call": "PoolManager.extsload(slot 0x1000, 2)",
+      "monadEstimateGas": 30445,
+      "ethereumScheduleEstimateGas": 26118,
+      "coldAccounts": 0,
+      "coldSlots": 2,
+      "coldPages": 1,
+      "modelPrediction": 30118,
+      "residual": 327
+    }
+  ],
+  "residualRange": [
+    185,
+    787
+  ],
+  "conclusion": "Model under-predicts Monad eth_estimateGas by 185-787 gas per call (<=1.5%); per-page storage pricing confirmed (each extra slot in an already-touched page ~170 gas on Monad vs ~2175 on the Ethereum schedule)."
+}
