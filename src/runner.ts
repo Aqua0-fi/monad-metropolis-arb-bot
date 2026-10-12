@@ -21,7 +21,7 @@ import {
   verifyChain,
   type ExternalPool,
 } from "./venues.js";
-import { V4Screen } from "./v4-screen.js";
+import { V4Screen, type ScreenResult } from "./v4-screen.js";
 import { BackendBudgetExceeded } from "./backend-budget.js";
 import { findPool, same, type ChainConfig, type Settings } from "./config.js";
 import { ceilDiv, findCandidates, type Candidate } from "./strategy.js";
@@ -333,6 +333,8 @@ export class Runner {
     inputCap: bigint;
     head: { number: bigint; hash: `0x${string}`; timestamp: bigint };
     fixed?: { amount: bigint; aquaFirst: boolean };
+    /** A free screen this scan already ran for `external`, so it is not screened twice. */
+    screened?: ScreenResult | undefined;
   }): Promise<Candidate[]> {
     const { client, chain, pool, market, external, head } = p;
     let amount: bigint, aquaFirst: boolean, fingerprint: string | undefined;
@@ -340,24 +342,7 @@ export class Runner {
     if (p.fixed) {
       ({ amount, aquaFirst } = p.fixed);
     } else {
-      const screen = await this.screen.screen({
-        client,
-        chain,
-        pool,
-        market,
-        external,
-        inputCap: p.inputCap,
-        blockNumber: head.number,
-      });
-      this.event("v4_screen", {
-        chainId: chain.chainId,
-        poolId: pool.poolId,
-        externalPool: external.address,
-        go: screen.go,
-        reason: screen.reason,
-        expectedProfit: screen.expectedProfit ?? null,
-        required: screen.required ?? null,
-      });
+      const screen = p.screened ?? (await this.screenExternal(p));
       if (!screen.go) return [];
       ({ amount, aquaFirst, fingerprint } = screen);
     }
@@ -404,6 +389,36 @@ export class Runner {
       this.screen.noteBackend(key, fingerprint, candidates.length > 0);
     for (const candidate of candidates) candidate.quoteBlockHash = head.hash;
     return candidates;
+  }
+  /** The free screen of one external pool against the Aqua0 pool: RPC reads only, no backend call. */
+  private async screenExternal(p: {
+    client: PublicClient;
+    chain: ChainConfig;
+    pool: ReturnType<typeof findPool>;
+    market: Settings["markets"][number];
+    external: ExternalPool;
+    inputCap: bigint;
+    head: { number: bigint };
+  }): Promise<ScreenResult> {
+    const screen = await this.screen.screen({
+      client: p.client,
+      chain: p.chain,
+      pool: p.pool,
+      market: p.market,
+      external: p.external,
+      inputCap: p.inputCap,
+      blockNumber: p.head.number,
+    });
+    this.event("v4_screen", {
+      chainId: p.chain.chainId,
+      poolId: p.pool.poolId,
+      externalPool: p.external.address,
+      go: screen.go,
+      reason: screen.reason,
+      expectedProfit: screen.expectedProfit ?? null,
+      required: screen.required ?? null,
+    });
+    return screen;
   }
   private swapVMMarkets() {
     return (
@@ -790,8 +805,59 @@ export class Runner {
               !allowedExternal ||
               allowedExternal.some((allowed) => same(allowed, venue.address)),
           );
+          // quote-grid screens every external pool for free and sends only the widest gap to the backend.
+          // Quoting each one spent the per-minute search budget on the same Aqua0-side quote, leaving none
+          // for the re-quote before authorization, so no trade could ever execute.
+          const screened = new Map<string, ScreenResult>();
+          let searched = venues;
+          if (this.settings.v4Search.mode === "quote-grid") {
+            await forEachConcurrent(
+              venues,
+              2,
+              async (external) => {
+                if (searchSignal.aborted) return;
+                check();
+                try {
+                  screened.set(
+                    external.address.toLowerCase(),
+                    await this.screenExternal({
+                      client,
+                      chain,
+                      pool,
+                      market,
+                      external,
+                      inputCap,
+                      head,
+                    }),
+                  );
+                } catch (error) {
+                  if (searchSignal.aborted) return;
+                  if (
+                    error instanceof StaleCandidateError ||
+                    error instanceof ObsoleteScan
+                  )
+                    throw error;
+                  this.event("sizing_rejected", {
+                    chainId,
+                    poolId: pool.poolId,
+                    venue: external.venue.name,
+                    error: safeError(error),
+                  });
+                  quoteFailures++;
+                }
+              },
+              searchSignal,
+            );
+            let best: { external: ExternalPool; profit: bigint } | undefined;
+            for (const external of venues) {
+              const screen = screened.get(external.address.toLowerCase());
+              if (screen?.go && (!best || screen.expectedProfit > best.profit))
+                best = { external, profit: screen.expectedProfit };
+            }
+            searched = best ? [best.external] : [];
+          }
           await forEachConcurrent(
-            venues,
+            searched,
             2,
             async (external) => {
               if (searchSignal.aborted) return;
@@ -807,6 +873,7 @@ export class Runner {
                     external,
                     inputCap,
                     head,
+                    screened: screened.get(external.address.toLowerCase()),
                   });
                   completedQuotes += found.length;
                   for (const candidate of found) {
