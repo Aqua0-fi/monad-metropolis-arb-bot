@@ -1,5 +1,5 @@
 import { erc20Abi, type Address, type PublicClient } from "viem";
-import { v3Abi } from "./abi.js";
+import { stateViewAbi, v3Abi } from "./abi.js";
 import { same, type ChainConfig, type Market, type Pool } from "./config.js";
 import type { Settings } from "./config.js";
 import { haircut } from "./strategy.js";
@@ -138,6 +138,24 @@ export function aquaOutEstimate(p: {
   );
 }
 
+type AquaPricing =
+  | { kind: "feed"; feed: [FeedQuote, FeedQuote] }
+  | { kind: "pool"; sqrtPriceX96: bigint; feePips: number };
+
+/** Output at the pool's current marginal price less its LP fee; depth is confirmed by the backend quote. */
+export function poolOutEstimate(
+  amountIn: bigint,
+  sqrtPriceX96: bigint,
+  zeroForOne: boolean,
+  feePips: number,
+): bigint {
+  const afterFee = (amountIn * BigInt(1_000_000 - feePips)) / 1_000_000n;
+  const priceX192 = sqrtPriceX96 * sqrtPriceX96;
+  return zeroForOne
+    ? (afterFee * priceX192) >> 192n
+    : (afterFee << 192n) / priceX192;
+}
+
 export class V4Screen {
   private decimals = new Map<string, number>();
   private last = new Map<
@@ -201,8 +219,28 @@ export class V4Screen {
     const other = same(base, p.pool.currency0)
       ? p.pool.currency1
       : p.pool.currency0;
-    const feed = await this.feed.pair(base, other);
-    if ("refused" in feed) return { go: false, reason: feed.refused };
+    // A hook that no longer recentres fills from wherever its pool price sits, so that price IS the
+    // Aqua0 side. A recentring hook fills at the backend's feed price instead.
+    let pricing: AquaPricing;
+    if (this.settings.aquaPrice === "pool") {
+      const stateView = this.settings.stateView[String(p.chain.chainId)];
+      if (!stateView)
+        return { go: false, reason: "No StateView configured for this chain" };
+      const [sqrtPriceX96, , , lpFee] = await p.client.readContract({
+        address: stateView,
+        abi: stateViewAbi,
+        functionName: "getSlot0",
+        args: [p.pool.poolId],
+        blockNumber: p.blockNumber,
+      });
+      if (sqrtPriceX96 === 0n)
+        return { go: false, reason: "Aqua0 pool is not initialized" };
+      pricing = { kind: "pool", sqrtPriceX96, feePips: Number(lpFee) };
+    } else {
+      const feed = await this.feed.pair(base, other);
+      if ("refused" in feed) return { go: false, reason: feed.refused };
+      pricing = { kind: "feed", feed };
+    }
     const [slot0, liquidity] = await Promise.all([
       p.client.readContract({
         address: p.external.address,
@@ -222,8 +260,9 @@ export class V4Screen {
     const fingerprint = JSON.stringify([
       String(slot0[0]),
       String(liquidity),
-      feed[0].priceUsd.toPrecision(7),
-      feed[1].priceUsd.toPrecision(7),
+      pricing.kind === "pool"
+        ? String(pricing.sqrtPriceX96)
+        : pricing.feed.map((q) => q.priceUsd.toPrecision(7)),
       String(p.inputCap),
     ]);
     const asked = this.backend.get(key);
@@ -242,7 +281,14 @@ export class V4Screen {
       };
     const cached = this.last.get(key);
     if (cached && cached.fingerprint === fingerprint) return cached.result;
-    const result = await this.evaluate(p, base, other, feed, fingerprint, key);
+    const result = await this.evaluate(
+      p,
+      base,
+      other,
+      pricing,
+      fingerprint,
+      key,
+    );
     this.last.set(key, { fingerprint, result });
     return result;
   }
@@ -250,7 +296,7 @@ export class V4Screen {
     p: Parameters<V4Screen["screen"]>[0],
     base: Address,
     other: Address,
-    feed: [FeedQuote, FeedQuote],
+    pricing: AquaPricing,
     fingerprint: string,
     key: string,
   ): Promise<ScreenResult> {
@@ -271,15 +317,27 @@ export class V4Screen {
       ),
     ];
     if (!sizes.length) return { go: false, reason: "No size within the cap" };
+    const baseIsToken0 = same(base, p.pool.currency0);
     const aqua = (amountIn: bigint, toOther: boolean) =>
-      aquaOutEstimate({
-        amountIn,
-        priceIn: toOther ? feed[0].priceUsd : feed[1].priceUsd,
-        priceOut: toOther ? feed[1].priceUsd : feed[0].priceUsd,
-        decimalsIn: toOther ? dBase : dOther,
-        decimalsOut: toOther ? dOther : dBase,
-        feePips: p.pool.fee,
-      });
+      pricing.kind === "pool"
+        ? poolOutEstimate(
+            amountIn,
+            pricing.sqrtPriceX96,
+            toOther === baseIsToken0,
+            pricing.feePips,
+          )
+        : aquaOutEstimate({
+            amountIn,
+            priceIn: toOther
+              ? pricing.feed[0].priceUsd
+              : pricing.feed[1].priceUsd,
+            priceOut: toOther
+              ? pricing.feed[1].priceUsd
+              : pricing.feed[0].priceUsd,
+            decimalsIn: toOther ? dBase : dOther,
+            decimalsOut: toOther ? dOther : dBase,
+            feePips: p.pool.fee,
+          });
     const v3 = (tokenIn: Address, tokenOut: Address, amountIn: bigint) =>
       quoteV3(
         p.client,

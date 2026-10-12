@@ -125,6 +125,10 @@ export const settingsSchema = z.object({
   v4Search: z
     .object({
       mode: z.enum(["optimize", "quote-grid"]).default("optimize"),
+      // "feed": the hook recentres to the backend's feed price before each fill. "pool": the hook fills
+      // from its pool's current price, read from Uniswap's StateView.
+      aquaPrice: z.enum(["feed", "pool"]).default("feed"),
+      stateView: z.record(z.string(), address).default({}),
       feedUrl: z.url().default("https://coins.llama.fi/prices/current"),
       // Lowercase token address -> "usd-stable" (the backend's fixed $1 model) or a DefiLlama key.
       feedKeys: z.record(z.string(), z.string().min(1)).default({}),

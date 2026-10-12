@@ -336,6 +336,16 @@ contract MarketRebalancer is Ownable2Step, ReentrancyGuard {
     }
 
     function uniswapV3SwapCallback(int256 amount0, int256 amount1, bytes calldata) external {
+        _payV3(amount0, amount1);
+    }
+
+    /// @notice PancakeSwap V3 pools call this name; the checks are identical (only the allowlisted pool
+    /// whose swap is in progress can collect, and only up to that leg's input).
+    function pancakeV3SwapCallback(int256 amount0, int256 amount1, bytes calldata) external {
+        _payV3(amount0, amount1);
+    }
+
+    function _payV3(int256 amount0, int256 amount1) private {
         if (callbackPool == address(0) || msg.sender != callbackPool || (amount0 > 0) == (amount1 > 0)) {
             revert BadCallback();
         }

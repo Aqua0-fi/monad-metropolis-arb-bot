@@ -3,7 +3,7 @@
   "networkMode": "mainnet",
   "apiUrl": "https://staging-api.aqua0.xyz",
   "maxRuntimeMs": 900000,
-  "slippageBps": 1,
+  "slippageBps": 10,
   "maxQuoteAgeMs": 10000,
   "maxBlockLag": 20,
   "confirmations": 2,
@@ -41,25 +41,35 @@
     "mode": "quote-grid",
     "feedKeys": {
       "0x754704bc059f8c67012fed69bc8a327a5aafb603": "usd-stable",
-      "0xe7cd86e13ac4309349f30b3435a9d337750fc82d": "usd-stable",
-      "0xee8c0e9f1bffb4eb878d8f15f368a02a35481242": "coingecko:ethereum"
+      "0x3bd359c1119da7da1d913d1c4d2b7c461115433a": "coingecko:monad"
     },
-    "marginBps": 2,
+    "marginBps": 5,
     "minBackendIntervalMs": 20000,
     "sizesPerScreen": 4,
     "externalPools": {
-      "143": ["0xacf82ECC826A9fc2D8c8C4d370d2D268fA5B3500"]
+      "143": [
+        "0x5Bc39A29EA5d8315263EC8939d6AD393dEbC34E9",
+        "0x659bD0BC4167BA25c62E05656F78043E7eD4a9da",
+        "0xC33e9E441e6f4E74CdB34f878bE51189C9CB00D8",
+        "0x63e48B725540A3Db24ACF6682a29f877808C53F2",
+        "0x85717A98d195c9306BBf7c9523Ba71F044Fea0f7",
+        "0xB9897986847472Cd08B9A0E7BCd31EA4F1322361"
+      ]
+    },
+    "aquaPrice": "pool",
+    "stateView": {
+      "143": "0x77395F3b2E73aE90843717371294fa97cC419D64"
     }
   },
   "markets": [
     {
       "chainId": 143,
-      "poolId": "0x26d1028fae5935b2553bcd7299884fb2150e9f5b135059fe49b9b8222aa3daad",
-      "classId": "17557176959828909580598016596944908883460282011703740996960343852595219258029",
+      "poolId": "POOL_ID_AFTER_DEPLOY",
+      "classId": "POOL_ID_DECIMAL_AFTER_DEPLOY",
       "baseToken": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
       "amounts": [],
       "minNetProfit": "1000",
-      "maxInput": "15000000",
+      "maxInput": "20000000",
       "screenGasCost": "6000"
     }
   ],
@@ -81,7 +91,14 @@
         "keyId": "arn:aws:kms:us-east-1:000000000000:key/00000000-0000-0000-0000-000000000000"
       },
       "allowBroadcast": false,
-      "externalPools": ["0xacf82ECC826A9fc2D8c8C4d370d2D268fA5B3500"],
+      "externalPools": [
+        "0x5Bc39A29EA5d8315263EC8939d6AD393dEbC34E9",
+        "0x659bD0BC4167BA25c62E05656F78043E7eD4a9da",
+        "0xC33e9E441e6f4E74CdB34f878bE51189C9CB00D8",
+        "0x63e48B725540A3Db24ACF6682a29f877808C53F2",
+        "0x85717A98d195c9306BBf7c9523Ba71F044Fea0f7",
+        "0xB9897986847472Cd08B9A0E7BCd31EA4F1322361"
+      ],
       "maxGasUnits": "2120000",
       "maxFeePerGas": "200000000000",
       "l1FeeReserveWei": "0",
