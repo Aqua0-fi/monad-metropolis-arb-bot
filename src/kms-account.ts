@@ -268,41 +268,7 @@ export async function createKmsAccount(
   });
 }
 
-/** Owner-run chains. Arbitrum keeps its reviewed script-level caps unchanged; Monad charges gas on the
- * full gas limit, so its owner signers also enforce explicit gas-limit and maximum-fee ceilings here.
- * These are last-resort signer bounds; the owner scripts apply tighter policy budgets first.
- */
-export const OWNER_SIGNING_CHAINS: Readonly<
-  Record<
-    number,
-    {
-      name: string;
-      callValueAllowed: boolean;
-      maxCreationGas?: bigint;
-      maxCreationFeeWei?: bigint;
-      maxCallGas?: bigint;
-      maxCallFeeWei?: bigint;
-    }
-  >
-> = {
-  42161: { name: "Arbitrum", callValueAllowed: true },
-  143: {
-    name: "Monad",
-    // Never send MON to a contract from an owner call; creation and calls are zero-value only.
-    callValueAllowed: false,
-    maxCreationGas: 6_000_000n,
-    maxCreationFeeWei: 2_000_000_000_000_000_000n, // 2 MON
-    maxCallGas: 500_000n,
-    maxCallFeeWei: 500_000_000_000_000_000n, // 0.5 MON
-  },
-};
-function ownerChain(chainId: number) {
-  return Object.hasOwn(OWNER_SIGNING_CHAINS, chainId)
-    ? OWNER_SIGNING_CHAINS[chainId]
-    : undefined;
-}
-
-/** Owner-invoked CLI only: one exact reviewed Arbitrum or Monad creation, never a worker permission.
+/** Owner-invoked CLI only: one exact reviewed Arbitrum creation, never a worker permission.
  * The ordinary createKmsAccount still refuses deployments and native transfers.
  */
 export async function createOwnerDeploymentAccount(
@@ -310,10 +276,9 @@ export async function createOwnerDeploymentAccount(
   reviewedUnsignedHash: Hex,
   transport: KmsTransport = awsKmsTransport(config.region),
 ): Promise<LocalAccount> {
-  const budget = ownerChain(config.chainId);
-  if (!budget || config.target)
+  if (config.chainId !== 42161 || config.target)
     throw new Error(
-      "Owner deployment signing is restricted to reviewed Arbitrum or Monad creation",
+      "Owner deployment signing is restricted to Arbitrum creation",
     );
   if (
     !/^0x[0-9a-fA-F]{64}$/.test(reviewedUnsignedHash) ||
@@ -331,10 +296,8 @@ export async function createOwnerDeploymentAccount(
       throw new Error("Owner deployment signer cannot sign typed data");
     },
     async signTransaction(transaction, options) {
-      if (transaction.chainId !== config.chainId)
-        throw new Error(
-          "Transaction chain differs from the reviewed owner chain (Arbitrum or Monad only)",
-        );
+      if (transaction.chainId !== 42161)
+        throw new Error("Arbitrum chain is required");
       if (
         transaction.type !== "eip1559" ||
         transaction.to ||
@@ -343,17 +306,6 @@ export async function createOwnerDeploymentAccount(
         transaction.data === "0x"
       )
         throw new Error("Only zero-value contract creation is permitted");
-      if (
-        budget.maxCreationGas !== undefined &&
-        (transaction.gas === undefined ||
-          transaction.maxFeePerGas === undefined ||
-          transaction.gas > budget.maxCreationGas ||
-          transaction.gas * transaction.maxFeePerGas >
-            budget.maxCreationFeeWei!)
-      )
-        throw new Error(
-          `${budget.name} creation exceeds the signer gas-limit or maximum-fee budget`,
-        );
       if (options?.serializer && options.serializer !== serializeTransaction)
         throw new Error("Custom transaction serializers are not supported");
       const digest = keccak256(serializeTransaction(transaction));
@@ -378,17 +330,14 @@ export async function createOwnerCallAccount(
   reviewedUnsignedHash: Hex,
   transport: KmsTransport = awsKmsTransport(config.region),
 ): Promise<LocalAccount> {
-  const budget = ownerChain(config.chainId);
   if (
-    !budget ||
+    config.chainId !== 42161 ||
     !config.target ||
     BigInt(config.target) === 0n ||
     !/^0x[0-9a-fA-F]{64}$/.test(reviewedUnsignedHash) ||
     BigInt(reviewedUnsignedHash) === 0n
   )
-    throw new Error(
-      "An exact reviewed Arbitrum or Monad owner call is required",
-    );
+    throw new Error("An exact reviewed Arbitrum owner call is required");
   const address = await verifiedAddress(config, transport);
   let used = false;
   return toAccount({
@@ -401,7 +350,7 @@ export async function createOwnerCallAccount(
     },
     async signTransaction(transaction, options) {
       if (
-        transaction.chainId !== config.chainId ||
+        transaction.chainId !== 42161 ||
         transaction.type !== "legacy" ||
         !transaction.to ||
         getAddress(transaction.to) !== getAddress(config.target!) ||
@@ -409,20 +358,6 @@ export async function createOwnerCallAccount(
         transaction.data === "0x"
       )
         throw new Error("Transaction is not the reviewed owner contract call");
-      if (!budget.callValueAllowed && (transaction.value ?? 0n) !== 0n)
-        throw new Error(
-          `${budget.name} owner calls never transfer native value`,
-        );
-      if (
-        budget.maxCallGas !== undefined &&
-        (transaction.gas === undefined ||
-          transaction.gasPrice === undefined ||
-          transaction.gas > budget.maxCallGas ||
-          transaction.gas * transaction.gasPrice > budget.maxCallFeeWei!)
-      )
-        throw new Error(
-          `${budget.name} owner call exceeds the signer gas-limit or maximum-fee budget`,
-        );
       if (options?.serializer && options.serializer !== serializeTransaction)
         throw new Error("Custom transaction serializers are unsupported");
       const digest = keccak256(serializeTransaction(transaction));

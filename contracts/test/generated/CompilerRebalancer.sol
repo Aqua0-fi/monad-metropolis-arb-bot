@@ -66,8 +66,6 @@ interface ICompilerRebalancer {
     error ReentrancyGuardReentrantCall();
     error Replayed();
     error SafeERC20FailedOperation(address token);
-    error SwapVMFillMismatch();
-    error SwapVMRouteInvalid();
     error Unauthorized();
     error Unprofitable();
 
@@ -80,20 +78,8 @@ interface ICompilerRebalancer {
     event OwnershipTransferStarted(address indexed previousOwner, address indexed newOwner);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     event PauseSet(bool paused);
-    event SwapVMLegExecuted(
-        address indexed router,
-        address indexed maker,
-        bytes32 indexed strategyId,
-        bytes32 orderHash,
-        uint256 classId,
-        address tokenIn,
-        address tokenOut,
-        uint256 amountIn,
-        uint256 amountOut
-    );
-    event SwapVMRouterSet(address indexed router, address aqua, uint8 slices, bool allowed);
-    event SwapVMStrategySet(address indexed router, address indexed maker, bytes32 indexed strategyId, bool allowed);
     event V3PoolSet(address indexed pool, bool allowed);
+    event V4PoolSet(bytes32 indexed poolId, bool allowed);
     event Withdrawn(address indexed token, address indexed recipient, uint256 amount);
 
     function MAX_ACTIVE_WINDOW() external view returns (uint256);
@@ -118,21 +104,14 @@ interface ICompilerRebalancer {
     function setLimits(address token, uint256 maxInput, uint256 minProfit) external;
     function setOperator(address operator, bool allowed) external;
     function setPaused(bool value) external;
-    function setSwapVMRouter(address router, address aqua, uint8 slices, bool allowed) external;
-    function setSwapVMStrategy(address router, address maker, bytes32 strategyId, bool allowed) external;
     function setV3Pool(address pool, bool allowed) external;
-    function supportsAquaSwapVM() external pure returns (bool);
-    function swapVMRouters(address) external view returns (address aqua, bytes32 codeHash, uint8 slices, bool allowed);
-    function swapVMStrategies(bytes32)
-        external
-        view
-        returns (address token0, address token1, uint256 classId, bool allowed);
-    function swapVMStrategyKey(address router, address maker, bytes32 strategyId) external pure returns (bytes32);
+    function setV4Pool(PoolKey memory key, bool allowed) external;
     function transferOwnership(address newOwner) external;
     function uniswapV3SwapCallback(int256 amount0, int256 amount1, bytes memory) external;
     function universalRouter() external view returns (address);
     function used(bytes32) external view returns (bool);
     function v3Pools(address) external view returns (address token0, address token1, bool allowed);
+    function v4Pools(bytes32) external view returns (bool);
     function withdraw(address token, address recipient, uint256 amount) external;
 }
 

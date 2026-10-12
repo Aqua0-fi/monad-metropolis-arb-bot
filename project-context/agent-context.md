@@ -1,13 +1,3 @@
-# Monad V4 pilot, 2026-10-12
-
-Read `project-context/monad-pilot-runbook.md` and `project-context/monad-v4-fork-verification.md` first.
-Branch `feat/monad-pilot` adds: the executor trading window (`activeUntil`, max 24 h, fresh deploys
-inactive), persistent backend budgets, the free `quote-grid` V4 screen, `--max-runtime-ms`, Monad-only
-registry regeneration (hook `0xA2bd…68c0`, pools USDC/USDT0 100/1 and USDC/WETH 3000/60, WMON gas
-token, free RPC), and owner-run Monad deploy/setup/timed-run/bridge tooling. Nothing was deployed,
-funded, signed or broadcast by the agent. Other chains still carry their 0bde3d4b registry records even
-though the backend redeployed every V4 hook on Oct 6-7; the Arbitrum executor's immutable hook is stale.
-
 # Latest Arbitrum owner-start release, 2026-09-29
 
 Read `evidence/releases/20260929-measured-pilot/release.json` and

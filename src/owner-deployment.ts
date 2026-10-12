@@ -28,7 +28,6 @@ export function normalizeRuntime(code: Hex, artifact: RuntimeArtifact): Hex {
   }
   return keccak256(bytes);
 }
-/** Monad charges the full gas limit, so its maximum fee is gas * maxFeePerGas and must stay within budget. */
 export function assertCreationBudget(
   tx: {
     type: string;
@@ -42,19 +41,17 @@ export function assertCreationBudget(
     to?: string;
   },
   maximumFee: bigint,
-  chainId: 42161 | 143 = 42161,
 ) {
   if (
-    (chainId !== 42161 && chainId !== 143) ||
     tx.type !== "eip1559" ||
-    tx.chainId !== chainId ||
+    tx.chainId !== 42161 ||
     tx.to ||
     tx.value !== 0n ||
     !/^0x[0-9a-fA-F]+$/.test(tx.data) ||
     tx.data === "0x"
   )
     throw new Error(
-      "Only reviewed zero-value contract creation on the selected owner chain (Arbitrum or Monad) is allowed",
+      "Only reviewed zero-value Arbitrum contract creation is allowed",
     );
   if (
     !Number.isSafeInteger(tx.nonce) ||

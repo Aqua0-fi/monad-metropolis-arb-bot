@@ -2,7 +2,6 @@
 pragma solidity 0.8.34;
 
 import {Test} from "forge-std/Test.sol";
-import {VmSafe} from "forge-std/Vm.sol";
 import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
@@ -48,7 +47,6 @@ contract MarketRebalancerForkTest is Test {
     int24 lowerTick;
     int24 upperTick;
     uint128 jitLiquidity;
-    address factory;
     uint256 signerPk = uint256(keccak256("aqua0.rebalancing.fork.signer"));
     uint256 strategistPk = uint256(keccak256("aqua0.rebalancing.fork.strategist"));
     uint256 constant CLASS = 1;
@@ -79,7 +77,7 @@ contract MarketRebalancerForkTest is Test {
         uint256 testLiquidity = customPair ? vm.parseJsonUint(pairConfig, ".jitLiquidity") : 1e18;
         require(testLiquidity > 0 && testLiquidity <= type(uint128).max, "Invalid fixture liquidity");
         jitLiquidity = uint128(testLiquidity);
-        factory = vm.parseJsonAddress(
+        address factory = vm.parseJsonAddress(
             config, string.concat(row, ".venues[", vm.toString(vm.envOr("FORK_VENUE_INDEX", uint256(0))), "].factory")
         );
         uint24[4] memory fees = [uint24(500), 3000, 100, 10000];
@@ -93,10 +91,6 @@ contract MarketRebalancerForkTest is Test {
             }
         }
         require(v3 != address(0), "No liquid external V3 pool for this pair at pinned block");
-        // Optional fixture pin: the discovered pool must be the exact venue the fixture reviewed.
-        if (customPair && vm.keyExistsJson(pairConfig, ".externalPool")) {
-            assertEq(v3, vm.parseJsonAddress(pairConfig, ".externalPool"), "Fixture external pool mismatch");
-        }
         (marketSqrt,,,,,,) = IMarketPool(v3).slot0();
         VaultRegistry registry = VaultRegistry(
             address(
@@ -150,7 +144,6 @@ contract MarketRebalancerForkTest is Test {
         rebalancer.setV3Pool(v3, true);
         rebalancer.setGasPriceLimit(100 gwei);
         rebalancer.setPaused(false);
-        rebalancer.setActiveUntil(uint64(block.timestamp + 1 days));
         deal(token0, address(rebalancer), amount * 10);
         emit log_named_uint("chain", block.chainid);
         emit log_named_uint("forkBlock", block.number);
@@ -158,7 +151,6 @@ contract MarketRebalancerForkTest is Test {
         emit log_named_uint("v4Fee", poolFee);
         emit log_named_int("tickSpacing", tickSpacing);
         emit log_named_uint("inputAmount", amount);
-        emit log_named_uint("blockBaseFee", block.basefee);
     }
 
     function _vault(address token) private returns (AssetVault) {
@@ -284,26 +276,12 @@ contract MarketRebalancerForkTest is Test {
         _assertCycle(false);
     }
 
-    struct GasProfile {
-        uint256 calldataGas;
-        uint256 coldAccounts;
-        uint256 coldSlots;
-        uint256 coldPages;
-        uint256 ecrecoverCalls;
-    }
-
     function _assertCycle(bool aquaFirst) private {
-        uint256 beforeBalance = IERC20(token0).balanceOf(address(rebalancer));
         MarketRebalancer.Trade memory trade = _trade(aquaFirst);
-        bytes memory data = abi.encodeCall(ICompilerRebalancer.execute, (trade));
-        uint256 snapshot = vm.snapshotState();
-        // _trade ends with a state revert, so accounts and slots are cold as in a fresh transaction. State-diff
-        // recording distorts gas accounting, so measure first and count touched state in a replay afterwards.
+        uint256 beforeBalance = IERC20(token0).balanceOf(address(rebalancer));
         uint256 gasBefore = gasleft();
-        (bool ok, bytes memory result) = address(rebalancer).call(data);
+        uint256 profit = rebalancer.execute(trade);
         uint256 usedGas = gasBefore - gasleft();
-        assertTrue(ok, "execute reverted");
-        uint256 profit = abi.decode(result, (uint256));
         assertGt(profit, 0);
         assertEq(IERC20(token0).balanceOf(address(rebalancer)), beforeBalance + profit);
         assertEq(vault0.sharedIdle(), IERC20(token0).balanceOf(address(vault0)));
@@ -313,282 +291,17 @@ contract MarketRebalancerForkTest is Test {
         assertTrue(hook.usedNonces(1));
         emit log_named_uint("executionGas", usedGas);
         emit log_named_uint("profitRaw", profit);
-        // Replay the identical trade from the same pre-trade state to record every account and slot it touches.
-        vm.revertToState(snapshot);
-        vm.startStateDiffRecording();
-        assertEq(rebalancer.execute(trade), profit);
-        GasProfile memory g = _profile(vm.stopAndReturnStateDiff());
-        for (uint256 i; i < data.length; i++) {
-            g.calldataGas += data[i] == 0 ? 4 : 16;
-        }
-        // Ethereum-schedule transaction gas: intrinsic + calldata + execution (pre-refund).
-        uint256 ethTxGas = 21000 + g.calldataGas + usedGas;
-        // Monad repricing (docs.monad.xyz opcode pricing; calibrated with eth_estimateGas, see evidence):
-        // cold account 10100 vs 2600; cold storage 8100 per 128-slot page (other slots in a touched page 100)
-        // vs 2100 per slot; ecRecover 6000 vs 3000. Cheaper Monad memory and SSTORE write components ignored.
-        uint256 monadTxGas =
-            ethTxGas + 7500 * g.coldAccounts + 8000 * g.coldPages + 3000 * g.ecrecoverCalls - 2000 * g.coldSlots;
-        emit log_named_uint("calldataBytes", data.length);
-        emit log_named_uint("calldataGas", g.calldataGas);
-        emit log_named_uint("coldAccounts", g.coldAccounts);
-        emit log_named_uint("coldSlots", g.coldSlots);
-        emit log_named_uint("coldPages", g.coldPages);
-        emit log_named_uint("ecrecoverCalls", g.ecrecoverCalls);
-        emit log_named_uint("ethTxGasEstimate", ethTxGas);
-        emit log_named_uint("monadTxGasEstimate", monadTxGas);
-    }
-
-    /// @dev Distinct accounts, storage slots and 128-slot pages touched by one execute call. The executor is
-    /// tx.to (account pre-warmed, storage cold); precompiles are always warm.
-    function _profile(VmSafe.AccountAccess[] memory accesses) private view returns (GasProfile memory g) {
-        uint256 total;
-        for (uint256 i; i < accesses.length; i++) {
-            total += accesses[i].storageAccesses.length;
-        }
-        address[] memory accounts = new address[](accesses.length);
-        bytes32[] memory slots = new bytes32[](total);
-        bytes32[] memory pages = new bytes32[](total);
-        for (uint256 i; i < accesses.length; i++) {
-            VmSafe.AccountAccess memory access = accesses[i];
-            address account = access.account;
-            if (uint160(account) <= 0x100) {
-                if (account == address(1) && access.kind != VmSafe.AccountAccessKind.Resume) g.ecrecoverCalls++;
-            } else if (
-                account != address(rebalancer) && account != address(this) && account != address(vm)
-                    && !_seen(accounts, g.coldAccounts, bytes32(uint256(uint160(account))))
-            ) {
-                accounts[g.coldAccounts++] = account;
-            }
-            for (uint256 j; j < access.storageAccesses.length; j++) {
-                VmSafe.StorageAccess memory slot = access.storageAccesses[j];
-                bytes32 slotId = keccak256(abi.encode(slot.account, slot.slot));
-                if (!_seen(slots, g.coldSlots, slotId)) slots[g.coldSlots++] = slotId;
-                bytes32 pageId = keccak256(abi.encode(slot.account, uint256(slot.slot) >> 7));
-                if (!_seen(pages, g.coldPages, pageId)) pages[g.coldPages++] = pageId;
-            }
-        }
-    }
-
-    function _seen(address[] memory list, uint256 length, bytes32 value) private pure returns (bool) {
-        for (uint256 i; i < length; i++) {
-            if (bytes32(uint256(uint160(list[i]))) == value) return true;
-        }
-        return false;
-    }
-
-    function _seen(bytes32[] memory list, uint256 length, bytes32 value) private pure returns (bool) {
-        for (uint256 i; i < length; i++) {
-            if (list[i] == value) return true;
-        }
-        return false;
     }
 
     function testFork_ImpossibleProfitRevertsBothLegsAndNonce() public {
         MarketRebalancer.Trade memory trade = _trade(true);
         trade.minProfit = type(uint128).max;
         uint256 beforeBalance = IERC20(token0).balanceOf(address(rebalancer));
-        Balances memory snapshot = _balances();
         vm.expectRevert(ICompilerRebalancer.Unprofitable.selector);
         rebalancer.execute(trade);
         assertEq(IERC20(token0).balanceOf(address(rebalancer)), beforeBalance);
         assertFalse(rebalancer.used(trade.id));
         assertFalse(hook.usedNonces(1));
-        _assertNoStateChange(snapshot, trade);
-    }
-
-    // ---- Treasury safety on real Monad infrastructure (unit-level variants live in SecurityReview.t.sol) ----
-
-    struct Balances {
-        uint256 executor0;
-        uint256 executor1;
-        uint256 vault0;
-        uint256 vault1;
-        uint256 external0;
-        uint256 external1;
-        uint256 manager0;
-        uint256 manager1;
-        uint160 externalSqrt;
-    }
-
-    function _balances() private view returns (Balances memory b) {
-        b.executor0 = IERC20(token0).balanceOf(address(rebalancer));
-        b.executor1 = IERC20(token1).balanceOf(address(rebalancer));
-        b.vault0 = IERC20(token0).balanceOf(address(vault0));
-        b.vault1 = IERC20(token1).balanceOf(address(vault1));
-        b.external0 = IERC20(token0).balanceOf(v3);
-        b.external1 = IERC20(token1).balanceOf(v3);
-        b.manager0 = IERC20(token0).balanceOf(address(manager));
-        b.manager1 = IERC20(token1).balanceOf(address(manager));
-        (b.externalSqrt,,,,,,) = IMarketPool(v3).slot0();
-    }
-
-    function _assertNoStateChange(Balances memory before, MarketRebalancer.Trade memory trade) private view {
-        Balances memory current = _balances();
-        assertEq(current.executor0, before.executor0, "executor token0 moved");
-        assertEq(current.executor1, before.executor1, "executor token1 moved");
-        assertEq(current.vault0, before.vault0, "Aqua0 vault0 moved");
-        assertEq(current.vault1, before.vault1, "Aqua0 vault1 moved");
-        assertEq(current.external0, before.external0, "external pool token0 moved");
-        assertEq(current.external1, before.external1, "external pool token1 moved");
-        assertEq(current.manager0, before.manager0, "PoolManager token0 moved");
-        assertEq(current.manager1, before.manager1, "PoolManager token1 moved");
-        assertEq(current.externalSqrt, before.externalSqrt, "external price moved");
-        assertFalse(rebalancer.used(trade.id), "replay id consumed");
-        assertFalse(hook.usedNonces(1), "Aqua0 JIT nonce consumed");
-        assertEq(IERC20(token0).allowance(address(rebalancer), rebalancer.permit2()), 0);
-        assertEq(IERC20(token1).allowance(address(rebalancer), rebalancer.permit2()), 0);
-    }
-
-    /// @dev The call must revert inside the executor before it touches any token, router, pool or hook.
-    function _assertRevertsBeforeAnySwap(MarketRebalancer.Trade memory trade, bytes4 selector) private {
-        Balances memory snapshot = _balances();
-        vm.startStateDiffRecording();
-        vm.expectRevert(selector);
-        rebalancer.execute(trade);
-        VmSafe.AccountAccess[] memory accesses = vm.stopAndReturnStateDiff();
-        uint256 executorAccesses;
-        for (uint256 i; i < accesses.length; i++) {
-            if (accesses[i].account == address(vm)) continue;
-            assertEq(accesses[i].account, address(rebalancer), "executor called out before reverting");
-            executorAccesses++;
-        }
-        assertGt(executorAccesses, 0);
-        _assertNoStateChange(snapshot, trade);
-    }
-
-    function testFork_ClosedOrExpiredWindowRevertsBeforeAnySwap() public {
-        MarketRebalancer.Trade memory trade = _trade(true);
-        // vm.getBlockTimestamp: via-IR may rematerialize block.timestamp after vm.warp.
-        uint256 start = vm.getBlockTimestamp();
-        // Owner closes the window explicitly.
-        rebalancer.setActiveUntil(0);
-        _assertRevertsBeforeAnySwap(trade, ICompilerRebalancer.Inactive.selector);
-        // A window that was open expires on its own; the trade's own deadline is fresh, only the window is stale.
-        rebalancer.setActiveUntil(uint64(start + 1 hours));
-        vm.warp(start + 1 hours + 1);
-        trade.deadline = vm.getBlockTimestamp() + 60;
-        _assertRevertsBeforeAnySwap(trade, ICompilerRebalancer.Inactive.selector);
-        // The identical trade executes once an open window covers it, so the window was the only blocker.
-        vm.warp(start);
-        trade.deadline = start + 60;
-        assertGt(rebalancer.execute(trade), 0);
-    }
-
-    function testFork_SeparateOperatorTradesButCannotWithdrawOrReconfigure() public {
-        address operator = makeAddr("monad-fork-operator");
-        rebalancer.setOperator(operator, true);
-        MarketRebalancer.Trade memory trade = _trade(true);
-        vm.prank(operator);
-        assertGt(rebalancer.execute(trade), 0);
-        uint256 held0 = IERC20(token0).balanceOf(address(rebalancer));
-        uint256 held1 = IERC20(token1).balanceOf(address(rebalancer));
-        bytes memory denied = abi.encodeWithSelector(ICompilerRebalancer.OwnableUnauthorizedAccount.selector, operator);
-        vm.startPrank(operator);
-        vm.expectRevert(denied);
-        rebalancer.withdraw(token0, operator, held0);
-        vm.expectRevert(denied);
-        rebalancer.withdraw(token1, operator, 1);
-        vm.expectRevert(denied);
-        rebalancer.setLimits(token0, type(uint256).max, 1);
-        vm.expectRevert(denied);
-        rebalancer.setGasPriceLimit(type(uint256).max);
-        vm.expectRevert(denied);
-        rebalancer.setActiveUntil(uint64(block.timestamp + 1 days));
-        vm.expectRevert(denied);
-        rebalancer.setOperator(makeAddr("accomplice"), true);
-        vm.expectRevert(denied);
-        rebalancer.setV3Pool(v3, false);
-        vm.expectRevert(denied);
-        rebalancer.transferOwnership(operator);
-        vm.stopPrank();
-        assertEq(IERC20(token0).balanceOf(address(rebalancer)), held0);
-        assertEq(IERC20(token1).balanceOf(address(rebalancer)), held1);
-        assertEq(IERC20(token0).balanceOf(operator), 0, "operator received token0");
-        assertEq(IERC20(token1).balanceOf(operator), 0, "operator received token1");
-        assertEq(rebalancer.owner(), address(this));
-    }
-
-    function testFork_TradeAboveMaxInputRevertsBeforeAnySwap() public {
-        MarketRebalancer.Trade memory trade = _trade(true);
-        rebalancer.setLimits(token0, amount - 1, 1);
-        _assertRevertsBeforeAnySwap(trade, ICompilerRebalancer.LimitExceeded.selector);
-        rebalancer.setLimits(token0, amount, 1);
-        assertGt(rebalancer.execute(trade), 0);
-    }
-
-    function testFork_GasPriceAboveCapRevertsBeforeAnySwap() public {
-        MarketRebalancer.Trade memory trade = _trade(false);
-        uint256 cap = rebalancer.maxGasPrice();
-        vm.txGasPrice(cap + 1);
-        _assertRevertsBeforeAnySwap(trade, ICompilerRebalancer.GasPriceExceeded.selector);
-        vm.txGasPrice(cap);
-        assertGt(rebalancer.execute(trade), 0);
-    }
-
-    function testFork_SecondLegCannotSpendPreexistingIntermediateBalance() public {
-        // Aqua0 leg first, so its JIT settlement and signed nonce must roll back too.
-        MarketRebalancer.Trade memory trade = _trade(true);
-        deal(token1, address(rebalancer), trade.second.amountIn * 10);
-        trade.second.amountIn += 1;
-        Balances memory snapshot = _balances();
-        vm.expectRevert(ICompilerRebalancer.InsufficientOutput.selector);
-        rebalancer.execute(trade);
-        _assertNoStateChange(snapshot, trade);
-    }
-
-    function testFork_UnlistedV3PoolRevertsAndRollsBackAquaLeg() public {
-        MarketRebalancer.Trade memory trade = _trade(true);
-        Balances memory snapshot = _balances();
-        address other = _otherV3Pool();
-        if (other != address(0)) {
-            // A real pool for the same pair that the owner never allowlisted.
-            trade.second.target = other;
-            uint256 other0 = IERC20(token0).balanceOf(other);
-            uint256 other1 = IERC20(token1).balanceOf(other);
-            vm.expectRevert(ICompilerRebalancer.InvalidRoute.selector);
-            rebalancer.execute(trade);
-            _assertNoStateChange(snapshot, trade);
-            assertEq(IERC20(token0).balanceOf(other), other0);
-            assertEq(IERC20(token1).balanceOf(other), other1);
-            trade.second.target = v3;
-        }
-        emit log_named_address("unlistedExternalPool", other);
-        // The previously approved pool after the owner delists it.
-        rebalancer.setV3Pool(v3, false);
-        vm.expectRevert(ICompilerRebalancer.InvalidRoute.selector);
-        rebalancer.execute(trade);
-        _assertNoStateChange(snapshot, trade);
-    }
-
-    function testFork_UnlistedAquaPoolKeyRevertsAndRollsBackExternalLeg() public {
-        MarketRebalancer.Trade memory trade = _trade(false);
-        Balances memory snapshot = _balances();
-        // Same tokens and hook, a fee tier the owner never allowlisted.
-        trade.second.pool.fee = poolFee == 500 ? 3000 : 500;
-        vm.expectRevert(ICompilerRebalancer.InvalidRoute.selector);
-        rebalancer.execute(trade);
-        _assertNoStateChange(snapshot, trade);
-        trade.second.pool.fee = poolFee;
-        // A key bound to a different hook than the one this executor was deployed for.
-        trade.second.pool.hooks = address(uint160(uint256(keccak256("market-rebalancer.fork.foreign-hook"))));
-        vm.expectRevert(ICompilerRebalancer.InvalidRoute.selector);
-        rebalancer.execute(trade);
-        _assertNoStateChange(snapshot, trade);
-        trade.second.pool.hooks = address(hook);
-        // The previously approved key after the owner delists it.
-        rebalancer.setAquaPool(ExecutorPoolKey(token0, token1, poolFee, tickSpacing, address(hook)), false);
-        vm.expectRevert(ICompilerRebalancer.InvalidRoute.selector);
-        rebalancer.execute(trade);
-        _assertNoStateChange(snapshot, trade);
-    }
-
-    function _otherV3Pool() private view returns (address) {
-        uint24[4] memory fees = [uint24(100), 500, 3000, 10000];
-        for (uint256 i; i < fees.length; i++) {
-            address candidate = IFactory(factory).getPool(token0, token1, fees[i]);
-            if (candidate != address(0) && candidate != v3 && candidate.code.length > 0) return candidate;
-        }
-        return address(0);
     }
 }
 

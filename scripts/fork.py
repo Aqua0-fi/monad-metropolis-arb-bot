@@ -35,7 +35,6 @@ chain = chains[index]
 if not 0 <= args.venue_index < len(chain["venues"]):
     parser.error("Unknown venue index")
 rpc = os.environ.get(chain["rpcEnv"], chain["publicRpc"])
-rpc_source = f"env:{chain['rpcEnv']}" if chain["rpcEnv"] in os.environ else "config:publicRpc"
 
 
 def call(method, params):
@@ -76,30 +75,6 @@ result = subprocess.run(
     stderr=subprocess.STDOUT,
 )
 output = result.stdout.replace(rpc, "<RPC_URL>")
-
-
-def named_logs(text):
-    """Numeric/address `name: value` log lines grouped by test, for gas and profit reporting."""
-    logs, current = {}, None
-    for line in text.splitlines():
-        result = re.match(r"\[(?:PASS|FAIL[^\]]*)\] (\w+)\(", line)
-        if result:
-            current = logs.setdefault(result.group(1), {})
-            continue
-        entry = re.match(r"^  (\w+): (-?\d+|0x[0-9a-fA-F]{40})$", line)
-        if current is not None and entry:
-            value = entry.group(2)
-            current[entry.group(1)] = value if value.startswith("0x") else int(value)
-        elif line.startswith(("Suite result", "Ran ")):
-            current = None
-    return logs
-
-
-def sha256(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
-
-
-forge_version = subprocess.run(["forge", "--version"], capture_output=True, text=True).stdout.splitlines()
 path = Path(f"evidence/fork-{args.chain}-{block}-venue{args.venue_index}{pair_suffix}")
 path.parent.mkdir(exist_ok=True)
 path.with_suffix(".txt").write_text(output)
@@ -112,21 +87,10 @@ report = {
     "exitCode": result.returncode,
     "elapsedSeconds": round(time.monotonic() - start, 2),
     "fixture": "Real chain state and external venues; local Aqua0 vaults, signed JIT hook, seeded mispricing and test capital",
-    "harnessSha256": sha256("contracts/test/MarketRebalancer.fork.t.sol"),
-    "sourcesSha256": {
-        source: sha256(source)
-        for source in (
-            "contracts/src/MarketRebalancer.sol",
-            "contracts/src/SwapVMVenue.sol",
-            "contracts/test/generated/CompilerRebalancer.sol",
-        )
-    },
-    "rpcSource": rpc_source,
-    "forgeVersion": forge_version[0] if forge_version else None,
+    "harnessSha256": hashlib.sha256(Path("contracts/test/MarketRebalancer.fork.t.sol").read_bytes()).hexdigest(),
     "pairFixture": pair_fixture,
     "pairFixtureSha256": hashlib.sha256(args.pair_fixture.read_bytes()).hexdigest() if args.pair_fixture else None,
     "tests": re.findall(r"\[(?:PASS|FAIL[^\]]*)\].*", output),
-    "logs": named_logs(output),
 }
 path.with_suffix(".json").write_text(json.dumps(report, indent=2) + "\n")
 print(json.dumps(report, indent=2))

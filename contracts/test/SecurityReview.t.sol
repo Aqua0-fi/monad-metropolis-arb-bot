@@ -8,7 +8,6 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Ownable2Step} from "@openzeppelin/contracts/access/Ownable2Step.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {MarketRebalancer, PoolKey} from "../src/MarketRebalancer.sol";
-import {SwapVMVenue, ISwapVMVenue} from "../src/SwapVMVenue.sol";
 import {Permit, Router} from "./MarketRebalancer.t.sol";
 
 // Adversarial fixtures, not external-price or live-profit evidence.
@@ -94,70 +93,6 @@ contract ReviewV3 {
         uint256 out = owed * 6 / 10;
         ReviewToken(z ? token1 : token0).mint(recipient, out);
         return (z ? int256(owed) : -int256(out), z ? -int256(out) : int256(owed));
-    }
-}
-
-contract ReviewVMRouter {
-    address public immutable AQUA;
-    uint256 public mode;
-    bytes public observedTakerData;
-
-    constructor(address aqua) {
-        AQUA = aqua;
-    }
-
-    function setMode(uint256 m) external {
-        mode = m;
-    }
-
-    function hash(ISwapVMVenue.Order calldata o) external pure returns (bytes32) {
-        return keccak256(abi.encode(o));
-    }
-
-    function swap(ISwapVMVenue.Order calldata o, address tokenIn, address tokenOut, uint256 amount, bytes calldata data)
-        external
-        returns (uint256 used, uint256 out, bytes32 orderHash)
-    {
-        observedTakerData = data;
-        IERC20(tokenIn).transferFrom(msg.sender, address(this), mode == 4 ? amount + 1 : amount);
-        uint256 minted = amount * 2;
-        if (mode != 3) ReviewToken(tokenOut).mint(msg.sender, minted);
-        used = mode == 1 ? amount - 1 : amount;
-        out = mode == 2 ? minted + 1 : minted;
-        orderHash = mode == 5 ? bytes32(uint256(1)) : keccak256(abi.encode(o));
-    }
-}
-
-contract ReviewMaker {
-    address public immutable aqua;
-    address public immutable aquaSwapVMRouter;
-    bytes32 public constant stableId = keccak256("review-only-strategy");
-    bytes32 public liveHash;
-    address private a;
-    address private b;
-
-    constructor(address aqua_, address router_, address a_, address b_) {
-        aqua = aqua_;
-        aquaSwapVMRouter = router_;
-        a = a_;
-        b = b_;
-        ISwapVMVenue.Order memory o = ISwapVMVenue.Order(address(this), uint256(1) << 254, hex"1100");
-        liveHash = keccak256(abi.encode(o));
-    }
-
-    function currentAquaHash(bytes32 id) external view returns (bytes32) {
-        return id == stableId ? liveHash : bytes32(0);
-    }
-
-    function strategyClassId(bytes32 id) external pure returns (uint256) {
-        return id == stableId ? 7 : 0;
-    }
-
-    function getStrategyTokens(bytes32 id) external view returns (address[] memory out) {
-        require(id == stableId);
-        out = new address[](2);
-        out[0] = a;
-        out[1] = b;
     }
 }
 
@@ -256,10 +191,8 @@ contract SecurityReviewTest is Test {
         calls[3] = abi.encodeWithSelector(MarketRebalancer.setPaused.selector, true);
         calls[4] = abi.encodeWithSelector(MarketRebalancer.setAquaPool.selector, pool, false);
         calls[5] = abi.encodeWithSelector(MarketRebalancer.setV3Pool.selector, address(v3), false);
-        calls[6] = abi.encodeWithSelector(SwapVMVenue.setSwapVMRouter.selector, address(router), address(a), 10, false);
-        calls[7] = abi.encodeWithSelector(
-            SwapVMVenue.setSwapVMStrategy.selector, address(router), address(a), bytes32(uint256(1)), false
-        );
+        calls[6] = abi.encodeWithSelector(MarketRebalancer.setV4Pool.selector, pool, false);
+        calls[7] = abi.encodeWithSelector(MarketRebalancer.setActiveUntil.selector, uint64(0));
         calls[8] = abi.encodeWithSelector(Ownable.transferOwnership.selector, operator);
         calls[9] = abi.encodeWithSelector(Ownable.renounceOwnership.selector);
         calls[10] = abi.encodeWithSelector(MarketRebalancer.withdraw.selector, address(a), operator, 1);
@@ -380,70 +313,6 @@ contract SecurityReviewTest is Test {
         unchanged(t, 0);
     }
 
-    function vmFixture()
-        internal
-        returns (ReviewVMRouter vmRouter, ReviewMaker maker, MarketRebalancer.Trade memory t)
-    {
-        vmRouter = new ReviewVMRouter(address(a));
-        maker = new ReviewMaker(address(a), address(vmRouter), address(a), address(b));
-        vm.startPrank(owner);
-        bot.setSwapVMRouter(address(vmRouter), address(a), 10, true);
-        bot.setSwapVMStrategy(address(vmRouter), address(maker), maker.stableId(), true);
-        vm.stopPrank();
-        t = trade(100 ether);
-        PoolKey memory empty;
-        t.first.pool = empty;
-        t.first.venue = MarketRebalancer.Venue.AquaSwapVM;
-        t.first.target = address(vmRouter);
-        ISwapVMVenue.Order memory order = ISwapVMVenue.Order(address(maker), uint256(1) << 254, hex"1100");
-        t.first.hookData = abi.encode(maker.stableId(), order);
-    }
-
-    function testSwapVMDishonestReturnsMissingOutputAndOverpullCannotPass() public {
-        (ReviewVMRouter vmRouter,, MarketRebalancer.Trade memory t) = vmFixture();
-        for (uint256 mode = 1; mode <= 5; ++mode) {
-            vmRouter.setMode(mode);
-            vm.prank(operator);
-            (bool ok, bytes memory result) =
-                address(bot).call(abi.encodeWithSelector(MarketRebalancer.execute.selector, t));
-            assertFalse(ok);
-            if (mode != 4) assertEq(bytes4(result), SwapVMVenue.SwapVMFillMismatch.selector);
-            unchanged(t, 0);
-            assertEq(a.balanceOf(address(vmRouter)), 0);
-            assertEq(a.allowance(address(bot), address(vmRouter)), 0);
-        }
-    }
-
-    function testSwapVMReceiverCannotBeOverriddenAndApprovalsAreCleared() public {
-        (ReviewVMRouter vmRouter,, MarketRebalancer.Trade memory t) = vmFixture();
-        // Appended garbage is not parsed into router callbacks or recipient overrides.
-        t.first.hookData = bytes.concat(t.first.hookData, abi.encode(outsider));
-        assertEq(run(t), 14 ether);
-        bytes memory expected = new bytes(20);
-        for (uint256 i; i < 10; ++i) {
-            expected[i * 2 + 1] = bytes1(uint8(32));
-        }
-        expected = bytes.concat(expected, hex"0041", abi.encode(t.first.minOut));
-        assertEq(vmRouter.observedTakerData(), expected);
-        assertEq(a.allowance(address(bot), address(vmRouter)), 0);
-        assertEq(b.balanceOf(outsider), 0);
-    }
-
-    function testSwapVMChangedRouterCodeAndUnapprovedMakerAreRefused() public {
-        (ReviewVMRouter vmRouter, ReviewMaker maker, MarketRebalancer.Trade memory t) = vmFixture();
-        bytes memory original = address(vmRouter).code;
-        vm.etch(address(vmRouter), hex"00");
-        vm.expectRevert(SwapVMVenue.SwapVMRouteInvalid.selector);
-        run(t);
-        unchanged(t, 0);
-        vm.etch(address(vmRouter), original);
-        ISwapVMVenue.Order memory bad = ISwapVMVenue.Order(outsider, uint256(1) << 254, hex"1100");
-        t.first.hookData = abi.encode(maker.stableId(), bad);
-        vm.expectRevert(SwapVMVenue.SwapVMRouteInvalid.selector);
-        run(t);
-        unchanged(t, 0);
-    }
-
     function testFreshDeploymentHasNoPublicTakeoverOrTradingWindow() public {
         MarketRebalancer fresh = new MarketRebalancer(owner, address(router), address(permit), address(a), false);
         assertEq(fresh.owner(), owner);
@@ -452,37 +321,6 @@ contract SecurityReviewTest is Test {
         vm.prank(outsider);
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, outsider));
         fresh.setOperator(outsider, true);
-    }
-
-    function testFreshDeploymentCannotTradeUntilOwnerOpensBoundedWindow() public {
-        MarketRebalancer fresh = new MarketRebalancer(owner, address(router), address(permit), address(a), false);
-        assertEq(fresh.activeUntil(), 0);
-        vm.prank(outsider);
-        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, outsider));
-        fresh.setActiveUntil(uint64(block.timestamp + 1 hours));
-        vm.startPrank(owner);
-        vm.expectRevert(MarketRebalancer.LimitExceeded.selector);
-        fresh.setActiveUntil(uint64(block.timestamp + 1 days + 1));
-        fresh.setActiveUntil(uint64(block.timestamp + 1 days));
-        assertEq(fresh.activeUntil(), uint64(block.timestamp + 1 days));
-        vm.stopPrank();
-    }
-
-    function testExpiredOrClosedWindowRevertsBeforeAnySwap() public {
-        MarketRebalancer.Trade memory t = trade(100 ether);
-        uint256 window = bot.activeUntil();
-        vm.warp(window + 1);
-        t.deadline = block.timestamp + 60;
-        vm.expectRevert(MarketRebalancer.Inactive.selector);
-        run(t);
-        unchanged(t, 0);
-        vm.warp(window - 1 hours);
-        vm.prank(owner);
-        bot.setActiveUntil(0);
-        t.deadline = block.timestamp + 60;
-        vm.expectRevert(MarketRebalancer.Inactive.selector);
-        run(t);
-        unchanged(t, 0);
     }
 
     function testNativeGasFundingMustNotBeSentDirectlyToExecutor() public {

@@ -1,9 +1,0 @@
-{
-  "version": 1,
-  "chainId": 143,
-  "contract": "MarketRebalancer",
-  "compiler": "0.8.37+commit.f401782d",
-  "creationCodeHash": "0x9c48a614dc3d26438b47874b73c03f57ac9210332386ef86dd284980f1d7e0e2",
-  "sourceCommit": "92390b0",
-  "sourceScope": "Reviewed guarded executor with the owner-set trading window (activeUntil dead-man switch). Starts paused with activeUntil = 0 (cannot trade); no native value, market approvals or funding in creation."
-}
