@@ -60,12 +60,12 @@
       "amounts": [],
       "minNetProfit": "1000",
       "maxInput": "15000000",
-      "screenGasCost": "4500"
+      "screenGasCost": "6000"
     }
   ],
   "quoteFees": {
     "143": {
-      "maxGasUnits": "1300000",
+      "maxGasUnits": "2120000",
       "maxFeePerGas": "200000000000",
       "l1FeeReserveWei": "0",
       "wrappedNative": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
@@ -82,12 +82,13 @@
       },
       "allowBroadcast": false,
       "externalPools": ["0xacf82ECC826A9fc2D8c8C4d370d2D268fA5B3500"],
-      "maxGasUnits": "1300000",
+      "maxGasUnits": "2120000",
       "maxFeePerGas": "200000000000",
       "l1FeeReserveWei": "0",
       "maxDailyGasWei": "10000000000000000000",
       "wrappedNative": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
-      "gasConversionFee": 3000
+      "gasConversionFee": 3000,
+      "gasLimitBufferBps": 11000
     }
   },
   "_template": "Owner setup writes runtime/monad-pilot/execute.json with the deployed executor, the real KMS key and allowBroadcast. Never run this template as-is."

@@ -214,6 +214,7 @@ export const settingsSchema = z.object({
           externalPools: z.array(address).min(1).max(64).optional(),
           maxGasUnits: positive,
           liveFeeBufferBps: z.number().int().min(10000).max(20000).optional(),
+          gasLimitBufferBps: z.number().int().min(10000).max(15000).optional(),
           maxFeePerGas: positive,
           l1FeeReserveWei: uint,
           maxDailyGasWei: positive,

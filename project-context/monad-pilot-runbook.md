@@ -4,6 +4,35 @@ A short, self-terminating market-rebalancer-service pilot on Monad mainnet throu
 Every run is time-boxed and leaves the system OFF. The agent that built this tooling ran it only against
 local anvil forks with anvil's public development key; every mainnet step below is owner-run.
 
+## Demo checklist (Monad Metropolis, 2026-10-12)
+
+Economics at block ~112.59M: Aqua0 fills Monad USDC/USDT0 at the backend's fixed $1/$1 start price
+minus ~2-3 bps; the external Uniswap V3 0.01% pool pays ~1.0009 USDT0 per USDC. That is a ~6 bps edge.
+Monad charges the full gas limit (~1.8M with headroom, ~0.18 MON, ~$0.005 per attempt), so a trade
+needs roughly 20 USDC to clear gas. Aqua0 backed only ~2 USDC of USDT0->USDC at the time, so:
+
+1. LP backing: add >= 25 USDC of LP capital on Monad committed to the USDC/USDT0 V4 pool (app action).
+2. Gas: bridge (step 0) or send ~10 MON to the KMS wallet `0xd1fC4c8631E8C5d23a0C86D5890802DD70Cb4cf5`.
+3. Inventory: send 20 USDC on chain 143 to the same wallet, then run setup with
+   `--max-input-usdc 20 --fund-usdc 20` (the code-level hard cap is 20 USDC).
+4. Operator key: `secrets/market-rebalancer-operator.json` with `AQUA0_OPERATOR_API_KEY` (staging
+   `API_OPERATOR_KEY`). `/api/swap/authorize` is operator tier on staging (verified 2026-10-12).
+5. Observe run, then one execute window of 10 minutes. Everything ends paused with `activeUntil = 0`.
+
+## Backend cost controls (why a run cannot repeat the ~$1000 RPC bill)
+
+- Every backend request passes `src/backend-budget.ts`: per-minute/hour/day caps per class, persisted in
+  `runtime/monad-pilot/backend-budget.json`. The pilot allows catalog 0, search 4/min 60/h 300/day,
+  authorize 2/min 10/h 30/day. A refusal idles the worker; it never retries harder.
+- `v4Search.mode = "quote-grid"` (`src/v4-screen.ts`): the Aqua0 leg is estimated from the backend's own
+  price feed (fixed $1 for USDC/USDT0, DefiLlama otherwise) and the external leg from QuoterV2 on the free
+  RPC. Only a screen that clears pool fees, slippage, gas allowance and margin spends one read-tier
+  `/api/swap/quote`. An unchanged market is never re-asked after a miss; a clamped quote records Aqua0's
+  real capacity for 5 minutes. Measured: 11 scans in 20 s made exactly 1 backend call.
+- Execute mode makes no backend call while the executor is paused or its window is closed.
+- `--max-runtime-ms` stops the worker by itself; the onchain window stops trading even if every process dies.
+- The paid `RPC_URL_MAINNET_MONAD` is never passed to the worker; it uses `https://rpc2.monad.xyz`.
+
 ## Safety model
 
 - The executor's dead-man switch: `execute` reverts `Inactive()` after `activeUntil`. A fresh deployment

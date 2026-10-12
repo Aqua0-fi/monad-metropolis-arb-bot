@@ -36,6 +36,9 @@ export interface LiveFeePolicy {
   l1FeeReserveWei: bigint;
   wrappedNative: Address;
   liveFeeBufferBps?: number | undefined;
+  // Gas-limit-charged chains (Monad) bill the whole limit and an out-of-gas revert still pays it,
+  // so the signed limit carries headroom and the profit check prices that whole limit.
+  gasLimitBufferBps?: number | undefined;
 }
 export interface LiveFeeEstimate {
   observedAt: number;
@@ -112,7 +115,7 @@ export async function finalizeCandidateFees(
       functionName: "execute",
       args: [trade],
     });
-    const gas = await client.estimateGas({
+    const estimated = await client.estimateGas({
       account: policy.operator,
       to: policy.executor,
       data,
@@ -120,7 +123,12 @@ export async function finalizeCandidateFees(
       nonce,
       blockNumber: block.number,
     });
-    if (gas <= 0n) throw new Error("RPC returned an invalid gas estimate");
+    if (estimated <= 0n)
+      throw new Error("RPC returned an invalid gas estimate");
+    const gas = ceilDiv(
+      estimated * BigInt(policy.gasLimitBufferBps ?? 10000),
+      10000n,
+    );
     if (gas > policy.maxGasUnits)
       throw new Error("Estimated gas unit cap exceeded");
     const rawAdditional = await readAdditionalNetworkFees(

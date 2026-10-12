@@ -38,7 +38,7 @@ export const MONAD_HARD_CAPS = {
   maxSetupFeeWei: 1_000_000_000_000_000_000n, // 1 MON
   maxWindowFeeWei: 500_000_000_000_000_000n, // 0.5 MON per open
   maxWorkerDailyGasWei: 20_000_000_000_000_000_000n, // 20 MON
-  maxWorkerGasUnits: 2_000_000n,
+  maxWorkerGasUnits: 2_400_000n, // measured Monad route ~1.63M gas; worker limit = estimate x1.1
   maxMinutes: 60,
 };
 

@@ -53,7 +53,7 @@
     "maxWindowFeeWei": "100000000000000000",
     "ownerReserveWei": "1000000000000000000",
     "maxWorkerDailyGasWei": "10000000000000000000",
-    "maxWorkerGasUnits": "1500000"
+    "maxWorkerGasUnits": "2200000"
   },
   "window": {
     "maxMinutes": 60,

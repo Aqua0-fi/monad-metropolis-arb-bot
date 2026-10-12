@@ -67,7 +67,7 @@ test("Monad policy parses and cannot exceed code-level ceilings or target anothe
         maxDeployFeeWei: (MONAD_HARD_CAPS.maxDeployFeeWei + 1n).toString(),
       },
     },
-    { budgets: { ...raw.budgets, maxWorkerGasUnits: "2000001" } },
+    { budgets: { ...raw.budgets, maxWorkerGasUnits: "2400001" } },
     { budgets: { ...raw.budgets, ownerMaxFeePerGasWei: "500000000001" } },
     { window: { ...raw.window, maxMinutes: 61 } },
   ])
@@ -343,7 +343,7 @@ test("worker config sanity refuses mismatched executor, hook, caps, pools and mi
     ],
     [
       "units",
-      (c) => (c.execution["143"].maxGasUnits = "1600000"),
+      (c) => (c.execution["143"].maxGasUnits = "2300000"),
       /maxGasUnits/,
     ],
     [

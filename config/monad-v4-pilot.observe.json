@@ -60,12 +60,12 @@
       "amounts": [],
       "minNetProfit": "1000",
       "maxInput": "15000000",
-      "screenGasCost": "4500"
+      "screenGasCost": "6000"
     }
   ],
   "quoteFees": {
     "143": {
-      "maxGasUnits": "1300000",
+      "maxGasUnits": "2120000",
       "maxFeePerGas": "200000000000",
       "l1FeeReserveWei": "0",
       "wrappedNative": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
