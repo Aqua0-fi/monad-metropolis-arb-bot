@@ -4,7 +4,7 @@ pragma solidity 0.8.37;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {SwapVMVenue} from "./SwapVMVenue.sol";
+import {Ownable2Step} from "@openzeppelin/contracts/access/Ownable2Step.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 struct PoolKey {
@@ -39,7 +39,7 @@ interface IV3Pool {
 /// @notice Prefunded, atomic two-leg rebalancing. An operator can only exchange allowlisted pairs;
 /// owner controls custody, limits and venues. Profits stay in this contract until owner withdrawal.
 /// @dev Standard ERC20s only. No bridges, flash loans, native currency, arbitrary calls or delegatecalls.
-contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
+contract MarketRebalancer is Ownable2Step, ReentrancyGuard {
     using SafeERC20 for IERC20;
     uint160 private constant MIN_SQRT = 4295128740;
     uint160 private constant MAX_SQRT = 1461446703485210103287273052203988822378723970341;
@@ -48,7 +48,7 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
     enum Venue {
         Aqua0V4,
         V3,
-        AquaSwapVM
+        UniswapV4
     }
 
     struct Leg {
@@ -113,6 +113,9 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
     mapping(address => Limit) public limits;
     mapping(bytes32 => bool) public aquaPools;
     mapping(address => V3Approval) public v3Pools;
+    /// @notice Owner-allowlisted external Uniswap V4 pools. Hookless only: an external hook could run
+    /// arbitrary code inside our swap.
+    mapping(bytes32 => bool) public v4Pools;
     mapping(bytes32 => bool) public used;
     address private callbackPool;
     address private callbackToken;
@@ -137,6 +140,7 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
     event GasPriceLimitSet(uint256 maxGasPrice);
     event AquaPoolSet(bytes32 indexed poolId, bool allowed);
     event V3PoolSet(address indexed pool, bool allowed);
+    event V4PoolSet(bytes32 indexed poolId, bool allowed);
     event Withdrawn(address indexed token, address indexed recipient, uint256 amount);
     event ActiveUntilSet(uint64 activeUntil);
 
@@ -194,6 +198,16 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
         emit AquaPoolSet(id, allowed);
     }
 
+    function setV4Pool(PoolKey calldata key, bool allowed) external onlyOwner {
+        if (
+            key.hooks != address(0) || key.currency0 == address(0) || key.currency0 >= key.currency1
+                || key.tickSpacing <= 0
+        ) revert InvalidRoute();
+        bytes32 id = keccak256(abi.encode(key));
+        v4Pools[id] = allowed;
+        emit V4PoolSet(id, allowed);
+    }
+
     function setV3Pool(address pool, bool allowed) external onlyOwner {
         if (allowed) {
             address t0 = IV3Pool(pool).token0();
@@ -226,7 +240,7 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
         Leg calldata b = trade.second;
         if (
             a.tokenIn == a.tokenOut || a.tokenIn != b.tokenOut || a.tokenOut != b.tokenIn
-                || ((a.venue == Venue.V3) == (b.venue == Venue.V3)) || a.amountIn == 0 || b.amountIn == 0
+                || ((a.venue == Venue.Aqua0V4) == (b.venue == Venue.Aqua0V4)) || a.amountIn == 0 || b.amountIn == 0
                 || a.minOut == 0 || b.minOut == 0
         ) revert InvalidRoute();
         Limit memory limit = limits[a.tokenIn];
@@ -257,36 +271,15 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
                     || leg.minOut > type(uint128).max || leg.hookData.length < 32
                     || bytes32(leg.hookData[:32]) != AQUA0_MAGIC
             ) revert InvalidRoute();
-            IERC20(leg.tokenIn).forceApprove(permit2, leg.amountIn);
-            IPermit2(permit2).approve(leg.tokenIn, universalRouter, uint160(leg.amountIn), uint48(deadline));
-            bytes[] memory params = new bytes[](3);
-            // Router deployments differ. Bind the tuple version at deployment, never guess from chain name.
-            // amountOutMinimum and the executor balance floor remain mandatory in either version.
-            params[0] = extendedV4Encoding
-                ? abi.encode(
-                    ExtendedExactInputSingle(
-                        key, leg.tokenIn == key.currency0, uint128(leg.amountIn), uint128(leg.minOut), 0, leg.hookData
-                    )
-                )
-                : abi.encode(
-                    ExactInputSingle(
-                        key, leg.tokenIn == key.currency0, uint128(leg.amountIn), uint128(leg.minOut), leg.hookData
-                    )
-                );
-            params[1] = abi.encode(leg.tokenIn, leg.amountIn);
-            params[2] = abi.encode(leg.tokenOut, leg.minOut);
-            bytes[] memory inputs = new bytes[](1);
-            inputs[0] = abi.encode(hex"060c0f", params);
-            IUniversalRouter(universalRouter).execute(hex"10", inputs, deadline);
-            IPermit2(permit2).approve(leg.tokenIn, universalRouter, 0, 0);
-            IERC20(leg.tokenIn).forceApprove(permit2, 0);
-        } else if (leg.venue == Venue.AquaSwapVM) {
-            // The V4-only ABI slot is empty, not fabricated pool metadata, for a SwapVM leg.
+            _routerV4Swap(leg, deadline);
+        } else if (leg.venue == Venue.UniswapV4) {
+            PoolKey calldata key = leg.pool;
             if (
-                leg.pool.currency0 != address(0) || leg.pool.currency1 != address(0) || leg.pool.fee != 0
-                    || leg.pool.tickSpacing != 0 || leg.pool.hooks != address(0)
+                leg.target != universalRouter || !v4Pools[keccak256(abi.encode(key))] || key.hooks != address(0)
+                    || !_pair(leg, key.currency0, key.currency1) || leg.amountIn > type(uint128).max
+                    || leg.minOut > type(uint128).max || leg.hookData.length != 0
             ) revert InvalidRoute();
-            _executeSwapVM(leg.target, leg.tokenIn, leg.tokenOut, leg.amountIn, leg.minOut, leg.hookData, beforeOut);
+            _routerV4Swap(leg, deadline);
         } else {
             V3Approval memory approved = v3Pools[leg.target];
             if (
@@ -307,6 +300,35 @@ contract MarketRebalancer is SwapVMVenue, ReentrancyGuard {
         if (afterIn > beforeIn || beforeIn - afterIn != leg.amountIn) revert PartialFill();
         received = IERC20(leg.tokenOut).balanceOf(address(this)) - beforeOut;
         if (received < leg.minOut) revert InsufficientOutput();
+    }
+
+    /// @dev One exact-input V4 swap through the bound Universal Router, with an exact Permit2 grant that is
+    /// revoked in the same call. Used for Aqua0's hook pools and for allowlisted hookless external pools.
+    function _routerV4Swap(Leg calldata leg, uint256 deadline) private {
+        PoolKey calldata key = leg.pool;
+        IERC20(leg.tokenIn).forceApprove(permit2, leg.amountIn);
+        IPermit2(permit2).approve(leg.tokenIn, universalRouter, uint160(leg.amountIn), uint48(deadline));
+        bytes[] memory params = new bytes[](3);
+        // Router deployments differ. Bind the tuple version at deployment, never guess from chain name.
+        // amountOutMinimum and the executor balance floor remain mandatory in either version.
+        params[0] = extendedV4Encoding
+            ? abi.encode(
+                ExtendedExactInputSingle(
+                    key, leg.tokenIn == key.currency0, uint128(leg.amountIn), uint128(leg.minOut), 0, leg.hookData
+                )
+            )
+            : abi.encode(
+                ExactInputSingle(
+                    key, leg.tokenIn == key.currency0, uint128(leg.amountIn), uint128(leg.minOut), leg.hookData
+                )
+            );
+        params[1] = abi.encode(leg.tokenIn, leg.amountIn);
+        params[2] = abi.encode(leg.tokenOut, leg.minOut);
+        bytes[] memory inputs = new bytes[](1);
+        inputs[0] = abi.encode(hex"060c0f", params);
+        IUniversalRouter(universalRouter).execute(hex"10", inputs, deadline);
+        IPermit2(permit2).approve(leg.tokenIn, universalRouter, 0, 0);
+        IERC20(leg.tokenIn).forceApprove(permit2, 0);
     }
 
     function _pair(Leg calldata leg, address a, address b) private pure returns (bool) {
