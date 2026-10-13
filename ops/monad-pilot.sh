@@ -22,7 +22,8 @@ PERMIT2=0x000000000022D473030F116dDEE9F6B43aC78BA3
 USDC=0x754704Bc059F8C67012fEd69BC8A327a5aafb603
 WMON=0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A
 HOOK=${AQUA0_HOOK:?set AQUA0_HOOK to the deployed no-recentre V4 hook}
-POOL_KEY="($WMON,$USDC,500,10,$HOOK)"
+EURW=0x1111B3DED9F1fE1801AD4ebeF8E2788183a24111
+AQUA_POOL_KEYS=("($WMON,$USDC,500,10,$HOOK)" "($EURW,$USDC,100,1,$HOOK)")
 EXTERNAL_POOLS=(
   0x5Bc39A29EA5d8315263EC8939d6AD393dEbC34E9 # Uniswap V3 0.05%
   0x659bD0BC4167BA25c62E05656F78043E7eD4a9da # Uniswap V3 0.3%
@@ -30,7 +31,10 @@ EXTERNAL_POOLS=(
   0x63e48B725540A3Db24ACF6682a29f877808C53F2 # PancakeSwap V3 0.05%
   0x85717A98d195c9306BBf7c9523Ba71F044Fea0f7 # PancakeSwap V3 0.25%
   0xB9897986847472Cd08B9A0E7BCd31EA4F1322361 # PancakeSwap V3 1%
+  0xe153201e40F50EBc9DA7Be3AA9C419f185C97F44 # Uniswap V3 EURW/USDC 0.01%
 )
+# Monad's RPC head trails the tip, so a trade lands several blocks after the block it was stamped at.
+BLOCK_WINDOW=30
 MAX_INPUT=${MAX_INPUT:-20000000} # 20 USDC
 MIN_PROFIT=${MIN_PROFIT:-1000}   # 0.001 USDC, onchain floor; the worker also nets out measured gas
 MAX_GAS_PRICE=200000000000       # 200 gwei (Monad base fee floor is 100 gwei)
@@ -76,7 +80,8 @@ setup)
   send "setOperator(address,bool)" "$OWNER" true
   send "setLimits(address,uint256,uint256)" "$USDC" "$MAX_INPUT" "$MIN_PROFIT"
   send "setGasPriceLimit(uint256)" "$MAX_GAS_PRICE"
-  send "setAquaPool((address,address,uint24,int24,address),bool)" "$POOL_KEY" true
+  send "setBlockWindow(uint256)" "$BLOCK_WINDOW"
+  for k in "${AQUA_POOL_KEYS[@]}"; do send "setAquaPool((address,address,uint24,int24,address),bool)" "$k" true; done
   for p in "${EXTERNAL_POOLS[@]}"; do send "setV3Pool(address,bool)" "$p" true; done
   echo "setup done; executor stays paused with the window closed"
   echo "fund it yourself: send USDC (<= $((MAX_INPUT / 1000000)) USDC) to $EXECUTOR on Monad"

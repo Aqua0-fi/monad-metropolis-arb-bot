@@ -219,6 +219,8 @@ export const settingsSchema = z.object({
           maxGasUnits: positive,
           liveFeeBufferBps: z.number().int().min(10000).max(20000).optional(),
           gasLimitBufferBps: z.number().int().min(10000).max(15000).optional(),
+          // Blocks a trade may land after its stamp block; must not exceed the executor's blockWindow.
+          validityBlocks: z.number().int().min(1).max(64).optional(),
           maxFeePerGas: positive,
           l1FeeReserveWei: uint,
           maxDailyGasWei: positive,

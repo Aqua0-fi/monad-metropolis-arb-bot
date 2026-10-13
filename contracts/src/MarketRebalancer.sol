@@ -109,6 +109,10 @@ contract MarketRebalancer is Ownable2Step, ReentrancyGuard {
     /// so a fresh deployment cannot trade until the owner opens a bounded window.
     uint64 public activeUntil;
     uint256 public constant MAX_ACTIVE_WINDOW = 1 days;
+    /// @notice Blocks a trade may land after the block it was stamped at. Chains whose RPC head trails the tip
+    /// (Monad) need more than the default.
+    uint256 public blockWindow = 5;
+    uint256 public constant MAX_BLOCK_WINDOW = 64;
     mapping(address => bool) public operators;
     mapping(address => Limit) public limits;
     mapping(bytes32 => bool) public aquaPools;
@@ -143,6 +147,7 @@ contract MarketRebalancer is Ownable2Step, ReentrancyGuard {
     event V4PoolSet(bytes32 indexed poolId, bool allowed);
     event Withdrawn(address indexed token, address indexed recipient, uint256 amount);
     event ActiveUntilSet(uint64 activeUntil);
+    event BlockWindowSet(uint256 blockWindow);
 
     constructor(address owner_, address router_, address permit2_, address hook_, bool extended_) Ownable(owner_) {
         if (router_.code.length == 0 || permit2_.code.length == 0 || hook_.code.length == 0) revert InvalidRoute();
@@ -189,6 +194,12 @@ contract MarketRebalancer is Ownable2Step, ReentrancyGuard {
         emit ActiveUntilSet(value);
     }
 
+    function setBlockWindow(uint256 value) external onlyOwner {
+        if (value == 0 || value > MAX_BLOCK_WINDOW) revert LimitExceeded();
+        blockWindow = value;
+        emit BlockWindowSet(value);
+    }
+
     function setAquaPool(PoolKey calldata key, bool allowed) external onlyOwner {
         if (key.hooks != aqua0Hook || key.currency0 == address(0) || key.currency0 >= key.currency1) {
             revert InvalidRoute();
@@ -233,7 +244,7 @@ contract MarketRebalancer is Ownable2Step, ReentrancyGuard {
         if (tx.gasprice > maxGasPrice) revert GasPriceExceeded();
         if (
             block.timestamp > trade.deadline || block.number > trade.validUntilBlock
-                || trade.deadline > block.timestamp + 120 || trade.validUntilBlock > block.number + 5
+                || trade.deadline > block.timestamp + 120 || trade.validUntilBlock > block.number + blockWindow
         ) revert Expired();
         if (used[trade.id]) revert Replayed();
         Leg calldata a = trade.first;

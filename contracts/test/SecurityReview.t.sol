@@ -184,7 +184,7 @@ contract SecurityReviewTest is Test {
     }
 
     function testSeparateOperatorCannotUseAnyOwnerEntryPoint() public {
-        bytes[] memory calls = new bytes[](12);
+        bytes[] memory calls = new bytes[](13);
         calls[0] = abi.encodeWithSelector(MarketRebalancer.setOperator.selector, operator, true);
         calls[1] = abi.encodeWithSelector(MarketRebalancer.setLimits.selector, address(a), CAPITAL * 2, 1);
         calls[2] = abi.encodeWithSelector(MarketRebalancer.setGasPriceLimit.selector, 200 gwei);
@@ -197,6 +197,7 @@ contract SecurityReviewTest is Test {
         calls[9] = abi.encodeWithSelector(Ownable.renounceOwnership.selector);
         calls[10] = abi.encodeWithSelector(MarketRebalancer.withdraw.selector, address(a), operator, 1);
         calls[11] = abi.encodeWithSelector(Ownable2Step.acceptOwnership.selector);
+        calls[12] = abi.encodeWithSelector(MarketRebalancer.setBlockWindow.selector, 30);
         for (uint256 i; i < calls.length; ++i) {
             vm.prank(operator);
             (bool ok, bytes memory result) = address(bot).call(calls[i]);

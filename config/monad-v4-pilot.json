@@ -105,7 +105,8 @@
       "maxDailyGasWei": "10000000000000000000",
       "wrappedNative": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
       "gasConversionFee": 3000,
-      "gasLimitBufferBps": 11000
+      "gasLimitBufferBps": 11000,
+      "validityBlocks": 25
     }
   },
   "_template": "Owner setup writes runtime/monad-pilot/execute.json with the deployed executor, the real KMS key and allowBroadcast. Never run this template as-is."

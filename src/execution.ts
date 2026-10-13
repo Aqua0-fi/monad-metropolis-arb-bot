@@ -200,7 +200,7 @@ export async function submit(
       abi: executorAbi,
       functionName: "executionBlockNumber",
       blockNumber: head.number,
-    })) + 2n;
+    })) + BigInt(config.validityBlocks ?? 2);
   onProgress?.("simulating");
   let fees = await finalizeCandidateFees(
     client,
@@ -229,7 +229,7 @@ export async function submit(
         abi: executorAbi,
         functionName: "executionBlockNumber",
         blockNumber: head.number,
-      })) + 2n;
+      })) + BigInt(config.validityBlocks ?? 2);
     fees = await finalizeCandidateFees(
       client,
       chain,
