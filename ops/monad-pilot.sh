@@ -91,7 +91,9 @@ run)
   need_executor
   minutes=${2:?minutes}
   ((minutes >= 1 && minutes <= 60)) || { echo "minutes must be 1-60" >&2; exit 1; }
-  [[ -f "$SECRETS/market-rebalancer-operator.json" ]] || { echo "missing $SECRETS/market-rebalancer-operator.json (AQUA0_OPERATOR_API_KEY)" >&2; exit 1; }
+  MM="$SECRETS/monad-metropolis.json" # the throwaway Monad Metropolis backend on the AWS host
+  [[ -f "$MM" ]] || { echo "missing $MM" >&2; exit 1; }
+  mm() { python3 -I -c "import json,sys;print(json.load(open(sys.argv[1]))[sys.argv[2]])" "$MM" "$1"; }
   read -r -p "Open trading for $minutes min on $EXECUTOR? type RUN: " answer
   [[ "$answer" == RUN ]] || exit 1
   cfg="$STATE/execute.json"
@@ -106,13 +108,17 @@ ex.update(executor=executor, allowBroadcast=True, kms={"region": k["region"], "k
 cfg["mode"] = "execute"
 json.dump(cfg, open(out, "w"), indent=2)
 PY
-  trap close_window EXIT INT TERM HUP
+  # The backend listens on the host's localhost only; reach it through an SSH tunnel for this run.
+  ssh -i "$(mm sshKey)" -o BatchMode=yes -o ExitOnForwardFailure=yes -N -L 18080:127.0.0.1:18080 "$(mm host)" &
+  tunnel=$!
+  sleep 3
+  curl -sf -m 5 http://127.0.0.1:18080/ready >/dev/null || { kill $tunnel; echo "metropolis backend not reachable" >&2; exit 1; }
+  trap 'close_window; kill $tunnel 2>/dev/null || true' EXIT INT TERM HUP
   now=$(cast block --rpc-url "$RPC" -f timestamp)
   send "setActiveUntil(uint64)" $((now + minutes * 60 + 90))
   send "setPaused(bool)" false
   echo "window open until $((now + minutes * 60 + 90)); worker starting"
-  AQUA0_READ_API_KEY=$(python3 -I -c "import json;print(json.load(open('$SECRETS/market-rebalancer-observer.json'))['AQUA0_READ_API_KEY'])") \
-  AQUA0_OPERATOR_API_KEY=$(python3 -I -c "import json;print(json.load(open('$SECRETS/market-rebalancer-operator.json'))['AQUA0_OPERATOR_API_KEY'])") \
+  AQUA0_READ_API_KEY=$(mm AQUA0_READ_API_KEY) AQUA0_OPERATOR_API_KEY=$(mm AQUA0_OPERATOR_API_KEY) \
   REBALANCER_REPORT_PORT=${REBALANCER_REPORT_PORT:-19191} \
     timeout --kill-after=30 $((minutes * 60 + 60)) \
     node --import tsx src/cli.ts run --config "$cfg" --chain 143 --max-runtime-ms $((minutes * 60000)) || true

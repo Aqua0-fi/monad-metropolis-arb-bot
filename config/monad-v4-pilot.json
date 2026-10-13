@@ -1,7 +1,7 @@
 {
   "mode": "execute",
   "networkMode": "mainnet",
-  "apiUrl": "https://staging-api.aqua0.xyz",
+  "apiUrl": "http://127.0.0.1:18080",
   "maxRuntimeMs": 900000,
   "slippageBps": 10,
   "maxQuoteAgeMs": 10000,
