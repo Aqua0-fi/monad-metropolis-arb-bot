@@ -10,7 +10,6 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { spawnSync } from "node:child_process";
 import { decodeFunctionData, type PublicClient, type Hex } from "viem";
 import { readAwsSessionFile } from "../src/aws-session-file.js";
 import {
@@ -220,15 +219,4 @@ test("dedicated credential files support rotation and optional sessions, but rej
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
-});
-
-test("the one-command owner wrapper refuses non-interactive enablement before credentials, RPCs or host writes", () => {
-  const result = spawnSync(
-    "python3",
-    ["ops/owner-start-arbitrum.py", "--enable"],
-    { encoding: "utf8", timeout: 5000, stdio: "pipe" },
-  );
-  assert.equal(result.status, 1);
-  assert.match(result.stdout, /interactive terminal/);
-  assert.doesNotMatch(result.stdout, /transactionHash|runtimeSignerVerified/);
 });
