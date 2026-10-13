@@ -1,10 +1,9 @@
 # Working on market-rebalancer-service
 
-Read `project-context/agent-context.md`, `project-context/debugging-issues.md`,
-`project-context/tech-debt.md`, then `project-context/how-it-works.md` before changing code.
+Read `README.md` (how the Monad deployment works and how to operate it) before changing code.
 
-- The service is always named `market-rebalancer-service`; the repository is
-  `aqua0-market-rebalancer-service`.
+- The service is always named `market-rebalancer-service`; this repository is
+  `monad-metropolis-arb-bot`.
 - User priority: preserve scarce capital. Both swap legs and the starting-token profit guard must stay
   in one EVM transaction. Never replace a failed quote/simulation with best-effort execution.
 - Reverts preserve trade principal but consume gas. Include chain-specific fees, budgets and this

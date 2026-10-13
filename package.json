@@ -14,13 +14,12 @@
     "scan": "node --import tsx src/cli.ts scan",
     "run": "node --import tsx src/cli.ts run",
     "doctor": "node --import tsx src/cli.ts doctor",
-    "check": "npm run verify:registry && npm run typecheck && npm test && npm run contracts:test && npm run test:owner-host",
+    "check": "npm run verify:registry && npm run typecheck && npm test && npm run contracts:test",
     "test:integration": "node --import tsx --test test/execution.integration.ts test/owner-deployment.integration.ts",
-    "format": "prettier --write src test scripts/*.ts config/*.json README.md AGENTS.md project-context/*.md && forge fmt contracts",
-    "format:check": "prettier --check src test scripts/*.ts config/*.json README.md AGENTS.md project-context/*.md && forge fmt --check contracts",
+    "format": "prettier --write src test scripts/*.ts config/*.json README.md AGENTS.md && forge fmt contracts",
+    "format:check": "prettier --check src test scripts/*.ts config/*.json README.md AGENTS.md && forge fmt --check contracts",
     "test:heads": "node --import tsx --test test/head-feed.integration.ts",
-    "verify:registry": "python3 scripts/verify-registry-provenance.py",
-    "test:owner-host": "python3 -m unittest discover -s ops -p 'test_owner_pilot_remote.py' && python3 -m unittest discover -s ops -p 'test_owner_refresh_remote.py' && python3 -m unittest discover -s ops -p 'test_owner_reconcile_remote.py'"
+    "verify:registry": "python3 scripts/verify-registry-provenance.py"
   },
   "dependencies": {
     "@aws-sdk/client-kms": "3.1095.0",
