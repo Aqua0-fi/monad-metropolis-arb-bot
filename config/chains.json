@@ -85,6 +85,14 @@
           "fee": 500,
           "tickSpacing": 10,
           "hooks": "0x458A6eEb541478E714A0C2D17cB02B2E4ff7a8C0"
+        },
+        {
+          "poolId": "0x1c7ae2daab59d2d45f24008b0ac194702c6707d7b89a3cf31ae5de2b04479081",
+          "currency0": "0x1111B3DED9F1fE1801AD4ebeF8E2788183a24111",
+          "currency1": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+          "fee": 100,
+          "tickSpacing": 1,
+          "hooks": "0x458A6eEb541478E714A0C2D17cB02B2E4ff7a8C0"
         }
       ],
       "venues": [

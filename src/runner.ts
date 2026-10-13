@@ -348,6 +348,7 @@ export class Runner {
     }
     const counterpart = (input: Address) =>
       same(input, pool.currency0) ? pool.currency1 : pool.currency0;
+    let capped = false;
     const candidates = await findCandidates({
       base: market.baseToken,
       other: counterpart(market.baseToken),
@@ -376,8 +377,10 @@ export class Runner {
         ),
       onQuoteError: (error) => {
         if (error instanceof BackendBudgetExceeded) throw error;
-        if (error instanceof AquaCapacityLimit)
+        if (error instanceof AquaCapacityLimit) {
+          capped = true;
           this.screen.noteCapacity(key, aquaFirst, error.backed);
+        }
         this.event("v4_quote_rejected", {
           chainId: chain.chainId,
           poolId: pool.poolId,
@@ -385,7 +388,8 @@ export class Runner {
         });
       },
     });
-    if (fingerprint)
+    // A capacity refusal is not "no profitable fill": the next screen retries at the backed size.
+    if (fingerprint && !capped)
       this.screen.noteBackend(key, fingerprint, candidates.length > 0);
     for (const candidate of candidates) candidate.quoteBlockHash = head.hash;
     return candidates;
