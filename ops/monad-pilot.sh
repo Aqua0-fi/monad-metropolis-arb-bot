@@ -112,7 +112,8 @@ PY
   ssh -i "$(mm sshKey)" -o BatchMode=yes -o ExitOnForwardFailure=yes -N -L 18080:127.0.0.1:18080 "$(mm host)" &
   tunnel=$!
   sleep 3
-  curl -sf -m 5 http://127.0.0.1:18080/ready >/dev/null || { kill $tunnel; echo "metropolis backend not reachable" >&2; exit 1; }
+  # /health, not /ready: /ready also gates on Supabase, which this deployment does not have.
+  curl -sf -m 5 http://127.0.0.1:18080/health >/dev/null || { kill $tunnel; echo "metropolis backend not reachable" >&2; exit 1; }
   trap 'close_window; kill $tunnel 2>/dev/null || true' EXIT INT TERM HUP
   now=$(cast block --rpc-url "$RPC" -f timestamp)
   send "setActiveUntil(uint64)" $((now + minutes * 60 + 90))
