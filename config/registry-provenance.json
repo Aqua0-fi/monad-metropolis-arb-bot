@@ -2,7 +2,7 @@
   "backendCommit": "0bde3d4b8cab294e858b5db2077c632609243379",
   "canonicalRecordsSha256": "c0eac39e903cb741947ea7bab203704265f5bf53bb21d5c0b8856f2d2a68a7e6",
   "executionPoliciesSha256": "6767b81496b918ca743bf908c24b3ad13bb95a490301bbf78dba8282cd5c691b",
-  "generatedChainsSha256": "9875c3e11937d9a9667203ddd13666ec8f629a4d12aece3301fae6d05940db1a",
+  "generatedChainsSha256": "6947b1be6b60405a5136cf197673bc98224eb6eaa8175bf8ea35038fe22147bb",
   "chainIds": [
     137,
     143,
@@ -19,6 +19,6 @@
       143
     ],
     "backendCommit": "4d7c98cca264edd040a3f930d71449c4eb2526f1",
-    "note": "Only Monad differs from the 0bde3d4b records: the no-recentre V4 hook (contracts 6f1be68) and its WMON/USDC pool, WMON gas token, free RPC, and the reviewed PancakeSwap V3 venue."
+    "note": "Only Monad differs from the 0bde3d4b records: the no-recentre V4 hook and its WMON/USDC and EURW/USDC pools, WMON gas token, free RPC, and the reviewed Uniswap V3 and PancakeSwap V3 venues."
   }
 }
