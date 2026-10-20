@@ -131,9 +131,8 @@ if (command === "doctor") {
     loadSettings(values.config),
     values.chain,
   );
-  const headers: Record<string, string> = {
-    "X-Network-Mode": settings.networkMode,
-  };
+  // The API answers in its own network mode. `networkMode` only keys this bot's local journals.
+  const headers: Record<string, string> = {};
   const readKey = process.env.AQUA0_READ_API_KEY ?? process.env.AQUA0_API_KEY;
   if (readKey) headers["X-API-Key"] = readKey;
   if (process.env.AQUA0_CALLER_TOKEN)
